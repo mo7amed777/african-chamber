@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "727474785846",
+    "project_id": "fir-a062a",
+    "storage_bucket": "fir-a062a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:727474785846:android:6d48298241ec215438d297",
+        "android_client_info": {
+          "package_name": "com.african.chamber"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "727474785846-uo7hr1jabiunkjla7eataa7dnbi4623o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.african.chamber",
+            "certificate_hash": "cf7e0c8c45d156a7afaa78a54969d93a63cec240"
+          }
+        },
+        {
+          "client_id": "727474785846-1aa4vbblihhjvtsdcbg88186kkmjgu9b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxdloIscDMyWAgCkus77vZ5jw1IpXDcg8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "727474785846-1aa4vbblihhjvtsdcbg88186kkmjgu9b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

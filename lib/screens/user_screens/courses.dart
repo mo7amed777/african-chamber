@@ -1,0 +1,224 @@
+import 'package:chewie/chewie.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:demo/constants.dart';
+import 'package:demo/models/ad.dart';
+import 'package:demo/models/user.dart';
+import 'package:demo/screens/user_screens/course.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:video_player/video_player.dart';
+
+class Courses extends StatelessWidget {
+  static final String routeName = '/courses';
+  final CurrentUser user;
+  Courses(this.user);
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: SECONDARYCOLOR,
+      body: user.courses.isEmpty
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'لم يتم التسجيل في أى محتوى',
+                    style: TextStyle(
+                      color: PRIMARYCOLOR,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 22,
+                    ),
+                  ),
+                  TextButton(
+                    style: TextButton.styleFrom(
+                      backgroundColor: PRIMARYCOLOR,
+                      primary: SECONDARYCOLOR,
+                    ),
+                    onPressed: () async {
+                      Get.dialog(Center(
+                        child: CircularProgressIndicator(),
+                      ));
+                      String exampleURL, exampleName;
+                      DocumentSnapshot exampleDoc = await firestore
+                          .collection('materials')
+                          .doc('example')
+                          .get();
+                      if (exampleDoc.exists) {
+                        exampleURL = exampleDoc.get('video');
+                        exampleName = exampleDoc.get('name');
+                        VideoPlayerController exampleVideo =
+                            VideoPlayerController.network(
+                          exampleURL,
+                        );
+                        exampleVideo.initialize().then(
+                          (value) {
+                            Get.back();
+                            Get.dialog(
+                              Material(
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      width: double.infinity,
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.4,
+                                      child: Chewie(
+                                        controller: ChewieController(
+                                          aspectRatio: 1.2,
+                                          videoPlayerController: exampleVideo,
+                                          placeholder: Center(
+                                            child: Text(
+                                              'جاري تحميل الفيديو',
+                                              style: TextStyle(
+                                                color: SECONDARYCOLOR,
+                                              ),
+                                            ),
+                                          ),
+                                          showControlsOnInitialize: false,
+                                          showOptions: false,
+                                        ),
+                                      ),
+                                    ),
+                                    Text(
+                                      exampleName,
+                                      style: TextStyle(
+                                        color: SECONDARYCOLOR,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        exampleVideo
+                                            .dispose()
+                                            .then((value) => Get.back());
+                                      },
+                                      child: Text('إغلاق'),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      }
+                    },
+                    child: Text(
+                      'عرض مثال للشرح',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          : ListView.builder(
+              itemBuilder: (context, index) => buildItem(
+                imgURL: SEMS[user.sem]![user.courses[index]]!,
+                title: user.courses[index],
+              ),
+              itemCount: user.courses.length,
+            ),
+    );
+  }
+
+  Widget buildItem({required String imgURL, required String title}) {
+    return InkWell(
+      onTap: () async {
+        Get.dialog(
+          Center(
+            child: CircularProgressIndicator(),
+          ),
+          barrierDismissible: false,
+        );
+        List videoURLs = [];
+        List docURLs = [];
+        List filesNames = [];
+        List videosNames = [];
+
+        DocumentSnapshot fileDoc = await firestore
+            .collection('materials')
+            .doc(user.sem)
+            .collection(title)
+            .doc('files')
+            .collection('users')
+            .doc(user.name)
+            .get();
+        DocumentSnapshot videoDoc = await firestore
+            .collection('materials')
+            .doc(user.sem)
+            .collection(title)
+            .doc('videos')
+            .get();
+
+        if (fileDoc.exists) {
+          docURLs = fileDoc.get('urls');
+          filesNames = fileDoc.get('names');
+        }
+        if (videoDoc.exists) {
+          videoURLs = videoDoc.get('urls');
+          videosNames = videoDoc.get('names');
+        }
+        List<VideoPlayerController> videos = List.generate(
+          videoURLs.length,
+          (index) => VideoPlayerController.network(
+            videoURLs[index],
+          ),
+        );
+        for (var video in videos) {
+          video.initialize().then((_) {
+            if (videos.indexOf(video) == videos.length - 1) {
+              Get.back();
+              Get.toNamed(Course.routeName, arguments: {
+                'videoURLs': videoURLs,
+                'docURLs': docURLs,
+                'filesNames': filesNames,
+                'videosNames': videosNames,
+                'coursID': title,
+                'videos': videos,
+              });
+            }
+          });
+        }
+      },
+      child: Card(
+        elevation: 2.0,
+        margin: EdgeInsets.only(top: 4.0, bottom: 4.0, left: 12.0, right: 8.0),
+        child: Column(
+          children: [
+            Stack(
+              children: [
+                Image.network(
+                  imgURL,
+                  fit: BoxFit.fill,
+                  height: 200,
+                  width: double.infinity,
+                ),
+                Positioned(
+                  child: AdWidget(ad: AdBanner.bannerAd),
+                  bottom: 1.0,
+                ),
+              ],
+            ),
+            Text(
+              title,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: PRIMARYCOLOR,
+                fontWeight: FontWeight.bold,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.fade,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
