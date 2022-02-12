@@ -9,27 +9,6 @@ abstract class Ad {
   void dispose() {}
 }
 
-class AdBanner implements Ad {
-  static BannerAd bannerAd = BannerAd(
-    size: AdSize.banner,
-    adUnitId: bannerAdUnitId,
-    listener: BannerAdListener(
-      onAdClosed: (ad) async => await ad.dispose(),
-    ),
-    request: AdRequest(),
-  );
-
-  @override
-  dispose() async {
-    await bannerAd.dispose();
-  }
-
-  @override
-  load() async {
-    await bannerAd.load();
-  }
-}
-
 class AdInterstitial implements Ad {
   InterstitialAd? interstitialAd;
 

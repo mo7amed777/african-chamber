@@ -201,8 +201,22 @@ class Courses extends StatelessWidget {
                   width: double.infinity,
                 ),
                 Positioned(
-                  child: AdWidget(ad: AdBanner.bannerAd),
+                  child: Container(
+                    height: 50.0,
+                    child: AdWidget(
+                      ad: BannerAd(
+                        size: AdSize.banner,
+                        adUnitId: bannerAdUnitId,
+                        listener: BannerAdListener(
+                          onAdClosed: (ad) async => await ad.dispose(),
+                        ),
+                        request: AdRequest(),
+                      )..load(),
+                    ),
+                  ),
                   bottom: 1.0,
+                  right: 1.0,
+                  left: 1.0,
                 ),
               ],
             ),
