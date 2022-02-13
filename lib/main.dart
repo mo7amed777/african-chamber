@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         fontFamily: 'Amiri',
       ),
-      title: 'الأكاديمية',
+      title: 'African Chamber',
       routes: {
         Splash.routeName: (_) => Splash(),
         Home.routeName: (_) => Home(),

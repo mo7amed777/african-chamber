@@ -86,7 +86,6 @@ class _RequestsState extends State<Requests> {
             trailing: TextButton(
               onPressed: () async {
                 showAdInterstitial();
-
                 try {
                   DocumentSnapshot snapshot =
                       await firestore.collection('users').doc(userID).get();
