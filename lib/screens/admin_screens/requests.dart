@@ -46,7 +46,6 @@ class _RequestsState extends State<Requests> {
             )
           : RefreshIndicator(
               onRefresh: () {
-                showAdRewarded();
                 setState(() {});
                 return Future.delayed(Duration(seconds: 1));
               },

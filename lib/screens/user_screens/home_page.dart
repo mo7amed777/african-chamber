@@ -311,6 +311,19 @@ class HomePage extends StatelessWidget {
                           },
                           child: Text('إغلاق'),
                         ),
+                        Container(
+                          height: 50.0,
+                          child: AdWidget(
+                            ad: BannerAd(
+                              size: AdSize.banner,
+                              adUnitId: bannerAdUnitId,
+                              listener: BannerAdListener(
+                                onAdClosed: (ad) async => await ad.dispose(),
+                              ),
+                              request: AdRequest(),
+                            )..load(),
+                          ),
+                        ),
                       ],
                     ),
                   ),
