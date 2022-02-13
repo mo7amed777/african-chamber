@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demo/constants.dart';
+import 'package:demo/models/ad.dart';
 import 'package:demo/screens/onboard_screens/login.dart';
 import 'package:demo/widgets/input_field.dart';
 import 'package:demo/widgets/message.dart';
@@ -9,6 +10,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:platform_device_id/platform_device_id.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
@@ -264,6 +266,19 @@ class _SignUPState extends State<SignUP> {
                     ),
                   ],
                 ),
+                Container(
+                  height: 50.0,
+                  child: AdWidget(
+                    ad: BannerAd(
+                      size: AdSize.banner,
+                      adUnitId: bannerAdUnitId,
+                      listener: BannerAdListener(
+                        onAdClosed: (ad) async => await ad.dispose(),
+                      ),
+                      request: AdRequest(),
+                    )..load(),
+                  ),
+                ),
               ],
             ),
           ),
@@ -274,6 +289,8 @@ class _SignUPState extends State<SignUP> {
 
   void sign_up(
       BuildContext context, String email, String password, String name) {
+    showAdInterstitial();
+
     Get.dialog(
       Center(child: CircularProgressIndicator()),
       barrierDismissible: false,
@@ -304,16 +321,10 @@ class _SignUPState extends State<SignUP> {
         },
       ).catchError((_) {
         Get.back();
-
-        Get.defaultDialog(
-          barrierDismissible: false,
+        showMessage(
           title: 'خطأ في تسجيل البيانات',
-          cancel: TextButton(
-            onPressed: () => Get.back(),
-            child: Text('إغلاق'),
-          ),
-          middleTextStyle: TextStyle(color: Colors.red),
-          middleText: 'برجاء التأكد من إدخال البيانات صحيحة وإعادة المحاولة',
+          text: 'برجاء التأكد من إدخال البيانات صحيحة وإعادة المحاولة',
+          error: true,
         );
       });
     } else {

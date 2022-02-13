@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:chewie/chewie.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demo/constants.dart';
@@ -68,7 +70,11 @@ class Courses extends StatelessWidget {
                                       child: Chewie(
                                         controller: ChewieController(
                                           aspectRatio: 1.2,
-                                          videoPlayerController: exampleVideo,
+                                          videoPlayerController: exampleVideo
+                                            ..addListener(() {
+                                              Timer(Duration(minutes: 7),
+                                                  () => showAdRewarded());
+                                            }),
                                           placeholder: Center(
                                             child: Text(
                                               'جاري تحميل الفيديو',
@@ -89,8 +95,19 @@ class Courses extends StatelessWidget {
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                    SizedBox(
-                                      height: 20,
+                                    Container(
+                                      height: 50.0,
+                                      child: AdWidget(
+                                        ad: BannerAd(
+                                          size: AdSize.banner,
+                                          adUnitId: bannerAdUnitId,
+                                          listener: BannerAdListener(
+                                            onAdClosed: (ad) async =>
+                                                await ad.dispose(),
+                                          ),
+                                          request: AdRequest(),
+                                        )..load(),
+                                      ),
                                     ),
                                     TextButton(
                                       onPressed: () {
@@ -115,6 +132,19 @@ class Courses extends StatelessWidget {
                       ),
                     ),
                   ),
+                  Container(
+                    height: 50.0,
+                    child: AdWidget(
+                      ad: BannerAd(
+                        size: AdSize.banner,
+                        adUnitId: bannerAdUnitId,
+                        listener: BannerAdListener(
+                          onAdClosed: (ad) async => await ad.dispose(),
+                        ),
+                        request: AdRequest(),
+                      )..load(),
+                    ),
+                  ),
                 ],
               ),
             )
@@ -131,6 +161,7 @@ class Courses extends StatelessWidget {
   Widget buildItem({required String imgURL, required String title}) {
     return InkWell(
       onTap: () async {
+        showAdInterstitial();
         Get.dialog(
           Center(
             child: CircularProgressIndicator(),

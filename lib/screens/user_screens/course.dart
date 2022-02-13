@@ -1,9 +1,13 @@
+import 'dart:async';
+
 import 'package:demo/constants.dart';
+import 'package:demo/models/ad.dart';
 import 'package:demo/widgets/message.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:chewie/chewie.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:video_player/video_player.dart';
@@ -15,7 +19,7 @@ class Course extends StatefulWidget {
   static final List filesNames = Get.arguments['filesNames'];
   static final List videosNames = Get.arguments['videosNames'];
   static final String courseID = Get.arguments['coursID'];
-  static final List videos = Get.arguments['videos'];
+  static final List<VideoPlayerController> videos = Get.arguments['videos'];
 
   @override
   State<Course> createState() => _CourseState();
@@ -55,6 +59,19 @@ class _CourseState extends State<Course> {
                 children: [
                   videosPlayer(context),
                   docs(),
+                  Container(
+                    height: 50.0,
+                    child: AdWidget(
+                      ad: BannerAd(
+                        size: AdSize.banner,
+                        adUnitId: bannerAdUnitId,
+                        listener: BannerAdListener(
+                          onAdClosed: (ad) async => await ad.dispose(),
+                        ),
+                        request: AdRequest(),
+                      )..load(),
+                    ),
+                  ),
                 ],
               ),
             )
@@ -82,8 +99,11 @@ class _CourseState extends State<Course> {
                     child: Chewie(
                       controller: ChewieController(
                         aspectRatio: 1.2,
-                        videoPlayerController:
-                            Course.videos[Course.videoURLs.indexOf(video)],
+                        videoPlayerController: Course
+                            .videos[Course.videoURLs.indexOf(video)]
+                          ..addListener(() {
+                            Timer(Duration(minutes: 7), () => showAdRewarded());
+                          }),
                         placeholder: Center(
                           child: Text(
                             'جاري تحميل الفيديو',
@@ -103,6 +123,19 @@ class _CourseState extends State<Course> {
                     style: TextStyle(
                       color: SECONDARYCOLOR,
                       fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Container(
+                    height: 50.0,
+                    child: AdWidget(
+                      ad: BannerAd(
+                        size: AdSize.banner,
+                        adUnitId: bannerAdUnitId,
+                        listener: BannerAdListener(
+                          onAdClosed: (ad) async => await ad.dispose(),
+                        ),
+                        request: AdRequest(),
+                      )..load(),
                     ),
                   ),
                   Divider(
@@ -147,6 +180,24 @@ class _CourseState extends State<Course> {
                             bottom: 5.0,
                             right: 5.0,
                           ),
+                          Positioned(
+                            child: Container(
+                              height: 50.0,
+                              child: AdWidget(
+                                ad: BannerAd(
+                                  size: AdSize.banner,
+                                  adUnitId: bannerAdUnitId,
+                                  listener: BannerAdListener(
+                                    onAdClosed: (ad) async =>
+                                        await ad.dispose(),
+                                  ),
+                                  request: AdRequest(),
+                                )..load(),
+                              ),
+                            ),
+                            bottom: 5.0,
+                            right: 20.0,
+                          ),
                         ],
                       ),
                     ),
@@ -168,6 +219,7 @@ class _CourseState extends State<Course> {
       );
 
   void download(String url, String fileName) async {
+    showAdInterstitial();
     Get.dialog(
       Center(child: CircularProgressIndicator()),
       barrierDismissible: false,

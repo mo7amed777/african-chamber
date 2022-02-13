@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demo/constants.dart';
+import 'package:demo/models/ad.dart';
 import 'package:demo/widgets/message.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class Requests extends StatefulWidget {
   static final routeName = '/Requests';
@@ -44,6 +46,7 @@ class _RequestsState extends State<Requests> {
             )
           : RefreshIndicator(
               onRefresh: () {
+                showAdRewarded();
                 setState(() {});
                 return Future.delayed(Duration(seconds: 1));
               },
@@ -77,71 +80,90 @@ class _RequestsState extends State<Requests> {
     return Card(
       margin: EdgeInsets.all(8.0),
       elevation: 10.0,
-      child: ListTile(
-        trailing: TextButton(
-          onPressed: () async {
-            try {
-              DocumentSnapshot snapshot =
-                  await firestore.collection('users').doc(userID).get();
-              List courses = snapshot.get('courses');
-              courses.add(request.values.last);
-              await firestore.collection('users').doc(userID).update({
-                'courses': courses,
-              });
+      child: Column(
+        children: [
+          ListTile(
+            trailing: TextButton(
+              onPressed: () async {
+                showAdInterstitial();
 
-              await firestore
-                  .collection('courses_requests')
-                  .doc(userID)
-                  .delete();
-              setState(() {
-                requests.removeAt(index);
-              });
-            } catch (e) {
-              print(e.toString());
-              showMessage(
-                title: 'خطأ',
-                text:
-                    'حدث خطأ أثناء قبول الطلب يرجي التأكد من الإتصال بالإنترنت وإعادة المحاولة',
-                error: true,
-              );
-            }
-          },
-          child: Text('قبول'),
-          style: TextButton.styleFrom(
-            backgroundColor: Colors.green,
-            primary: SECONDARYCOLOR,
-          ),
-        ),
-        title: Text(
-          user_snapshot?.get('name') ?? '',
-          style: TextStyle(
-            color: PRIMARYCOLOR,
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-          ),
-        ),
-        subtitle: Row(
-          children: [
-            Text(
-              request.values.elementAt(index),
+                try {
+                  DocumentSnapshot snapshot =
+                      await firestore.collection('users').doc(userID).get();
+                  List courses = snapshot.get('courses');
+                  courses.add(request.values.last);
+                  await firestore.collection('users').doc(userID).update({
+                    'courses': courses,
+                  });
+
+                  await firestore
+                      .collection('courses_requests')
+                      .doc(userID)
+                      .delete();
+                  setState(() {
+                    requests.removeAt(index);
+                  });
+                } catch (e) {
+                  print(e.toString());
+                  showMessage(
+                    title: 'خطأ',
+                    text:
+                        'حدث خطأ أثناء قبول الطلب يرجي التأكد من الإتصال بالإنترنت وإعادة المحاولة',
+                    error: true,
+                  );
+                }
+              },
+              child: Text('قبول'),
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.green,
+                primary: SECONDARYCOLOR,
+              ),
+            ),
+            title: Text(
+              user_snapshot?.get('name') ?? '',
               style: TextStyle(
                 color: PRIMARYCOLOR,
                 fontWeight: FontWeight.bold,
-                fontSize: 25,
+                fontSize: 20,
               ),
             ),
-            SizedBox(
-              width: 10,
+            subtitle: Row(
+              children: [
+                Text(
+                  request.values.elementAt(index),
+                  style: TextStyle(
+                    color: PRIMARYCOLOR,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 25,
+                  ),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  ' : كود الإشتراك ',
+                  style: TextStyle(
+                    color: PRIMARYCOLOR,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
             ),
-            Text(
-              ' : كود الإشتراك ',
-              style: TextStyle(
-                color: PRIMARYCOLOR,
-                fontWeight: FontWeight.bold,
-              ),
+          ),
+          Container(
+            height: 50.0,
+            child: AdWidget(
+              ad: BannerAd(
+                size: AdSize.banner,
+                adUnitId: bannerAdUnitId,
+                listener: BannerAdListener(
+                  onAdClosed: (ad) async => await ad.dispose(),
+                ),
+                request: AdRequest(),
+              )..load(),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

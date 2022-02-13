@@ -8,6 +8,7 @@ import 'package:demo/screens/onboard_screens/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:platform_device_id/platform_device_id.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -43,6 +44,19 @@ class Splash extends StatelessWidget {
                 color: SECONDARYCOLOR,
                 fontSize: 50,
                 fontWeight: FontWeight.w900,
+              ),
+            ),
+            Container(
+              height: 50.0,
+              child: AdWidget(
+                ad: BannerAd(
+                  size: AdSize.banner,
+                  adUnitId: bannerAdUnitId,
+                  listener: BannerAdListener(
+                    onAdClosed: (ad) async => await ad.dispose(),
+                  ),
+                  request: AdRequest(),
+                )..load(),
               ),
             ),
             SizedBox(

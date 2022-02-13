@@ -1,4 +1,5 @@
 import 'package:demo/constants.dart';
+import 'package:demo/models/ad.dart';
 import 'package:demo/screens/user_screens/courses.dart';
 import 'package:demo/screens/user_screens/home_page.dart';
 import 'package:demo/screens/user_screens/profile.dart';
@@ -42,6 +43,8 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
+        showAdInterstitial();
+
         bool res = false;
         await Get.defaultDialog(
           title: 'إغلاق',
@@ -69,6 +72,8 @@ class _HomeState extends State<Home> {
           actions: [
             TextButton(
               onPressed: () {
+                showAdInterstitial();
+
                 SharedPreferences.getInstance().then((value) => value.clear());
                 Get.offAllNamed(Login.routeName);
               },

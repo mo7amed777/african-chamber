@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demo/constants.dart';
+import 'package:demo/models/ad.dart';
 import 'package:demo/screens/admin_screens/requests.dart';
 import 'package:demo/widgets/message.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
@@ -8,6 +9,7 @@ import 'package:demo/screens/onboard_screens/login.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Admin extends StatefulWidget {
@@ -211,6 +213,19 @@ class _AdminState extends State<Admin> {
                       title: 'تحميل الفيديوهات',
                       callback: () => uploadFiles(video: true),
                     ),
+                    Container(
+                      height: 50.0,
+                      child: AdWidget(
+                        ad: BannerAd(
+                          size: AdSize.banner,
+                          adUnitId: bannerAdUnitId,
+                          listener: BannerAdListener(
+                            onAdClosed: (ad) async => await ad.dispose(),
+                          ),
+                          request: AdRequest(),
+                        )..load(),
+                      ),
+                    ),
                     buildButton(
                       title: 'تحميل المذكرات',
                       callback: () {
@@ -223,6 +238,7 @@ class _AdminState extends State<Admin> {
                               itemCount: subscribedUsers.length,
                               itemBuilder: (context, index) => InkWell(
                                 onTap: () {
+                                  showAdInterstitial();
                                   selectedUser = subscribedUsers[index];
                                   Get.back();
                                   uploadFiles();
@@ -249,6 +265,7 @@ class _AdminState extends State<Admin> {
                               child: Text('إغلاق')),
                           confirm: TextButton(
                             onPressed: () {
+                              showAdInterstitial();
                               Get.back();
                               uploadFiles(all: true);
                             },
@@ -296,6 +313,19 @@ class _AdminState extends State<Admin> {
                         ;
                       },
                     ),
+                    Container(
+                      height: 50.0,
+                      child: AdWidget(
+                        ad: BannerAd(
+                          size: AdSize.banner,
+                          adUnitId: bannerAdUnitId,
+                          listener: BannerAdListener(
+                            onAdClosed: (ad) async => await ad.dispose(),
+                          ),
+                          request: AdRequest(),
+                        )..load(),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -312,7 +342,10 @@ class _AdminState extends State<Admin> {
       child: Container(
         width: 200,
         child: TextButton(
-          onPressed: () => callback(),
+          onPressed: () {
+            showAdRewarded();
+            callback();
+          },
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: Text(

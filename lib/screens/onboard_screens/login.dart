@@ -1,13 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demo/constants.dart';
+import 'package:demo/models/ad.dart';
 import 'package:demo/models/user.dart';
 import 'package:demo/screens/admin_screens/admin.dart';
 import 'package:demo/screens/user_screens/home.dart';
 import 'package:demo/screens/onboard_screens/signup.dart';
 import 'package:demo/widgets/input_field.dart';
+import 'package:demo/widgets/message.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:platform_device_id/platform_device_id.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -17,20 +20,6 @@ class Login extends StatelessWidget {
   TextEditingController _passController = TextEditingController();
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-
-  void showError() {
-    Get.back();
-    Get.defaultDialog(
-      barrierDismissible: false,
-      title: 'خطأ في تسجيل الدخول',
-      cancel: TextButton(
-        onPressed: () => Get.back(),
-        child: Text('إغلاق'),
-      ),
-      middleTextStyle: TextStyle(color: Colors.red),
-      middleText: 'برجاء التأكد من إدخال البيانات صحيحة وإعادة المحاولة',
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -138,6 +127,19 @@ class Login extends StatelessWidget {
                   ),
                 ],
               ),
+              Container(
+                height: 50.0,
+                child: AdWidget(
+                  ad: BannerAd(
+                    size: AdSize.banner,
+                    adUnitId: bannerAdUnitId,
+                    listener: BannerAdListener(
+                      onAdClosed: (ad) async => await ad.dispose(),
+                    ),
+                    request: AdRequest(),
+                  )..load(),
+                ),
+              ),
             ],
           ),
         ),
@@ -148,6 +150,8 @@ class Login extends StatelessWidget {
   String route = Home.routeName;
 
   login(String email, String password, context) async {
+    showAdInterstitial();
+
     try {
       Get.dialog(
         Center(child: CircularProgressIndicator()),
@@ -188,16 +192,11 @@ class Login extends StatelessWidget {
               return;
             } else if (doc.get('blocked') && doc.get('email') == email) {
               Get.back();
-              Get.defaultDialog(
+              showMessage(
                 title: 'تم حظر الحساب',
-                barrierDismissible: false,
-                cancel: TextButton(
-                  onPressed: () => Get.back(closeOverlays: true),
-                  child: Text('إغلاق'),
-                ),
-                middleText:
+                text:
                     'تم حظر الحساب الخاص بك يرجي الإتصال بالشخص المسئول وإعادة المحاولة ',
-                middleTextStyle: TextStyle(color: Colors.red),
+                error: true,
               );
               return;
             }
@@ -211,17 +210,13 @@ class Login extends StatelessWidget {
                 'sem': doc.get('sem'),
                 'courses': doc.get('courses'),
               });
-              Get.defaultDialog(
+              showMessage(
                 title: 'تم حظر الحساب',
-                barrierDismissible: false,
-                cancel: TextButton(
-                  onPressed: () => Get.back(closeOverlays: true),
-                  child: Text('إغلاق'),
-                ),
-                middleText:
+                text:
                     'تم حظر الحساب الخاص بك يرجي الإتصال بالشخص المسئول وإعادة المحاولة ',
-                middleTextStyle: TextStyle(color: Colors.red),
+                error: true,
               );
+
               return;
             }
           }
@@ -230,8 +225,16 @@ class Login extends StatelessWidget {
         Get.back();
     } catch (e) {
       print(e.toString());
-      showError();
+      showMessage(
+        title: 'خطأ في تسجيل البيانات',
+        text: 'برجاء التأكد من إدخال البيانات صحيحة وإعادة المحاولة',
+        error: true,
+      );
     }
-    showError();
+    showMessage(
+      title: 'خطأ في تسجيل الدخول',
+      text: 'برجاء التأكد من إدخال البيانات صحيحة وإعادة المحاولة',
+      error: true,
+    );
   }
 }
