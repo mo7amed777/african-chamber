@@ -60,7 +60,7 @@ class Splash extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.3,
+              height: MediaQuery.of(context).size.height * 0.1,
             ),
             CircularProgressIndicator(
               color: SECONDARYCOLOR,

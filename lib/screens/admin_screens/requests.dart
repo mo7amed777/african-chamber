@@ -87,12 +87,16 @@ class _RequestsState extends State<Requests> {
               onPressed: () async {
                 showAdInterstitial();
                 try {
-                  DocumentSnapshot snapshot =
-                      await firestore.collection('users').doc(userID).get();
-                  List courses = snapshot.get('courses');
-                  courses.add(request.values.last);
-                  await firestore.collection('users').doc(userID).update({
-                    'courses': courses,
+                  firestore
+                      .collection('users')
+                      .doc(userID)
+                      .get()
+                      .then((snapshot) async {
+                    List courses = snapshot.get('courses');
+                    courses.add(request.values.last);
+                    await firestore.collection('users').doc(userID).update({
+                      'courses': courses,
+                    });
                   });
 
                   await firestore
@@ -129,7 +133,7 @@ class _RequestsState extends State<Requests> {
             subtitle: Row(
               children: [
                 Text(
-                  request.values.elementAt(index),
+                  request['code'] ?? 'Code Error',
                   style: TextStyle(
                     color: PRIMARYCOLOR,
                     fontWeight: FontWeight.bold,

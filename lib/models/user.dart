@@ -1,5 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
-
 class CurrentUser {
   final String uid;
   final String name;
