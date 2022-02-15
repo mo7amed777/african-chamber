@@ -168,8 +168,7 @@ class Login extends StatelessWidget {
       if (_formKey.currentState!.validate()) {
         String deviceId = await PlatformDeviceId.getDeviceId ?? '';
         QuerySnapshot snapshot = await firestore.collection('users').get();
-        List<QueryDocumentSnapshot> docs = snapshot.docs;
-        for (QueryDocumentSnapshot doc in docs) {
+        for (QueryDocumentSnapshot doc in snapshot.docs) {
           if (doc.id == deviceId) {
             if (!doc.get('blocked') && doc.get('email') == email) {
               await FirebaseAuth.instance

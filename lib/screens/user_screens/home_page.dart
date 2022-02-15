@@ -24,7 +24,7 @@ class HomePage extends StatelessWidget {
         case 'الثانية':
           return 4;
         case 'الثالثة':
-          return 6;
+          return 5;
         default:
           return 9;
       }

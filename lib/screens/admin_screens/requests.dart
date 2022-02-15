@@ -82,6 +82,7 @@ class _RequestsState extends State<Requests> {
       child: Column(
         children: [
           ListTile(
+            isThreeLine: true,
             trailing: TextButton(
               onPressed: () async {
                 showAdInterstitial();
@@ -129,25 +130,39 @@ class _RequestsState extends State<Requests> {
                 fontSize: 20,
               ),
             ),
-            subtitle: Row(
+            subtitle: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
+                Row(
+                  children: [
+                    Text(
+                      request['code'] ?? 'Code Error',
+                      style: TextStyle(
+                        color: PRIMARYCOLOR,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 25,
+                      ),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      ' : كود الإشتراك ',
+                      style: TextStyle(
+                        color: PRIMARYCOLOR,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
                 Text(
-                  request['code'] ?? 'Code Error',
+                  request['coursID'] ?? 'Title Error',
                   style: TextStyle(
                     color: PRIMARYCOLOR,
                     fontWeight: FontWeight.bold,
-                    fontSize: 25,
+                    fontSize: 20,
                   ),
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  ' : كود الإشتراك ',
-                  style: TextStyle(
-                    color: PRIMARYCOLOR,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
               ],
             ),
