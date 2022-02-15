@@ -358,9 +358,9 @@ class _AdminState extends State<Admin> {
         Center(child: CircularProgressIndicator()),
         barrierDismissible: false,
       );
+      courses_requests = [];
       QuerySnapshot courses_snapshot =
           await firestore.collection('courses_requests').get();
-      if (courses_requests.length > 0) courses_requests.clear();
       courses_snapshot.docs.forEach((doc) {
         courses_requests.add({
           doc.id: {
