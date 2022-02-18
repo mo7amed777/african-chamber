@@ -24,7 +24,7 @@ class _AdminState extends State<Admin> {
   String? _value;
   String? selected;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-  List<Map<String, Map<String, String>>> courses_requests = [];
+  List<Map<String, dynamic>> courses_requests = [];
 
   @override
   Widget build(BuildContext context) {
@@ -360,44 +360,39 @@ class _AdminState extends State<Admin> {
       );
       courses_requests = [];
       QuerySnapshot courses_snapshot =
-          await firestore.collection('courses_requests').get();
+          await firestore.collection('crs_requests').get();
       courses_snapshot.docs.forEach((doc) {
         courses_requests.add({
-          doc.id: {
-            'code': doc.get('code'),
-            'coursID': doc.get('coursID'),
-          },
+          doc.id: doc.get('requests'),
         });
       });
 
       List<Map<String, Map<String, String>>> requests = [];
-      if (courses_requests.isEmpty) {
-        showMessage(
-            title: 'لا يوجد طلبات',
-            text: 'لا يوجد طلبات جديدة لعرضها',
-            error: true);
-        return;
-      }
-      for (var crs in courses_requests) {
-        for (var value in SEMS.values) {
-          for (var key in value.keys) {
-            if (crs.values.last == key) {
-              requests.add(crs);
-            }
-            if (courses_requests.indexOf(crs) == courses_requests.length - 1) {
-              if (crs.values.last == key) {
-                requests.add(crs);
+      for (String sem in SEMS.keys) {
+        if (sem == selected) {
+          for (String title in SEMS[sem]!.keys) {
+            if (title == _value) {
+              for (var request in courses_requests) {
+                for (var crs in request.values.first!) {
+                  if (crs.values.last == couresID) {
+                    requests.add({
+                      request.keys.first: {
+                        'code': crs.values.first,
+                        'coursID': couresID,
+                      },
+                    });
+                  }
+                }
               }
-              Get.back();
-              Get.toNamed(
-                Requests.routeName,
-                arguments: requests.length > 0 ? requests : courses_requests,
-              );
             }
           }
         }
       }
-      ;
+      Get.back();
+      Get.toNamed(
+        Requests.routeName,
+        arguments: requests,
+      );
     } catch (e) {
       showMessage(
         title: 'خطأ في التحميل',

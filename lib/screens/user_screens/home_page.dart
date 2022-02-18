@@ -112,13 +112,10 @@ class HomePage extends StatelessWidget {
       FirebaseFirestore firestore = FirebaseFirestore.instance;
 
       DocumentSnapshot? courses_snapshot =
-          await firestore.collection('courses_requests').doc(user.uid).get();
-      Map<String, String>? courses_requests = {};
+          await firestore.collection('crs_requests').doc(user.uid).get();
+      List courses_requests = [];
       if (courses_snapshot.exists) {
-        courses_requests = {
-          'code': courses_snapshot.get('code'),
-          'coursID': courses_snapshot.get('coursID'),
-        };
+        courses_requests = courses_snapshot.get('requests');
       }
 
       DocumentSnapshot? snapshot =
@@ -180,15 +177,18 @@ class HomePage extends StatelessWidget {
         }
       } else {
         Get.back();
-        if (courses_requests.containsValue(coursID)) {
-          showMessage(
-            title: 'مشترك بالفعل',
-            text:
-                'عفواً ! لقد قمت بالإشتراك في هذا المحتوى يرجي الإنتظار حتى يتم الموافقة على طلب إشتراكك من قبل الشخص المسئول',
-            error: true,
-          );
-          return;
+        for (var request in courses_requests) {
+          if (request.containsValue(coursID)) {
+            showMessage(
+              title: 'مشترك بالفعل',
+              text:
+                  'عفواً ! لقد قمت بالإشتراك في هذا المحتوى يرجي الإنتظار حتى يتم الموافقة على طلب إشتراكك من قبل الشخص المسئول',
+              error: true,
+            );
+            return;
+          }
         }
+
         Get.defaultDialog(
           title: 'غير مشترك',
           middleText:
@@ -202,25 +202,25 @@ class HomePage extends StatelessWidget {
           ),
           confirm: TextButton(
             onPressed: () async {
-              //Map<code,courseID> courses_requests
-              courses_requests!.addAll({
+              courses_requests.add({
                 'code': code,
                 'coursID': coursID,
               });
               DocumentSnapshot snap = await firestore
-                  .collection('courses_requests')
+                  .collection('crs_requests')
                   .doc(user.uid)
                   .get();
               if (snap.exists)
                 await firestore
-                    .collection('courses_requests')
+                    .collection('crs_requests')
                     .doc(user.uid)
-                    .update(courses_requests);
+                    .update({
+                  'requests': courses_requests,
+                });
               else
-                await firestore
-                    .collection('courses_requests')
-                    .doc(user.uid)
-                    .set(courses_requests);
+                await firestore.collection('crs_requests').doc(user.uid).set({
+                  'requests': courses_requests,
+                });
               Get.back();
               await FlutterWindowManager.clearFlags(
                   FlutterWindowManager.FLAG_SECURE);

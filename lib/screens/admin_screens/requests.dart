@@ -93,16 +93,26 @@ class _RequestsState extends State<Requests> {
                       .get()
                       .then((snapshot) async {
                     List courses = snapshot.get('courses');
-                    courses.add(request.values.last);
+                    if (!courses.contains(request.values.last))
+                      courses.add(request.values.last);
                     await firestore.collection('users').doc(userID).update({
                       'courses': courses,
                     });
                   });
+                  DocumentSnapshot crs_request = await firestore
+                      .collection('crs_requests')
+                      .doc(userID)
+                      .get();
+                  List crs_req = crs_request.get('requests');
+                  crs_req.removeWhere(
+                      (req) => req['coursID'] == request['coursID']);
 
                   await firestore
-                      .collection('courses_requests')
+                      .collection('crs_requests')
                       .doc(userID)
-                      .delete();
+                      .update({
+                    'requests': crs_req,
+                  });
                   setState(() {
                     requests.removeAt(index);
                   });
