@@ -202,21 +202,16 @@ class Courses extends StatelessWidget {
             videoURLs[index],
           ),
         );
-        for (var video in videos) {
-          video.initialize().then((_) {
-            if (videos.indexOf(video) == videos.length - 1) {
-              Get.back();
-              Get.toNamed(Course.routeName, arguments: {
-                'videoURLs': videoURLs,
-                'docURLs': docURLs,
-                'filesNames': filesNames,
-                'videosNames': videosNames,
-                'coursID': title,
-                'videos': videos,
-              });
-            }
-          });
-        }
+
+        Get.back();
+        Get.toNamed(Course.routeName, arguments: {
+          'videoURLs': videoURLs,
+          'docURLs': docURLs,
+          'filesNames': filesNames,
+          'videosNames': videosNames,
+          'coursID': title,
+          'videos': videos,
+        });
       },
       child: Card(
         elevation: 2.0,

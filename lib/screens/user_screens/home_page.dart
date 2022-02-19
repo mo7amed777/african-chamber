@@ -160,21 +160,15 @@ class HomePage extends StatelessWidget {
             videoURLs[index],
           ),
         );
-        for (var video in videos) {
-          video.initialize().then((_) {
-            if (videos.indexOf(video) == videos.length - 1) {
-              Get.back();
-              Get.toNamed(Course.routeName, arguments: {
-                'videoURLs': videoURLs,
-                'docURLs': docURLs,
-                'filesNames': filesNames,
-                'videosNames': videosNames,
-                'coursID': coursID,
-                'videos': videos,
-              });
-            }
-          });
-        }
+        Get.back();
+        Get.toNamed(Course.routeName, arguments: {
+          'videoURLs': videoURLs,
+          'docURLs': docURLs,
+          'filesNames': filesNames,
+          'videosNames': videosNames,
+          'coursID': coursID,
+          'videos': videos,
+        });
       } else {
         Get.back();
         for (var request in courses_requests) {

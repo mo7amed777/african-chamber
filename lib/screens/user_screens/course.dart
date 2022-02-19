@@ -27,6 +27,12 @@ class Course extends StatefulWidget {
 
 class _CourseState extends State<Course> {
   @override
+  void initState() {
+    super.initState();
+    initialize();
+  }
+
+  @override
   void dispose() {
     dis();
     super.dispose();
@@ -34,7 +40,18 @@ class _CourseState extends State<Course> {
 
   void dis() async {
     for (VideoPlayerController video in Course.videos) {
-      await video.dispose();
+      video.removeListener(() {});
+      await video.pause();
+    }
+  }
+
+  void initialize() {
+    for (VideoPlayerController video in Course.videos) {
+      video.initialize().then((_) {
+        video.addListener(() {
+          Timer(Duration(minutes: 7), () => showAdRewarded());
+        });
+      });
     }
   }
 
@@ -99,11 +116,8 @@ class _CourseState extends State<Course> {
                     child: Chewie(
                       controller: ChewieController(
                         aspectRatio: 1.2,
-                        videoPlayerController: Course
-                            .videos[Course.videoURLs.indexOf(video)]
-                          ..addListener(() {
-                            Timer(Duration(minutes: 7), () => showAdRewarded());
-                          }),
+                        videoPlayerController:
+                            Course.videos[Course.videoURLs.indexOf(video)],
                         placeholder: Center(
                           child: Text(
                             'جاري تحميل الفيديو',
