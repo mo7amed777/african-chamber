@@ -215,51 +215,7 @@ class _AdminState extends State<Admin> {
                     ),
                     buildButton(
                       title: 'تحميل المذكرات',
-                      callback: () {
-                        getSubscribedUsers();
-                        Get.defaultDialog(
-                          barrierDismissible: false,
-                          title: 'اختر الطالب',
-                          content: Expanded(
-                            child: ListView.builder(
-                              itemCount: subscribedUsers.length,
-                              itemBuilder: (context, index) => InkWell(
-                                onTap: () {
-                                  showAdInterstitial();
-                                  selectedUser = subscribedUsers[index];
-                                  Get.back();
-                                  uploadFiles();
-                                },
-                                child: Card(
-                                  margin: EdgeInsets.all(8.0),
-                                  color: PRIMARYCOLOR,
-                                  child: Center(
-                                    child: Text(
-                                      subscribedUsers[index],
-                                      style: TextStyle(
-                                        color: SECONDARYCOLOR,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          cancel: TextButton(
-                              onPressed: () => Get.back(),
-                              child: Text('إغلاق')),
-                          confirm: TextButton(
-                            onPressed: () {
-                              showAdInterstitial();
-                              Get.back();
-                              uploadFiles(all: true);
-                            },
-                            child: Text('تحديد الكل'),
-                          ),
-                        );
-                      },
+                      callback: () => getSubscribedUsers(),
                     ),
                     buildButton(
                       title: 'طلبات الإشتراك  ',
@@ -407,15 +363,54 @@ class _AdminState extends State<Admin> {
   List<String> urls = [];
   List<String> names = [];
   List<String> subscribedUsers = [];
-  getSubscribedUsers() async {
-    QuerySnapshot<Map<String, dynamic>> users =
-        await firestore.collection('users').get();
-    users.docs.forEach((doc) {
-      if ((doc.get('courses') as List).contains(_value)) {
-        if (!subscribedUsers.contains(doc.get('name'))) {
+  void getSubscribedUsers() {
+    subscribedUsers = [];
+    firestore.collection('users').get().then((users) {
+      users.docs.forEach((doc) {
+        if (doc.get('courses').contains(_value)) {
           subscribedUsers.add(doc.get('name'));
         }
-      }
+      });
+      Get.defaultDialog(
+        barrierDismissible: false,
+        title: 'اختر الطالب',
+        content: Expanded(
+          child: ListView.builder(
+            itemCount: subscribedUsers.length,
+            itemBuilder: (context, index) => InkWell(
+              onTap: () {
+                showAdInterstitial();
+                selectedUser = subscribedUsers.elementAt(index);
+                Get.back();
+                uploadFiles();
+              },
+              child: Card(
+                margin: EdgeInsets.all(8.0),
+                color: PRIMARYCOLOR,
+                child: Center(
+                  child: Text(
+                    subscribedUsers.elementAt(index),
+                    style: TextStyle(
+                      color: SECONDARYCOLOR,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+        cancel: TextButton(onPressed: () => Get.back(), child: Text('إغلاق')),
+        confirm: TextButton(
+          onPressed: () {
+            showAdInterstitial();
+            Get.back();
+            uploadFiles(all: true);
+          },
+          child: Text('تحديد الكل'),
+        ),
+      );
     });
   }
 

@@ -232,7 +232,6 @@ class HomePage extends StatelessWidget {
                         text(
                           'قم بعمل سكرين شوت لهذه الشاشة والتوجه إلى المسئول بالمركز',
                         ),
-                        SizedBox(height: 5),
                         Card(
                           elevation: 10.0,
                           child: Image.network(
@@ -241,7 +240,16 @@ class HomePage extends StatelessWidget {
                             height: 200,
                           ),
                         ),
-                        SizedBox(height: 5),
+                        Text(
+                          coursID,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold,
+                              color: PRIMARYCOLOR),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        SizedBox(height: 2),
                         text(
                           user.name,
                           size: 25,
