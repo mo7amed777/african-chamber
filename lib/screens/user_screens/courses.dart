@@ -161,7 +161,7 @@ class Courses extends StatelessWidget {
   Widget buildItem({required String imgURL, required String title}) {
     return InkWell(
       onTap: () async {
-        showAdInterstitial();
+        //showAdInterstitial();
         Get.dialog(
           Center(
             child: CircularProgressIndicator(),

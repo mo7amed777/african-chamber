@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demo/constants.dart';
-import 'package:demo/models/ad.dart';
+import 'package:demo/screens/user_screens/home_page.dart';
 import 'package:demo/widgets/message.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,7 +15,8 @@ class Requests extends StatefulWidget {
 class _RequestsState extends State<Requests> {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  List requests = Get.arguments;
+  List requests = Get.arguments[0];
+  List names = Get.arguments[1];
 
   @override
   Widget build(BuildContext context) {
@@ -44,38 +45,26 @@ class _RequestsState extends State<Requests> {
                 ),
               ),
             )
-          : RefreshIndicator(
-              onRefresh: () {
-                setState(() {});
-                return Future.delayed(Duration(seconds: 1));
-              },
-              child: ListView.builder(
-                itemBuilder: (context, index) => buildItem(
-                  context,
-                  index,
-                  requests[index].values.first,
-                  requests[index].keys.first,
-                ),
-                itemCount: requests.length,
+          : ListView.builder(
+              itemBuilder: (context, index) => buildItem(
+                context,
+                index,
+                requests[index].values.first,
+                requests[index].keys.first,
+                names[index],
               ),
+              itemCount: requests.length,
             ),
     );
   }
-
-  DocumentSnapshot? user_snapshot;
 
   buildItem(
     BuildContext context,
     int index,
     Map<String, String> request,
     String userID,
+    String name,
   ) {
-    firestore
-        .collection('users')
-        .doc(userID)
-        .get()
-        .then((doc) => user_snapshot = doc);
-
     return Card(
       margin: EdgeInsets.all(8.0),
       elevation: 10.0,
@@ -84,56 +73,18 @@ class _RequestsState extends State<Requests> {
           ListTile(
             isThreeLine: true,
             trailing: TextButton(
-              onPressed: () async {
-                showAdInterstitial();
-                try {
-                  firestore
-                      .collection('users')
-                      .doc(userID)
-                      .get()
-                      .then((snapshot) async {
-                    List courses = snapshot.get('courses');
-                    if (!courses.contains(request.values.last))
-                      courses.add(request.values.last);
-                    await firestore.collection('users').doc(userID).update({
-                      'courses': courses,
-                    });
-                  });
-                  DocumentSnapshot crs_request = await firestore
-                      .collection('crs_requests')
-                      .doc(userID)
-                      .get();
-                  List crs_req = crs_request.get('requests');
-                  crs_req.removeWhere(
-                      (req) => req['coursID'] == request['coursID']);
-
-                  await firestore
-                      .collection('crs_requests')
-                      .doc(userID)
-                      .update({
-                    'requests': crs_req,
-                  });
-                  setState(() {
-                    requests.removeAt(index);
-                  });
-                } catch (e) {
-                  print(e.toString());
-                  showMessage(
-                    title: 'خطأ',
-                    text:
-                        'حدث خطأ أثناء قبول الطلب يرجي التأكد من الإتصال بالإنترنت وإعادة المحاولة',
-                    error: true,
-                  );
-                }
+              onPressed: () {
+                getRequestInfo(
+                    userID, request['coursID']!, request['code']!, index);
               },
-              child: Text('قبول'),
+              child: Text('عرض'),
               style: TextButton.styleFrom(
                 backgroundColor: Colors.green,
                 primary: SECONDARYCOLOR,
               ),
             ),
             title: Text(
-              user_snapshot?.get('name') ?? '',
+              name,
               style: TextStyle(
                 color: PRIMARYCOLOR,
                 fontWeight: FontWeight.bold,
@@ -193,5 +144,190 @@ class _RequestsState extends State<Requests> {
         ],
       ),
     );
+  }
+
+  void getRequestInfo(
+      String userID, String coursID, String code, int index) async {
+    DocumentSnapshot user =
+        await firestore.collection('users').doc(userID).get();
+    showRequestInfo(user, coursID, code, index);
+  }
+
+  void showRequestInfo(
+      DocumentSnapshot user, String coursID, String code, int index) {
+    Get.dialog(
+      Material(
+        child: Center(
+          child: ListView(
+            children: [
+              text(
+                'بيانات الطلب',
+              ),
+              Card(
+                elevation: 10.0,
+                child: Image.network(
+                  user.get('id_card'),
+                  fit: BoxFit.fill,
+                  height: 200,
+                ),
+              ),
+              Text(
+                coursID,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                    color: PRIMARYCOLOR),
+                overflow: TextOverflow.ellipsis,
+              ),
+              SizedBox(height: 2),
+              text(
+                user.get('name'),
+                size: 25,
+                color: PRIMARYCOLOR!,
+              ),
+              SizedBox(height: 5),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  text(
+                    user.get('sem'),
+                    color: PRIMARYCOLOR!,
+                  ),
+                  text(' : الفرقة'),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  text(
+                    user.get('set_num'),
+                    color: PRIMARYCOLOR!,
+                  ),
+                  SizedBox(width: 10),
+                  text(' : رقم الجلوس'),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  text(user.get('email'), color: PRIMARYCOLOR!, size: 15),
+                  SizedBox(width: 5),
+                  text(' : البريد الإلكتروني'),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  text(
+                    user.get('phone'),
+                    color: PRIMARYCOLOR!,
+                  ),
+                  SizedBox(width: 10),
+                  text(' : رقم الهاتف'),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  text(
+                    code,
+                    size: 22,
+                    color: PRIMARYCOLOR!,
+                  ),
+                  SizedBox(width: 10),
+                  text(' : كود الإشتراك'),
+                ],
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextButton(
+                        onPressed: () async {
+                          Get.back();
+                          reject(user, coursID, index);
+                        },
+                        child: Text('رفض'),
+                        style: TextButton.styleFrom(
+                          backgroundColor: Colors.red,
+                          primary: SECONDARYCOLOR,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextButton(
+                        onPressed: () async {
+                          Get.back();
+                          accept(user, coursID, index);
+                        },
+                        child: Text('قبول'),
+                        style: TextButton.styleFrom(
+                          backgroundColor: Colors.green,
+                          primary: SECONDARYCOLOR,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                height: 50.0,
+                child: AdWidget(
+                  ad: BannerAd(
+                    size: AdSize.banner,
+                    adUnitId: bannerAdUnitId,
+                    listener: BannerAdListener(
+                      onAdClosed: (ad) async => await ad.dispose(),
+                    ),
+                    request: AdRequest(),
+                  )..load(),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      useSafeArea: true,
+    );
+  }
+
+  void reject(DocumentSnapshot user, String coursID, int index) async {
+    DocumentSnapshot crs_request =
+        await firestore.collection('crs_requests').doc(user.id).get();
+    List crs_req = crs_request.get('requests');
+    crs_req.removeWhere((req) => req['coursID'] == coursID);
+
+    await firestore.collection('crs_requests').doc(user.id).update({
+      'requests': crs_req,
+    });
+    setState(() {
+      requests.removeAt(index);
+      names.removeAt(index);
+    });
+  }
+
+  void accept(DocumentSnapshot user, String coursID, int index) async {
+    try {
+      List courses = user.get('courses');
+      if (!courses.contains(coursID)) courses.add(coursID);
+      await firestore.collection('users').doc(user.id).update({
+        'courses': courses,
+      });
+
+      reject(user, coursID, index);
+    } catch (e) {
+      print(e.toString());
+      showMessage(
+        title: 'خطأ',
+        text:
+            'حدث خطأ أثناء قبول الطلب يرجي التأكد من الإتصال بالإنترنت وإعادة المحاولة',
+        error: true,
+      );
+    }
   }
 }

@@ -1,5 +1,6 @@
 import 'package:demo/screens/admin_screens/admin.dart';
 import 'package:demo/screens/admin_screens/requests.dart';
+import 'package:demo/screens/admin_screens/sem_users.dart';
 import 'package:demo/screens/user_screens/course.dart';
 import 'package:demo/screens/user_screens/home.dart';
 import 'package:demo/screens/onboard_screens/login.dart';
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
         Admin.routeName: (_) => Admin(),
         Login.routeName: (_) => Login(),
         SignUP.routeName: (_) => SignUP(),
+        SemUsers.routeName: (_) => SemUsers(),
       },
     );
   }

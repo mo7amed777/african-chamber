@@ -150,7 +150,7 @@ class Login extends StatelessWidget {
   String route = Home.routeName;
 
   login(String email, String password, context) async {
-    showAdInterstitial();
+    //showAdInterstitial();
 
     try {
       Get.dialog(

@@ -43,7 +43,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        showAdInterstitial();
+        //showAdInterstitial();
 
         bool res = false;
         await Get.defaultDialog(
@@ -72,7 +72,7 @@ class _HomeState extends State<Home> {
           actions: [
             TextButton(
               onPressed: () {
-                showAdInterstitial();
+                //showAdInterstitial();
 
                 SharedPreferences.getInstance().then((value) => value.clear());
                 Get.offAllNamed(Login.routeName);

@@ -3,6 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demo/constants.dart';
 import 'package:demo/models/ad.dart';
 import 'package:demo/screens/admin_screens/requests.dart';
+import 'package:demo/screens/admin_screens/sem_users.dart';
+import 'package:demo/screens/user_screens/home_page.dart';
 import 'package:demo/widgets/message.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:demo/screens/onboard_screens/login.dart';
@@ -190,7 +192,7 @@ class _AdminState extends State<Admin> {
                 child: Column(
                   children: [
                     SizedBox(
-                      height: 32,
+                      height: 8,
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -207,7 +209,11 @@ class _AdminState extends State<Admin> {
                       ),
                     ),
                     SizedBox(
-                      height: 32,
+                      height: 8,
+                    ),
+                    buildButton(
+                      title: 'عرض الطلاب  ',
+                      callback: () => setStudents(),
                     ),
                     buildButton(
                       title: 'تحميل الفيديوهات',
@@ -286,7 +292,7 @@ class _AdminState extends State<Admin> {
         width: 200,
         child: TextButton(
           onPressed: () {
-            showAdRewarded();
+            //showAdRewarded();
             callback();
           },
           child: Padding(
@@ -317,6 +323,10 @@ class _AdminState extends State<Admin> {
       courses_requests = [];
       QuerySnapshot courses_snapshot =
           await firestore.collection('crs_requests').get();
+      QuerySnapshot users = await firestore.collection('users').get();
+      List<QueryDocumentSnapshot> sem_users =
+          users.docs.where((user) => user.get('sem') == selected).toList();
+
       courses_snapshot.docs.forEach((doc) {
         courses_requests.add({
           doc.id: doc.get('requests'),
@@ -331,12 +341,14 @@ class _AdminState extends State<Admin> {
               for (var request in courses_requests) {
                 for (var crs in request.values.first!) {
                   if (crs.values.last == couresID) {
-                    requests.add({
-                      request.keys.first: {
-                        'code': crs.values.first,
-                        'coursID': couresID,
-                      },
-                    });
+                    if (!requests.contains(request)) {
+                      requests.add({
+                        request.keys.first: {
+                          'code': crs.values.first,
+                          'coursID': couresID,
+                        },
+                      });
+                    }
                   }
                 }
               }
@@ -344,10 +356,20 @@ class _AdminState extends State<Admin> {
           }
         }
       }
+      List<String> names = [];
+      if (_value == 'Terminologies  مصطلحات تجارية') sem_users = users.docs;
+
+      for (var request in requests) {
+        for (var user in sem_users) {
+          if (request.containsKey(user.id)) {
+            names.add(user.get('name'));
+          }
+        }
+      }
       Get.back();
       Get.toNamed(
         Requests.routeName,
-        arguments: requests,
+        arguments: [requests, names],
       );
     } catch (e) {
       showMessage(
@@ -363,55 +385,58 @@ class _AdminState extends State<Admin> {
   List<String> urls = [];
   List<String> names = [];
   List<String> subscribedUsers = [];
-  void getSubscribedUsers() {
-    subscribedUsers = [];
-    firestore.collection('users').get().then((users) {
-      users.docs.forEach((doc) {
-        if (doc.get('courses').contains(_value)) {
-          subscribedUsers.add(doc.get('name'));
-        }
-      });
-      Get.defaultDialog(
-        barrierDismissible: false,
-        title: 'اختر الطالب',
-        content: Expanded(
-          child: ListView.builder(
-            itemCount: subscribedUsers.length,
-            itemBuilder: (context, index) => InkWell(
-              onTap: () {
-                showAdInterstitial();
-                selectedUser = subscribedUsers.elementAt(index);
-                Get.back();
-                uploadFiles();
-              },
-              child: Card(
-                margin: EdgeInsets.all(8.0),
-                color: PRIMARYCOLOR,
-                child: Center(
-                  child: Text(
-                    subscribedUsers.elementAt(index),
-                    style: TextStyle(
-                      color: SECONDARYCOLOR,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
+  void getSubscribedUsers() async {
+    QuerySnapshot users = await firestore.collection('users').get();
+    List sem_users = users.docs
+        .where((user) => user.get('sem') == selected && !user.get('blocked'))
+        .toList();
+    subscribedUsers = sem_users
+        .where((user) => user.get('courses').contains(_value))
+        .toList()
+        .map((e) => '${e.get('name')}')
+        .toList();
+    ;
+
+    Get.defaultDialog(
+      barrierDismissible: false,
+      title: 'اختر الطالب',
+      content: Expanded(
+        child: ListView.builder(
+          itemCount: subscribedUsers.length,
+          itemBuilder: (context, index) => InkWell(
+            onTap: () {
+              //showAdInterstitial();
+              selectedUser = subscribedUsers.elementAt(index);
+              Get.back();
+              uploadFiles();
+            },
+            child: Card(
+              margin: EdgeInsets.all(8.0),
+              color: PRIMARYCOLOR,
+              child: Center(
+                child: Text(
+                  subscribedUsers.elementAt(index),
+                  style: TextStyle(
+                    color: SECONDARYCOLOR,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
                   ),
                 ),
               ),
             ),
           ),
         ),
-        cancel: TextButton(onPressed: () => Get.back(), child: Text('إغلاق')),
-        confirm: TextButton(
-          onPressed: () {
-            showAdInterstitial();
-            Get.back();
-            uploadFiles(all: true);
-          },
-          child: Text('تحديد الكل'),
-        ),
-      );
-    });
+      ),
+      cancel: TextButton(onPressed: () => Get.back(), child: Text('إغلاق')),
+      confirm: TextButton(
+        onPressed: () {
+          //showAdInterstitial();
+          Get.back();
+          uploadFiles(all: true);
+        },
+        child: Text('تحديد الكل'),
+      ),
+    );
   }
 
   String? selectedUser;
@@ -558,5 +583,66 @@ class _AdminState extends State<Admin> {
 
   String fileName(File file) {
     return file.path.substring(file.path.lastIndexOf('/') + 1);
+  }
+
+  void setStudents() async {
+    states state = states.all;
+    Get.dialog(
+      Center(child: CircularProgressIndicator()),
+      barrierDismissible: false,
+    );
+    QuerySnapshot users =
+        await firestore.collection('users').orderBy('name').get();
+    List<QueryDocumentSnapshot> sem_users =
+        users.docs.where((user) => user.get('sem') == selected).toList();
+    Get.back();
+    Get.defaultDialog(
+      title: 'برجاء اختيار النوع',
+      content: PopupMenuButton(
+        child: text('أختر النوع', color: PRIMARYCOLOR!),
+        itemBuilder: (ctx) => <PopupMenuItem<states>>[
+          PopupMenuItem<states>(
+            child: Text('مشترك'),
+            value: states.subscribed,
+          ),
+          PopupMenuItem<states>(
+            child: Text('غير مشترك'),
+            value: states.non,
+          ),
+          PopupMenuItem<states>(
+            child: Text('الكل'),
+            value: states.all,
+          ),
+        ],
+        onSelected: (states s) {
+          Get.back();
+          Get.dialog(
+            Center(child: CircularProgressIndicator()),
+            barrierDismissible: false,
+          );
+          if (s == states.subscribed) {
+            List<QueryDocumentSnapshot> sub_users = sem_users
+                .where((user) => (user.get('courses') as List).contains(_value))
+                .toList();
+            state = s;
+            Get.back();
+            Get.toNamed(SemUsers.routeName,
+                arguments: [sub_users, selected, state, _value]);
+          } else if (s == states.non) {
+            state = s;
+            sem_users.removeWhere(
+                (user) => (user.get('courses') as List).contains(_value));
+            Get.back();
+            Get.toNamed(SemUsers.routeName,
+                arguments: [sem_users, selected, state, _value]);
+          } else {
+            state = s;
+            Get.back();
+            Get.toNamed(SemUsers.routeName,
+                arguments: [sem_users, selected, state, _value]);
+          }
+        },
+      ),
+    );
   }
 }

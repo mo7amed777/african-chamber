@@ -233,7 +233,7 @@ class _CourseState extends State<Course> {
       );
 
   void download(String url, String fileName) async {
-    showAdInterstitial();
+    //showAdInterstitial();
     Get.dialog(
       Center(child: CircularProgressIndicator()),
       barrierDismissible: false,

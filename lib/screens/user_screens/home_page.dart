@@ -1,6 +1,5 @@
 import 'dart:math';
 import 'package:demo/models/ad.dart';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demo/constants.dart';
 import 'package:demo/models/user.dart';
@@ -99,7 +98,7 @@ class HomePage extends StatelessWidget {
   Random _rnd = Random.secure();
 
   void buyCourse({required String coursID}) async {
-    showAdInterstitial();
+    //showAdInterstitial();
     try {
       Get.dialog(
         Center(
@@ -346,21 +345,6 @@ class HomePage extends StatelessWidget {
     }
   }
 
-  Widget text(String label, {double size = 20, Color color = Colors.black}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12.0),
-      child: Text(
-        label,
-        textAlign: TextAlign.center,
-        style: TextStyle(
-          fontSize: size,
-          fontWeight: FontWeight.bold,
-          color: color,
-        ),
-      ),
-    );
-  }
-
   String getRandomString(int length) => String.fromCharCodes(
         Iterable.generate(
           length,
@@ -369,4 +353,19 @@ class HomePage extends StatelessWidget {
           ),
         ),
       );
+}
+
+Widget text(String label, {double size = 20, Color color = Colors.black}) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 12.0),
+    child: Text(
+      label,
+      textAlign: TextAlign.center,
+      style: TextStyle(
+        fontSize: size,
+        fontWeight: FontWeight.bold,
+        color: color,
+      ),
+    ),
+  );
 }
