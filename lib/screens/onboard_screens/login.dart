@@ -147,8 +147,6 @@ class Login extends StatelessWidget {
     );
   }
 
-  String route = Home.routeName;
-
   login(String email, String password, context) async {
     //showAdInterstitial();
 
@@ -158,17 +156,46 @@ class Login extends StatelessWidget {
         barrierDismissible: false,
       );
       if (email == 'admin' && password == '123456') {
-        route = Admin.routeName;
         SharedPreferences.getInstance().then((pref) {
           pref.setString('uid', 'admin');
         });
-        Get.offAllNamed('$route');
+        Get.offAllNamed(Admin.routeName);
         return;
       }
       if (_formKey.currentState!.validate()) {
         String deviceId = await PlatformDeviceId.getDeviceId ?? '';
         QuerySnapshot snapshot = await firestore.collection('users').get();
+
         for (QueryDocumentSnapshot doc in snapshot.docs) {
+          if (doc.get('email') == email && email == 'dev@yahoo.com') {
+            await FirebaseAuth.instance
+                .signInWithEmailAndPassword(email: email, password: password);
+            SharedPreferences pref = await SharedPreferences.getInstance();
+            pref.setString('uid', deviceId);
+            String name = FirebaseAuth.instance.currentUser!.displayName ?? '';
+            CurrentUser currentUser = CurrentUser(
+              uid: deviceId,
+              name: name,
+              sem: doc.get('sem'),
+              email: email,
+              courses: doc.get('courses'),
+              id_card: doc.get('id_card'),
+              set_num: doc.get('set_num'),
+              phone: doc.get('phone'),
+            );
+            QuerySnapshot<Map<String, dynamic>> sem_doc =
+                await firestore.collection('posts').doc(currentUser.sem)
+                .collection('posts').orderBy('date').limit(20).get();
+            QuerySnapshot<Map<String, dynamic>> all_sems =
+                await firestore.collection('posts').doc('الكل')
+                .collection('posts').orderBy('date').limit(20).get();
+
+            List<DocumentSnapshot> posts = [];
+              posts = sem_doc.docs;
+              posts.addAll(all_sems.docs);
+            Get.offAllNamed(Home.routeName, arguments: [currentUser, posts]);
+            return;
+          }
           if (doc.id == deviceId) {
             if (!doc.get('blocked') && doc.get('email') == email) {
               await FirebaseAuth.instance
@@ -187,7 +214,17 @@ class Login extends StatelessWidget {
                 set_num: doc.get('set_num'),
                 phone: doc.get('phone'),
               );
-              Get.offAllNamed('$route', arguments: currentUser);
+              QuerySnapshot<Map<String, dynamic>> sem_doc =
+                await firestore.collection('posts').doc(currentUser.sem)
+                .collection('posts').orderBy('date').limit(20).get();
+            QuerySnapshot<Map<String, dynamic>> all_sems =
+                await firestore.collection('posts').doc('الكل')
+                .collection('posts').orderBy('date').limit(20).get();
+
+            List<DocumentSnapshot> posts = [];
+              posts = sem_doc.docs;
+              posts.addAll(all_sems.docs);
+              Get.offAllNamed(Home.routeName, arguments: [currentUser, posts]);
               return;
             } else if (doc.get('blocked') && doc.get('email') == email) {
               Get.back();

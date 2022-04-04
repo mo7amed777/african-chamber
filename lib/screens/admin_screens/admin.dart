@@ -1,7 +1,11 @@
 import 'dart:io';
+import 'dart:typed_data';
+import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:better_player/better_player.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demo/constants.dart';
-import 'package:demo/models/ad.dart';
+import 'package:demo/screens/admin_screens/admin_courses.dart';
+import 'package:demo/screens/admin_screens/post.dart';
 import 'package:demo/screens/admin_screens/requests.dart';
 import 'package:demo/screens/admin_screens/sem_users.dart';
 import 'package:demo/screens/user_screens/home_page.dart';
@@ -23,8 +27,8 @@ class Admin extends StatefulWidget {
 
 class _AdminState extends State<Admin> {
   bool _visible = false;
-  String? _value;
-  String? selected;
+  String? coursid;
+  String? sem;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   List<Map<String, dynamic>> courses_requests = [];
 
@@ -77,7 +81,7 @@ class _AdminState extends State<Admin> {
                     ),
                     iconEnabledColor: PRIMARYCOLOR,
                     iconSize: 25,
-                    value: selected,
+                    value: sem,
                     items: [
                       DropdownMenuItem(
                         alignment: Alignment.center,
@@ -126,21 +130,21 @@ class _AdminState extends State<Admin> {
                     ],
                     onChanged: (val) {
                       setState(() {
-                        selected = val!;
-                        _value = null;
+                        sem = val!;
+                        coursid = null;
                       });
                     },
                   ),
                 ),
               ),
               Visibility(
-                visible: selected != null,
+                visible: sem != null,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
                       vertical: 8.0, horizontal: 16.0),
                   child: DropdownButtonHideUnderline(
                     child: DropdownButtonFormField<String>(
-                      value: _value,
+                      value: coursid,
                       isExpanded: true,
                       elevation: 0,
                       decoration: InputDecoration(
@@ -157,7 +161,7 @@ class _AdminState extends State<Admin> {
                       ),
                       iconEnabledColor: PRIMARYCOLOR,
                       iconSize: 30,
-                      items: SEMS[selected]
+                      items: SEMS[sem]
                           ?.keys
                           .map(
                             (e) => DropdownMenuItem<String>(
@@ -176,7 +180,7 @@ class _AdminState extends State<Admin> {
                           .toList(),
                       onChanged: (newVal) {
                         setState(() {
-                          _value = newVal!;
+                          coursid = newVal!;
                           _visible = true;
                         });
                       },
@@ -185,19 +189,16 @@ class _AdminState extends State<Admin> {
                 ),
               ),
               SizedBox(
-                height: 32,
+                height: 16,
               ),
               Visibility(
                 visible: _visible,
                 child: Column(
                   children: [
-                    SizedBox(
-                      height: 8,
-                    ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Text(
-                        _value ?? '',
+                        coursid ?? '',
                         textAlign: TextAlign.center,
                         maxLines: 2,
                         style: TextStyle(
@@ -209,7 +210,11 @@ class _AdminState extends State<Admin> {
                       ),
                     ),
                     SizedBox(
-                      height: 8,
+                      height: 4,
+                    ),
+                    buildButton(
+                      title: 'إضافة بوست',
+                      callback: () => Get.toNamed(Post.routeName),
                     ),
                     buildButton(
                       title: 'عرض الطلاب  ',
@@ -220,12 +225,16 @@ class _AdminState extends State<Admin> {
                       callback: () => uploadFiles(video: true),
                     ),
                     buildButton(
+                      title: 'عرض الفيديوهات   ',
+                      callback: () => showVideos(),
+                    ),
+                    buildButton(
                       title: 'تحميل المذكرات',
                       callback: () => getSubscribedUsers(),
                     ),
                     buildButton(
                       title: 'طلبات الإشتراك  ',
-                      callback: () => uploadCoursesRequests(_value!),
+                      callback: () => uploadCoursesRequests(coursid!),
                     ),
                     buildButton(
                       title: 'تحميل مثال للشرح',
@@ -325,7 +334,7 @@ class _AdminState extends State<Admin> {
           await firestore.collection('crs_requests').get();
       QuerySnapshot users = await firestore.collection('users').get();
       List<QueryDocumentSnapshot> sem_users =
-          users.docs.where((user) => user.get('sem') == selected).toList();
+          users.docs.where((user) => user.get('sem') == sem).toList();
 
       courses_snapshot.docs.forEach((doc) {
         courses_requests.add({
@@ -335,9 +344,9 @@ class _AdminState extends State<Admin> {
 
       List<Map<String, Map<String, String>>> requests = [];
       for (String sem in SEMS.keys) {
-        if (sem == selected) {
+        if (sem == sem) {
           for (String title in SEMS[sem]!.keys) {
-            if (title == _value) {
+            if (title == coursid) {
               for (var request in courses_requests) {
                 for (var crs in request.values.first!) {
                   if (crs.values.last == couresID) {
@@ -357,7 +366,7 @@ class _AdminState extends State<Admin> {
         }
       }
       List<String> names = [];
-      if (_value == 'Terminologies  مصطلحات تجارية') sem_users = users.docs;
+      if (coursid == 'Terminologies  مصطلحات تجارية') sem_users = users.docs;
 
       for (var request in requests) {
         for (var user in sem_users) {
@@ -381,17 +390,14 @@ class _AdminState extends State<Admin> {
     }
   }
 
-  List<File> files = [];
-  List<String> urls = [];
-  List<String> names = [];
   List<String> subscribedUsers = [];
   void getSubscribedUsers() async {
     QuerySnapshot users = await firestore.collection('users').get();
     List sem_users = users.docs
-        .where((user) => user.get('sem') == selected && !user.get('blocked'))
+        .where((user) => user.get('sem') == sem && !user.get('blocked'))
         .toList();
     subscribedUsers = sem_users
-        .where((user) => user.get('courses').contains(_value))
+        .where((user) => user.get('courses').contains(coursid))
         .toList()
         .map((e) => '${e.get('name')}')
         .toList();
@@ -406,7 +412,7 @@ class _AdminState extends State<Admin> {
           itemBuilder: (context, index) => InkWell(
             onTap: () {
               //showAdInterstitial();
-              selectedUser = subscribedUsers.elementAt(index);
+              semUser = subscribedUsers.elementAt(index);
               Get.back();
               uploadFiles();
             },
@@ -439,136 +445,178 @@ class _AdminState extends State<Admin> {
     );
   }
 
-  String? selectedUser;
+  String? semUser;
   void uploadFiles({bool video = false, bool all = false}) async {
     try {
-      String type = 'files/$selectedUser';
-      if (video) type = 'videos';
+      int progress = 0;
+      List<File> files = [];
+      List<String> urls = [];
+      List<String> names = [];
+      String type = 'files/$semUser';
+      if (video) {
+        type = 'videos';
+
+        AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+          if (!isAllowed) {
+            showMessage(
+                title: 'السماح للإشعارات',
+                text: 'يرجي السماح بإرسال إشعارات التحميل');
+            AwesomeNotifications().requestPermissionToSendNotifications();
+          }
+        });
+      }
       FilePickerResult? result = await FilePicker.platform.pickFiles(
           allowMultiple: true, dialogTitle: 'قم بتحديد ملفات المحاضرة');
 
       if (result != null) {
         files = result.paths.map((path) => File(path!)).toList();
         files.forEach((file) {
-          firebase_storage.FirebaseStorage.instance
-              .ref('$selected/$_value/$type/${fileName(file)}')
-              .putFile(file)
-              .then((uplaodedFile) async {
-            String url = await uplaodedFile.ref.getDownloadURL();
-            if (files.indexOf(file) == 0) {
-              urls.clear();
-              names.clear();
-            }
-            if (!urls.contains(url)) urls.add(url);
-            if (!names.contains(fileName(file))) names.add(fileName(file));
-            DocumentSnapshot doc = video
-                ? await firestore
-                    .collection('materials')
-                    .doc(selected)
-                    .collection(_value!)
-                    .doc(type)
-                    .get()
-                : await firestore
-                    .collection('materials')
-                    .doc(selected)
-                    .collection(_value!)
-                    .doc('files')
-                    .collection('users')
-                    .doc(selectedUser)
-                    .get();
-            if (doc.exists) {
-              if (video) {
-                await firestore
-                    .collection('materials')
-                    .doc(selected)
-                    .collection(_value!)
-                    .doc(type)
-                    .update(
-                  {
-                    'urls': urls,
-                    'names': names,
-                  },
-                );
-              } else {
-                if (all)
-                  for (var one in subscribedUsers) {
+          progress = 0;
+
+          firebase_storage.UploadTask uplaodedFile = firebase_storage
+              .FirebaseStorage.instance
+              .ref('$sem/$coursid/$type/${fileName(file)}')
+              .putFile(file);
+          uplaodedFile.snapshotEvents.listen((event) async {
+            progress =
+                ((event.bytesTransferred.toInt() / event.totalBytes.toInt()) *
+                        100)
+                    .toInt();
+            int uploaded = event.bytesTransferred ~/ 1048576;
+            int total = event.totalBytes ~/ 1048576;
+
+            AwesomeNotifications().createNotification(
+              content: NotificationContent(
+                id: files.indexOf(file),
+                channelKey: 'basic_channel',
+                locked: true,
+                autoDismissible: false,
+                category: NotificationCategory.Progress,
+                notificationLayout: NotificationLayout.ProgressBar,
+                progress: progress,
+                title: fileName(file),
+                body: ' $progress%       $uploaded/$total MB',
+              ),
+            );
+            if (event.state == firebase_storage.TaskState.success) {
+              String url = await uplaodedFile.snapshot.ref.getDownloadURL();
+              showMessage(title: 'تم التحميل', text: 'تم تحميل الملفات بنجاح');
+              await AwesomeNotifications().dismiss(files.indexOf(file));
+              if (!urls.contains(url)) urls.add(url);
+              if (!names.contains(fileName(file))) names.add(fileName(file));
+              DocumentSnapshot doc = video
+                  ? await firestore
+                      .collection('materials')
+                      .doc(sem)
+                      .collection(coursid!)
+                      .doc(type)
+                      .get()
+                  : await firestore
+                      .collection('materials')
+                      .doc(sem)
+                      .collection(coursid!)
+                      .doc('files')
+                      .collection('users')
+                      .doc(semUser)
+                      .get();
+              if (doc.exists) {
+                if (video) {
+                  List updatedURLs = doc.get('urls');
+                  List updatedNames = doc.get('names');
+                  updatedURLs.addAll(urls);
+                  updatedNames.addAll(names);
+
+                  await firestore
+                      .collection('materials')
+                      .doc(sem)
+                      .collection(coursid!)
+                      .doc(type)
+                      .update(
+                    {
+                      'urls': updatedURLs,
+                      'names': updatedNames,
+                    },
+                  );
+                } else {
+                  if (all)
+                    for (var one in subscribedUsers) {
+                      await firestore
+                          .collection('materials')
+                          .doc(sem)
+                          .collection(coursid!)
+                          .doc('files')
+                          .collection('users')
+                          .doc(one)
+                          .update(
+                        {
+                          'urls': urls,
+                          'names': names,
+                        },
+                      );
+                    }
+                  else
                     await firestore
                         .collection('materials')
-                        .doc(selected)
-                        .collection(_value!)
+                        .doc(sem)
+                        .collection(coursid!)
                         .doc('files')
                         .collection('users')
-                        .doc(one)
+                        .doc(semUser)
                         .update(
                       {
                         'urls': urls,
                         'names': names,
                       },
                     );
-                  }
-                else
-                  await firestore
-                      .collection('materials')
-                      .doc(selected)
-                      .collection(_value!)
-                      .doc('files')
-                      .collection('users')
-                      .doc(selectedUser)
-                      .update(
-                    {
-                      'urls': urls,
-                      'names': names,
-                    },
-                  );
-              }
-            } else {
-              if (video) {
-                await firestore
-                    .collection('materials')
-                    .doc(selected)
-                    .collection(_value!)
-                    .doc(type)
-                    .set(
-                  {
-                    'urls': urls,
-                    'names': names,
-                  },
-                );
+                }
               } else {
-                if (all)
-                  for (var one in subscribedUsers) {
-                    await firestore
-                        .collection('materials')
-                        .doc(selected)
-                        .collection(_value!)
-                        .doc('files')
-                        .collection('users')
-                        .doc(one)
-                        .set(
-                      {
-                        'urls': urls,
-                        'names': names,
-                      },
-                    );
-                  }
-                else
+                if (video) {
                   await firestore
                       .collection('materials')
-                      .doc(selected)
-                      .collection(_value!)
-                      .doc('files')
-                      .collection('users')
-                      .doc(selectedUser)
+                      .doc(sem)
+                      .collection(coursid!)
+                      .doc(type)
                       .set(
                     {
                       'urls': urls,
                       'names': names,
                     },
                   );
+                } else {
+                  if (all)
+                    for (var one in subscribedUsers) {
+                      await firestore
+                          .collection('materials')
+                          .doc(sem)
+                          .collection(coursid!)
+                          .doc('files')
+                          .collection('users')
+                          .doc(one)
+                          .set(
+                        {
+                          'urls': urls,
+                          'names': names,
+                        },
+                      );
+                    }
+                  else
+                    await firestore
+                        .collection('materials')
+                        .doc(sem)
+                        .collection(coursid!)
+                        .doc('files')
+                        .collection('users')
+                        .doc(semUser)
+                        .set(
+                      {
+                        'urls': urls,
+                        'names': names,
+                      },
+                    );
+                }
               }
             }
           });
-          showMessage(title: 'تم التحميل', text: 'تم تحميل الملفات بنجاح');
         });
       } else {
         Get.back();
@@ -594,7 +642,7 @@ class _AdminState extends State<Admin> {
     QuerySnapshot users =
         await firestore.collection('users').orderBy('name').get();
     List<QueryDocumentSnapshot> sem_users =
-        users.docs.where((user) => user.get('sem') == selected).toList();
+        users.docs.where((user) => user.get('sem') == sem).toList();
     Get.back();
     Get.defaultDialog(
       title: 'برجاء اختيار النوع',
@@ -622,27 +670,87 @@ class _AdminState extends State<Admin> {
           );
           if (s == states.subscribed) {
             List<QueryDocumentSnapshot> sub_users = sem_users
-                .where((user) => (user.get('courses') as List).contains(_value))
+                .where(
+                    (user) => (user.get('courses') as List).contains(coursid))
                 .toList();
             state = s;
             Get.back();
             Get.toNamed(SemUsers.routeName,
-                arguments: [sub_users, selected, state, _value]);
+                arguments: [sub_users, sem, state, coursid]);
           } else if (s == states.non) {
             state = s;
             sem_users.removeWhere(
-                (user) => (user.get('courses') as List).contains(_value));
+                (user) => (user.get('courses') as List).contains(coursid));
             Get.back();
             Get.toNamed(SemUsers.routeName,
-                arguments: [sem_users, selected, state, _value]);
+                arguments: [sem_users, sem, state, coursid]);
           } else {
             state = s;
             Get.back();
             Get.toNamed(SemUsers.routeName,
-                arguments: [sem_users, selected, state, _value]);
+                arguments: [sem_users, sem, state, coursid]);
           }
         },
       ),
     );
+  }
+
+  void showVideos() {
+    //showAdInterstitial();
+    Get.dialog(
+      Center(
+        child: CircularProgressIndicator(),
+      ),
+      barrierDismissible: false,
+    );
+    List videoURLs = [];
+    List videosNames = [];
+
+    firestore
+        .collection('materials')
+        .doc(sem)
+        .collection(coursid!)
+        .doc('videos')
+        .get()
+        .then((videoDoc) {
+      if (videoDoc.exists) {
+        videoURLs = videoDoc.get('urls');
+        videosNames = videoDoc.get('names');
+
+        List<BetterPlayerController> _videoPlayerControllers = List.generate(
+          videoURLs.length,
+          (index) => BetterPlayerController(
+            BetterPlayerConfiguration(
+              aspectRatio: 1.2,
+              placeholder: Center(
+                child: Text(
+                  'جاري تحميل الفيديو',
+                  style: TextStyle(
+                    color: SECONDARYCOLOR,
+                  ),
+                ),
+              ),
+            ),
+            betterPlayerDataSource: BetterPlayerDataSource.network(
+              videoURLs[index],
+              cacheConfiguration: BetterPlayerCacheConfiguration(
+                useCache: true,
+                preCacheSize: 10 * 1024 * 1024,
+                maxCacheSize: 10 * 1024 * 1024,
+                maxCacheFileSize: 10 * 1024 * 1024,
+              ),
+            ),
+          ),
+        );
+
+        Get.back();
+        Get.toNamed(AdminCourses.routeName, arguments: {
+          'videoURLs': videoURLs,
+          'videosNames': videosNames,
+          'coursID': coursid,
+          'videos': _videoPlayerControllers,
+        });
+      }
+    });
   }
 }

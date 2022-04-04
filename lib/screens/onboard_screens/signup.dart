@@ -212,59 +212,37 @@ class _SignUPState extends State<SignUP> {
                     ),
                   ),
                 ),
-                TextButton(
-                  onPressed: url == null || selected == null
-                      ? null
-                      : () => sign_up(
-                            context,
-                            _emailController.text,
-                            _passController.text,
-                            _nameController.text,
-                          ),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20.0),
-                    child: Text(
-                      'إنشاء حساب جديد   ',
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: PRIMARYCOLOR,
-                      ),
-                    ),
-                  ),
-                  style: TextButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5.0),
-                    ),
-                    alignment: Alignment.center,
-                    backgroundColor: SECONDARYCOLOR,
-                  ),
-                ),
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.05,
+                  height: 32,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    InkWell(
-                      onTap: () => Get.toNamed(Login.routeName),
+                Visibility(
+                  visible: url != null && selected != null,
+                  child: TextButton(
+                    onPressed: () => sign_up(
+                      context,
+                      _emailController.text,
+                      _passController.text,
+                      _nameController.text,
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20.0),
                       child: Text(
-                        'تسجيل الدخول',
+                        'إنشاء حساب جديد   ',
                         style: TextStyle(
-                          color: SECONDARYCOLOR,
-                          fontWeight: FontWeight.w900,
-                          fontSize: 16,
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: PRIMARYCOLOR,
                         ),
                       ),
                     ),
-                    SizedBox(
-                      width: 5,
+                    style: TextButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                      alignment: Alignment.center,
+                      backgroundColor: SECONDARYCOLOR,
                     ),
-                    Text(
-                      'لدي حساب بالفعل',
-                      style: TextStyle(color: SECONDARYCOLOR),
-                    ),
-                  ],
+                  ),
                 ),
                 Container(
                   height: 50.0,
@@ -347,7 +325,8 @@ class _SignUPState extends State<SignUP> {
             .putFile(File(file))
             .then((uplaodedFile) async {
           url = await uplaodedFile.ref.getDownloadURL();
-          showMessage(title: 'تم التحميل', text: 'تم التحميل بنجاح');
+          Get.back();
+          setState(() {});
         });
       }
     } catch (e) {

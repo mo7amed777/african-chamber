@@ -1,15 +1,11 @@
-import 'dart:async';
-
-import 'package:chewie/chewie.dart';
+import 'package:better_player/better_player.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demo/constants.dart';
-import 'package:demo/models/ad.dart';
 import 'package:demo/models/user.dart';
 import 'package:demo/screens/user_screens/course.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:video_player/video_player.dart';
 
 class Courses extends StatelessWidget {
   static final String routeName = '/courses';
@@ -51,77 +47,67 @@ class Courses extends StatelessWidget {
                       if (exampleDoc.exists) {
                         exampleURL = exampleDoc.get('video');
                         exampleName = exampleDoc.get('name');
-                        VideoPlayerController exampleVideo =
-                            VideoPlayerController.network(
-                          exampleURL,
-                        );
-                        exampleVideo.initialize().then(
-                          (value) {
-                            Get.back();
-                            Get.dialog(
-                              Material(
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      width: double.infinity,
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.4,
-                                      child: Chewie(
-                                        controller: ChewieController(
-                                          aspectRatio: 1.2,
-                                          videoPlayerController: exampleVideo
-                                            ..addListener(() {
-                                              Timer(Duration(minutes: 7),
-                                                  () => showAdRewarded());
-                                            }),
-                                          placeholder: Center(
-                                            child: Text(
-                                              'جاري تحميل الفيديو',
-                                              style: TextStyle(
-                                                color: SECONDARYCOLOR,
-                                              ),
-                                            ),
-                                          ),
-                                          showControlsOnInitialize: false,
-                                          showOptions: false,
-                                        ),
-                                      ),
-                                    ),
-                                    Text(
-                                      exampleName,
+                        BetterPlayerController exampleVideo =
+                            BetterPlayerController(
+                                BetterPlayerConfiguration(
+                                  aspectRatio: 1.2,
+                                  placeholder: Center(
+                                    child: Text(
+                                      'جاري تحميل الفيديو',
                                       style: TextStyle(
                                         color: SECONDARYCOLOR,
-                                        fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                    Container(
-                                      height: 50.0,
-                                      child: AdWidget(
-                                        ad: BannerAd(
-                                          size: AdSize.banner,
-                                          adUnitId: bannerAdUnitId,
-                                          listener: BannerAdListener(
-                                            onAdClosed: (ad) async =>
-                                                await ad.dispose(),
-                                          ),
-                                          request: AdRequest(),
-                                        )..load(),
-                                      ),
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                        exampleVideo
-                                            .dispose()
-                                            .then((value) => Get.back());
-                                      },
-                                      child: Text('إغلاق'),
-                                    ),
-                                  ],
+                                  ),
+                                  showPlaceholderUntilPlay: true,
                                 ),
-                              ),
-                            );
-                          },
+                                betterPlayerDataSource:
+                                    BetterPlayerDataSource.network(exampleURL));
+                        Get.back();
+                        Get.dialog(
+                          Material(
+                            child: Column(
+                              children: [
+                                Container(
+                                  width: double.infinity,
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.4,
+                                  child: BetterPlayer(
+                                    controller: exampleVideo,
+                                  ),
+                                ),
+                                Text(
+                                  exampleName,
+                                  style: TextStyle(
+                                    color: SECONDARYCOLOR,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Container(
+                                  height: 50.0,
+                                  child: AdWidget(
+                                    ad: BannerAd(
+                                      size: AdSize.banner,
+                                      adUnitId: bannerAdUnitId,
+                                      listener: BannerAdListener(
+                                        onAdClosed: (ad) async =>
+                                            await ad.dispose(),
+                                      ),
+                                      request: AdRequest(),
+                                    )..load(),
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    exampleVideo.videoPlayerController!
+                                        .dispose()
+                                        .then((value) => Get.back());
+                                  },
+                                  child: Text('إغلاق'),
+                                ),
+                              ],
+                            ),
+                          ),
                         );
                       }
                     },
@@ -196,10 +182,29 @@ class Courses extends StatelessWidget {
           videoURLs = videoDoc.get('urls');
           videosNames = videoDoc.get('names');
         }
-        List<VideoPlayerController> videos = List.generate(
+        List<BetterPlayerController> _videoPlayerControllers = List.generate(
           videoURLs.length,
-          (index) => VideoPlayerController.network(
-            videoURLs[index],
+          (index) => BetterPlayerController(
+            BetterPlayerConfiguration(
+              aspectRatio: 1.2,
+              placeholder: Center(
+                child: Text(
+                  'جاري تحميل الفيديو',
+                  style: TextStyle(
+                    color: SECONDARYCOLOR,
+                  ),
+                ),
+              ),
+            ),
+            betterPlayerDataSource: BetterPlayerDataSource.network(
+              videoURLs[index],
+              cacheConfiguration: BetterPlayerCacheConfiguration(
+                useCache: true,
+                preCacheSize: 10 * 1024 * 1024,
+                maxCacheSize: 10 * 1024 * 1024,
+                maxCacheFileSize: 10 * 1024 * 1024,
+              ),
+            ),
           ),
         );
 
@@ -210,9 +215,10 @@ class Courses extends StatelessWidget {
           'filesNames': filesNames,
           'videosNames': videosNames,
           'coursID': title,
-          'videos': videos,
+          'videos': _videoPlayerControllers,
         });
       },
+      
       child: Card(
         elevation: 2.0,
         margin: EdgeInsets.only(top: 4.0, bottom: 4.0, left: 12.0, right: 8.0),

@@ -1,6 +1,8 @@
+import 'package:anim_search_bar/anim_search_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demo/constants.dart';
 import 'package:demo/screens/user_screens/home_page.dart';
+import 'package:demo/widgets/check_courses.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -25,6 +27,10 @@ class _SemUsersState extends State<SemUsers> {
   states state = Get.arguments[2];
   String coursID = Get.arguments[3];
   String title = '';
+  List<QueryDocumentSnapshot> search_users = [];
+  TextEditingController searchController = TextEditingController();
+
+  bool search = false;
   @override
   Widget build(BuildContext context) {
     switch (state) {
@@ -35,17 +41,44 @@ class _SemUsersState extends State<SemUsers> {
         title = 'الطلاب الغير مشتركين';
         break;
       default:
-        title = 'جميع طلاب الفرقة$sem';
+        title = 'جميع طلاب الفرقة $sem';
         break;
     }
     return Scaffold(
         appBar: AppBar(
           title: text(title, color: SECONDARYCOLOR),
-          actions: [],
+          actions: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4.0),
+              child: AnimSearchBar(
+                width: MediaQuery.of(context).size.width - 75,
+                textController: searchController,
+                color: PRIMARYCOLOR,
+                rtl: true,
+                style: TextStyle(color: SECONDARYCOLOR),
+                suffixIcon: Icon(Icons.search),
+                closeSearchOnSuffixTap: true,
+                onSuffixTap: () {
+                  search_users.clear();
+                  for (var user in sem_users) {
+                    if ((user.get('name') as String)
+                        .isCaseInsensitiveContainsAny(searchController.text)) {
+                      search_users.add(user);
+                    }
+                  }
+                  setState(() {
+                    search = search_users.isNotEmpty;
+                    searchController.clear();
+                  });
+                },
+              ),
+            ),
+          ],
         ),
         body: ListView.builder(
-            itemBuilder: (context, index) =>
-                buildItem(context, index, sem_users[index], state)));
+            itemCount: search ? search_users.length : sem_users.length,
+            itemBuilder: (context, index) => buildItem(context, index,
+                search ? search_users[index] : sem_users[index], state)));
   }
 
   buildItem(
@@ -80,15 +113,14 @@ class _SemUsersState extends State<SemUsers> {
               ),
             ),
           ),
-          Container(
-            child: buildButton(() async {
-              if (state == states.subscribed)
-                reject(user, coursID, index);
-              else
-                accept(user, coursID, index);
-            }),
-            width: double.infinity,
-          ),
+          buildButton(() async {
+            if (state == states.subscribed)
+              reject(user, index);
+            else if (state == states.non)
+              accept(user, index);
+            else
+              add(user);
+          }),
           Container(
             height: 50.0,
             child: AdWidget(
@@ -128,7 +160,31 @@ class _SemUsersState extends State<SemUsers> {
               text(crs.isEmpty ? 'لم يتم التسجيل في أى محتوى' : 'الإشتراكات'),
               crs.isNotEmpty
                   ? Column(
-                      children: crs.map((course) => text(course)).toList(),
+                      children: crs
+                          .map(
+                            (course) => Dismissible(
+                                child: text(course),
+                                key: Key(course),
+                                direction: DismissDirection.horizontal,
+                                background: Container(
+                                  color: Colors.red,
+                                  child: Icon(
+                                    Icons.delete,
+                                    color: Colors.white,
+                                    size: 35,
+                                  ),
+                                ),
+                                onDismissed: (_) async {
+                                  crs.remove(course);
+                                  await firestore
+                                      .collection('users')
+                                      .doc(user.id)
+                                      .update({
+                                    'courses': crs,
+                                  });
+                                }),
+                          )
+                          .toList(),
                     )
                   : Container(),
               Row(
@@ -174,9 +230,11 @@ class _SemUsersState extends State<SemUsers> {
               buildButton(() async {
                 Get.back();
                 if (state == states.subscribed)
-                  reject(user, coursID, index);
+                  reject(user, index);
+                else if (state == states.non)
+                  accept(user, index);
                 else
-                  accept(user, coursID, index);
+                  add(user);
               }),
               Container(
                 height: 50.0,
@@ -200,26 +258,39 @@ class _SemUsersState extends State<SemUsers> {
   }
 
   Widget buildButton(Function callBack) {
-    if (state == states.all) return Container();
-    return Expanded(
-      child: Padding(
+    if (state == states.all)
+      return Container(
         padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
+        width: double.infinity,
+        height: 50,
         child: TextButton(
           onPressed: () => callBack(),
-          child:
-              Text(state == states.subscribed ? 'حذف الطالب' : 'تسجيل الطالب'),
+          child: Text('تسجيــل الـمــواد'),
           style: TextButton.styleFrom(
-            backgroundColor:
-                state == states.subscribed ? Colors.red : Colors.green,
+            backgroundColor: Colors.green,
             primary: SECONDARYCOLOR,
           ),
+        ),
+      );
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
+      width: double.infinity,
+      height: 50,
+      child: TextButton(
+        onPressed: () => callBack(),
+        child: Text(state == states.subscribed ? 'حذف الطالب' : 'تسجيل الطالب'),
+        style: TextButton.styleFrom(
+          backgroundColor:
+              state == states.subscribed ? Colors.red : Colors.green,
+          primary: SECONDARYCOLOR,
         ),
       ),
     );
   }
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-  void reject(DocumentSnapshot user, String coursID, int index) async {
+  void reject(DocumentSnapshot user, int index) async {
     List courses = user.get('courses');
     courses.removeWhere((crs) => crs == coursID);
     await firestore.collection('users').doc(user.id).update({
@@ -230,7 +301,7 @@ class _SemUsersState extends State<SemUsers> {
     });
   }
 
-  void accept(DocumentSnapshot user, String coursID, int index) async {
+  void accept(DocumentSnapshot user, int index) async {
     List courses = user.get('courses');
     courses.add(coursID);
     await firestore.collection('users').doc(user.id).update({
@@ -248,5 +319,22 @@ class _SemUsersState extends State<SemUsers> {
     setState(() {
       sem_users.removeAt(index);
     });
+  }
+
+  void add(DocumentSnapshot user) {
+    List allCourses = SEMS[sem]!.keys.toList();
+    List subscribedCourses = user.get('courses');
+    List<String> unSubscribedCourses = [];
+
+    for (var course in allCourses) {
+      if (!subscribedCourses.contains(course)) {
+        unSubscribedCourses.add(course);
+      }
+    }
+    List<Map<String, bool>> checkedUnSubscribedCourses = List.generate(
+        unSubscribedCourses.length,
+        (index) => {unSubscribedCourses[index]: false});
+    Get.to(CheckCourse(checkedUnSubscribedCourses, unSubscribedCourses,
+        subscribedCourses, user));
   }
 }

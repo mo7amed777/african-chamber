@@ -1,7 +1,10 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:badges/badges.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demo/constants.dart';
-import 'package:demo/models/ad.dart';
 import 'package:demo/screens/user_screens/courses.dart';
 import 'package:demo/screens/user_screens/home_page.dart';
+import 'package:demo/screens/user_screens/posts.dart';
 import 'package:demo/screens/user_screens/profile.dart';
 import 'package:demo/screens/onboard_screens/login.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +21,9 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  List<DocumentSnapshot> posts = Get.arguments[1];
+
+  bool showBadge = true;
   @override
   void initState() {
     super.initState();
@@ -70,19 +76,36 @@ class _HomeState extends State<Home> {
           title: Text(titles.elementAt(_selectedIndex)),
           backgroundColor: PRIMARYCOLOR,
           actions: [
-            TextButton(
+            IconButton(
+              onPressed: () async {
+                await AwesomeNotifications().resetGlobalBadge();
+                setState(() {
+                  showBadge = false;
+                });
+                Get.toNamed(Posts.routeName, arguments: posts);
+              },
+              icon: Badge(
+                child: Icon(
+                  Icons.notifications,
+                  size: 30,
+                ),
+                showBadge: showBadge && posts.isNotEmpty,
+                position: BadgePosition.topEnd(end: -4, top: -9),
+                badgeContent: Text(
+                  '${posts.length}',
+                  style: TextStyle(
+                    color: SECONDARYCOLOR,
+                  ),
+                ),
+              ),
+            ),
+            IconButton(
               onPressed: () {
                 //showAdInterstitial();
-
                 SharedPreferences.getInstance().then((value) => value.clear());
                 Get.offAllNamed(Login.routeName);
               },
-              child: Text(
-                'تسجيل الخروج',
-                style: TextStyle(
-                  color: SECONDARYCOLOR,
-                ),
-              ),
+              icon: Icon(Icons.logout),
             )
           ],
         ),
@@ -126,13 +149,13 @@ class _HomeState extends State<Home> {
   }
 
   List<String> titles = [
-    'المواد العلمية',
+    'الإشتراكات',
     'الصفحة الرئيسية',
     'الصفحة الشخصية',
   ];
   List<Widget> widgets = [
-    Courses(Get.arguments),
-    HomePage(Get.arguments),
-    Profile(Get.arguments),
+    Courses(Get.arguments[0]),
+    HomePage(Get.arguments[0]),
+    Profile(Get.arguments[0]),
   ];
 }

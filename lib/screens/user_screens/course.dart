@@ -1,25 +1,23 @@
-import 'dart:async';
+// ignore_for_file: import_of_legacy_library_into_null_safe
 
+import 'package:better_player/better_player.dart';
 import 'package:demo/constants.dart';
-import 'package:demo/models/ad.dart';
 import 'package:demo/widgets/message.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:chewie/chewie.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
-import 'package:video_player/video_player.dart';
 
 class Course extends StatefulWidget {
   static final String routeName = '/course';
-  static final List videoURLs = Get.arguments['videoURLs'];
-  static final List docURLs = Get.arguments['docURLs'];
-  static final List filesNames = Get.arguments['filesNames'];
-  static final List videosNames = Get.arguments['videosNames'];
-  static final String courseID = Get.arguments['coursID'];
-  static final List<VideoPlayerController> videos = Get.arguments['videos'];
+  final List videoURLs = Get.arguments['videoURLs'];
+  final List docURLs = Get.arguments['docURLs'];
+  final List filesNames = Get.arguments['filesNames'];
+  final List videosNames = Get.arguments['videosNames'];
+  final String courseID = Get.arguments['coursID'];
+  final List<BetterPlayerController> videos = Get.arguments['videos'];
 
   @override
   State<Course> createState() => _CourseState();
@@ -27,31 +25,26 @@ class Course extends StatefulWidget {
 
 class _CourseState extends State<Course> {
   @override
-  void initState() {
-    super.initState();
-    initialize();
-  }
-
-  @override
   void dispose() {
     dis();
     super.dispose();
   }
 
-  void dis() async {
-    for (VideoPlayerController video in Course.videos) {
-      video.removeListener(() {});
-      await video.pause();
+  void dis() {
+    for (BetterPlayerController video in widget.videos) {
+      video.dispose();
     }
   }
 
-  void initialize() {
-    for (VideoPlayerController video in Course.videos) {
-      video.initialize().then((_) {
-        video.addListener(() {
-          Timer(Duration(minutes: 7), () => showAdRewarded());
-        });
-      });
+  @override
+  void initState() {
+    init();
+    super.initState();
+  }
+
+  void init() async {
+    for (BetterPlayerController video in widget.videos) {
+      if (video.isVideoInitialized() ?? false) await video.play();
     }
   }
 
@@ -62,7 +55,7 @@ class _CourseState extends State<Course> {
         backgroundColor: PRIMARYCOLOR,
         elevation: 0.0,
         title: Text(
-          Course.courseID,
+          widget.courseID,
           style: TextStyle(
             color: SECONDARYCOLOR,
             fontWeight: FontWeight.bold,
@@ -70,7 +63,7 @@ class _CourseState extends State<Course> {
         ),
       ),
       backgroundColor: PRIMARYCOLOR,
-      body: Course.docURLs.isNotEmpty || Course.videoURLs.isNotEmpty
+      body: widget.docURLs.isNotEmpty || widget.videoURLs.isNotEmpty
           ? SingleChildScrollView(
               child: Column(
                 children: [
@@ -106,34 +99,32 @@ class _CourseState extends State<Course> {
   }
 
   Column videosPlayer(BuildContext context) => Column(
-        children: Course.videoURLs
+        children: widget.videoURLs
             .map(
               (video) => Column(
                 children: [
                   Container(
                     width: double.infinity,
                     height: MediaQuery.of(context).size.height * 0.4,
-                    child: Chewie(
-                      controller: ChewieController(
-                        aspectRatio: 1.2,
-                        videoPlayerController:
-                            Course.videos[Course.videoURLs.indexOf(video)],
-                        placeholder: Center(
-                          child: Text(
-                            'جاري تحميل الفيديو',
-                            style: TextStyle(
-                              color: SECONDARYCOLOR,
-                            ),
-                          ),
-                        ),
-                        showControlsOnInitialize: false,
-                        showOptions: false,
-                      ),
+                    child: BetterPlayer(
+                      controller: widget.videos
+                          .elementAt(widget.videoURLs.indexOf(video)),
                     ),
+                    // child: VideoPlayer(
+
+                    // placeholder: Center(
+                    //   child: Text(
+                    //     'جاري تحميل الفيديو',
+                    //     style: TextStyle(
+                    //       color: SECONDARYCOLOR,
+                    //     ),
+                    //   ),
+                    // ),
+                    // ),
                   ),
                   Text(
-                    Course.videosNames
-                        .elementAt(Course.videoURLs.indexOf(video)),
+                    widget.videosNames
+                        .elementAt(widget.videoURLs.indexOf(video)),
                     style: TextStyle(
                       color: SECONDARYCOLOR,
                       fontWeight: FontWeight.bold,
@@ -166,7 +157,7 @@ class _CourseState extends State<Course> {
   Wrap docs() => Wrap(
         alignment: WrapAlignment.center,
         spacing: 10.0,
-        children: Course.docURLs
+        children: widget.docURLs
             .map(
               (e) => TextButton(
                 onPressed: () {
@@ -187,8 +178,8 @@ class _CourseState extends State<Course> {
                               icon: Icon(Icons.download),
                               onPressed: () => download(
                                 e,
-                                Course.filesNames
-                                    .elementAt(Course.docURLs.indexOf(e)),
+                                widget.filesNames
+                                    .elementAt(widget.docURLs.indexOf(e)),
                               ),
                             ),
                             bottom: 5.0,
@@ -220,7 +211,7 @@ class _CourseState extends State<Course> {
                   );
                 },
                 child: Text(
-                  Course.filesNames.elementAt(Course.docURLs.indexOf(e)),
+                  widget.filesNames.elementAt(widget.docURLs.indexOf(e)),
                   style: TextStyle(
                     color: SECONDARYCOLOR,
                     fontWeight: FontWeight.bold,

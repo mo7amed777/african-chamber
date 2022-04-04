@@ -1,5 +1,5 @@
 import 'dart:math';
-import 'package:demo/models/ad.dart';
+import 'package:better_player/better_player.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demo/constants.dart';
 import 'package:demo/models/user.dart';
@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:video_player/video_player.dart';
 
 class HomePage extends StatelessWidget {
   final CurrentUser user;
@@ -153,12 +152,32 @@ class HomePage extends StatelessWidget {
           videoURLs = videoDoc.get('urls');
           videosNames = videoDoc.get('names');
         }
-        List<VideoPlayerController> videos = List.generate(
+       List<BetterPlayerController> _videoPlayerControllers = List.generate(
           videoURLs.length,
-          (index) => VideoPlayerController.network(
-            videoURLs[index],
+          (index) => BetterPlayerController(
+            BetterPlayerConfiguration(
+              aspectRatio: 1.2,
+              placeholder: Center(
+                child: Text(
+                  'جاري تحميل الفيديو',
+                  style: TextStyle(
+                    color: SECONDARYCOLOR,
+                  ),
+                ),
+              ),
+            ),
+            betterPlayerDataSource: BetterPlayerDataSource.network(
+              videoURLs[index],
+              cacheConfiguration: BetterPlayerCacheConfiguration(
+                useCache: true,
+                preCacheSize: 10 * 1024 * 1024,
+                maxCacheSize: 10 * 1024 * 1024,
+                maxCacheFileSize: 10 * 1024 * 1024,
+              ),
+            ),
           ),
         );
+
         Get.back();
         Get.toNamed(Course.routeName, arguments: {
           'videoURLs': videoURLs,
@@ -166,7 +185,7 @@ class HomePage extends StatelessWidget {
           'filesNames': filesNames,
           'videosNames': videosNames,
           'coursID': coursID,
-          'videos': videos,
+          'videos': _videoPlayerControllers,
         });
       } else {
         Get.back();

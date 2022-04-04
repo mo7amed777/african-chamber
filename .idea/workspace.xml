@@ -1,17 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AndroidLogFilters">
+    <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
+  </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ad4ec13a-afe4-4465-9a33-d7e9414d566b" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/lib/screens/admin_screens/admin_courses.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/screens/admin_screens/post.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/screens/user_screens/posts.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/widgets/check_courses.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.dart_tool/package_config.json" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/package_config.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.dart_tool/package_config_subset" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/package_config_subset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.flutter-plugins" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins-dependencies" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/african_chamber" beforeDir="false" afterPath="$PROJECT_DIR$/african_chamber" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/african_chamber/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.packages" beforeDir="false" afterPath="$PROJECT_DIR$/.packages" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/android/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Runner/Info.plist" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Runner/Info.plist" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/generated_plugin_registrant.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/generated_plugin_registrant.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/screens/admin_screens/admin.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/screens/admin_screens/admin.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/screens/admin_screens/requests.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/screens/admin_screens/requests.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/screens/admin_screens/sem_users.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/screens/admin_screens/sem_users.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/screens/onboard_screens/login.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/screens/onboard_screens/login.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/screens/onboard_screens/signup.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/screens/onboard_screens/signup.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/screens/onboard_screens/splash.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/screens/onboard_screens/splash.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/screens/user_screens/course.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/screens/user_screens/course.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/screens/user_screens/courses.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/screens/user_screens/courses.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/screens/user_screens/home.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/screens/user_screens/home.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/screens/user_screens/home_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/screens/user_screens/home_page.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,7 +47,9 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="25CnR7mt33Cp0otSdtyhaMmZxnl" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1" />
     <panes>
@@ -37,9 +63,13 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="dart.analysis.tool.window.force.activate" value="true" />
     <property name="dart.analysis.tool.window.visible" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="project.structure.last.edited" value="Build Variants" />
+    <property name="project.structure.proportion" value="0.17" />
+    <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="build.tools" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
@@ -59,5 +89,20 @@
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
     </layout>
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
 </project>

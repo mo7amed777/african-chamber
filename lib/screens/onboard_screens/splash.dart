@@ -110,7 +110,17 @@ class Splash extends StatelessWidget {
                   set_num: doc.get('set_num'),
                   phone: doc.get('phone'),
                 );
-                Get.offAndToNamed(Home.routeName, arguments: user);
+                QuerySnapshot<Map<String, dynamic>> sem_doc =
+                await firestore.collection('posts').doc(user.sem)
+                .collection('posts').orderBy('date').limit(20).get();
+            QuerySnapshot<Map<String, dynamic>> all_sems =
+                await firestore.collection('posts').doc('الكل')
+                .collection('posts').orderBy('date').limit(20).get();
+
+            List<DocumentSnapshot> posts = [];
+              posts = sem_doc.docs;
+              posts.addAll(all_sems.docs);
+                Get.offAndToNamed(Home.routeName, arguments: [user,posts]);
                 return;
               }
             }
