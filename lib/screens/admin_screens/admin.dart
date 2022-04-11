@@ -733,12 +733,6 @@ class _AdminState extends State<Admin> {
             ),
             betterPlayerDataSource: BetterPlayerDataSource.network(
               videoURLs[index],
-              cacheConfiguration: BetterPlayerCacheConfiguration(
-                useCache: true,
-                preCacheSize: 10 * 1024 * 1024,
-                maxCacheSize: 10 * 1024 * 1024,
-                maxCacheFileSize: 10 * 1024 * 1024,
-              ),
             ),
           ),
         );

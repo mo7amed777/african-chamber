@@ -198,12 +198,6 @@ class Courses extends StatelessWidget {
             ),
             betterPlayerDataSource: BetterPlayerDataSource.network(
               videoURLs[index],
-              cacheConfiguration: BetterPlayerCacheConfiguration(
-                useCache: true,
-                preCacheSize: 10 * 1024 * 1024,
-                maxCacheSize: 10 * 1024 * 1024,
-                maxCacheFileSize: 10 * 1024 * 1024,
-              ),
             ),
           ),
         );
@@ -218,7 +212,6 @@ class Courses extends StatelessWidget {
           'videos': _videoPlayerControllers,
         });
       },
-      
       child: Card(
         elevation: 2.0,
         margin: EdgeInsets.only(top: 4.0, bottom: 4.0, left: 12.0, right: 8.0),
