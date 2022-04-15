@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="bottom|left"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:id="@+id/tappx_privacy_container_content"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_weight="1"
+        android:background="#EEe7e7e7"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tappx_privacy_text_message"
+            android:layout_width="285dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:gravity="center"
+            android:text="Do you want to change your ad experience?."
+            android:textColor="#000"
+            android:textSize="14dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="3dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tappx_privacy_button_yes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/tappx_privacy_button_background"
+                android:paddingLeft="20dp"
+                android:paddingTop="2dp"
+                android:paddingRight="20dp"
+                android:paddingBottom="2dp"
+                android:text="Yes"
+                android:textColor="#fff"
+                android:textSize="14dp" />
+
+            <FrameLayout
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="#cacaca" />
+
+            <TextView
+                android:id="@+id/tappx_privacy_button_no"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/tappx_privacy_button_background"
+                android:paddingLeft="20dp"
+                android:paddingTop="2dp"
+                android:paddingRight="20dp"
+                android:paddingBottom="2dp"
+                android:text="No"
+                android:textColor="#fff"
+                android:textSize="14dp" />
+
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/tappx_privacy_container_expand_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="bottom|left"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/tappx_privacy_container_expand_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/tappx_privacy_banner_icon_plain" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#fff" />
+    </LinearLayout>
+
+</LinearLayout>

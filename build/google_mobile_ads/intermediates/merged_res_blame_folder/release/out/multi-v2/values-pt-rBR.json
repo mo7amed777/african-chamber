@@ -1,0 +1,116 @@
+{
+    "logs": [
+        {
+            "outputFile": "E:\\Flutter\\Projects\\african_chamber\\build\\google_mobile_ads\\intermediates\\res\\merged\\release\\values-pt-rBR\\values-pt-rBR.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\devel\\.gradle\\caches\\transforms-2\\files-2.1\\b187b54b51482953f32b9322df98fb2b\\jetified-play-services-basement-17.6.0\\res\\values-pt-rBR\\values.xml",
+                    "from": {
+                        "startLines": "4",
+                        "startColumns": "0",
+                        "startOffsets": "251",
+                        "endColumns": "203",
+                        "endOffsets": "454"
+                    },
+                    "to": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "105",
+                        "endColumns": "203",
+                        "endOffsets": "304"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\devel\\.gradle\\caches\\transforms-2\\files-2.1\\86cae1ed7f87903c37ea187d62abf974\\core-1.6.0\\res\\values-pt-rBR\\values-pt-rBR.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "100",
+                        "endOffsets": "151"
+                    },
+                    "to": {
+                        "startLines": "17",
+                        "startColumns": "4",
+                        "startOffsets": "1359",
+                        "endColumns": "100",
+                        "endOffsets": "1455"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\devel\\.gradle\\caches\\transforms-2\\files-2.1\\67bf1886739c0077384e0d9a01d95543\\jetified-play-services-ads-20.4.0\\res\\values-pt-rBR\\values.xml",
+                    "from": {
+                        "startLines": "4,5,6,7,8,9,10,11,12,13,14,15,16,17",
+                        "startColumns": "0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+                        "startOffsets": "203,280,384,434,558,609,722,820,861,954,989,1024,1074,1153",
+                        "endColumns": "76,103,49,123,50,112,97,40,92,34,34,49,78,43",
+                        "endOffsets": "279,383,433,557,608,721,819,860,953,988,1023,1073,1152,1196"
+                    },
+                    "to": {
+                        "startLines": "3,4,5,6,7,8,9,10,11,12,13,14,15,16",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "309,390,498,552,680,735,852,954,999,1096,1135,1174,1228,1311",
+                        "endColumns": "80,107,53,127,54,116,101,44,96,38,38,53,82,47",
+                        "endOffsets": "385,493,547,675,730,847,949,994,1091,1130,1169,1223,1306,1354"
+                    }
+                }
+            ]
+        },
+        {
+            "outputFile": "E:\\Flutter\\Projects\\african_chamber\\build\\google_mobile_ads\\intermediates\\incremental\\mergeReleaseResources\\merged.dir\\values-pt-rBR\\values-pt-rBR.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\devel\\.gradle\\caches\\transforms-2\\files-2.1\\b187b54b51482953f32b9322df98fb2b\\jetified-play-services-basement-17.6.0\\res\\values-pt-rBR\\values.xml",
+                    "from": {
+                        "startLines": "4",
+                        "startColumns": "0",
+                        "startOffsets": "251",
+                        "endColumns": "203",
+                        "endOffsets": "454"
+                    },
+                    "to": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "105",
+                        "endColumns": "203",
+                        "endOffsets": "304"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\devel\\.gradle\\caches\\transforms-2\\files-2.1\\86cae1ed7f87903c37ea187d62abf974\\core-1.6.0\\res\\values-pt-rBR\\values-pt-rBR.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "100",
+                        "endOffsets": "151"
+                    },
+                    "to": {
+                        "startLines": "17",
+                        "startColumns": "4",
+                        "startOffsets": "1359",
+                        "endColumns": "100",
+                        "endOffsets": "1455"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\devel\\.gradle\\caches\\transforms-2\\files-2.1\\67bf1886739c0077384e0d9a01d95543\\jetified-play-services-ads-20.4.0\\res\\values-pt-rBR\\values.xml",
+                    "from": {
+                        "startLines": "4,5,6,7,8,9,10,11,12,13,14,15,16,17",
+                        "startColumns": "0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+                        "startOffsets": "203,280,384,434,558,609,722,820,861,954,989,1024,1074,1153",
+                        "endColumns": "76,103,49,123,50,112,97,40,92,34,34,49,78,43",
+                        "endOffsets": "279,383,433,557,608,721,819,860,953,988,1023,1073,1152,1196"
+                    },
+                    "to": {
+                        "startLines": "3,4,5,6,7,8,9,10,11,12,13,14,15,16",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "309,390,498,552,680,735,852,954,999,1096,1135,1174,1228,1311",
+                        "endColumns": "80,107,53,127,54,116,101,44,96,38,38,53,82,47",
+                        "endOffsets": "385,493,547,675,730,847,949,994,1091,1130,1169,1223,1306,1354"
+                    }
+                }
+            ]
+        }
+    ]
+}
