@@ -1,7 +1,0 @@
-#Sat Apr 16 00:53:20 EET 2022
-base.1=E\:\\Flutter\\Projects\\african_chamber\\build\\app\\intermediates\\dex\\release\\minifyReleaseWithR8\\classes2.dex
-path.1=classes2.dex
-base.0=E\:\\Flutter\\Projects\\african_chamber\\build\\app\\intermediates\\dex\\release\\minifyReleaseWithR8\\classes.dex
-renamed.1=classes2.dex
-renamed.0=classes.dex
-path.0=classes.dex

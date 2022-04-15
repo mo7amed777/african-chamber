@@ -1,2 +1,0 @@
-com/di1shuai/platform_device_id/BuildConfig.java
- com.di1shuai.platform_device_id.BuildConfig

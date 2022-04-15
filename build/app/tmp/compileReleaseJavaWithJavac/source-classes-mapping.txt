@@ -1,4 +1,0 @@
-io/flutter/plugins/GeneratedPluginRegistrant.java
- io.flutter.plugins.GeneratedPluginRegistrant
-com/african/chamber/BuildConfig.java
- com.african.chamber.BuildConfig
