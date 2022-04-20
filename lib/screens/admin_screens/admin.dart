@@ -734,7 +734,6 @@ class _AdminState extends State<Admin> {
             ),
             betterPlayerDataSource: BetterPlayerDataSource.network(
               videoURLs[index],
-              videoFormat: BetterPlayerVideoFormat.hls,
 
             ),
           ),

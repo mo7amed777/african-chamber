@@ -169,7 +169,6 @@ class HomePage extends StatelessWidget {
             ),
             betterPlayerDataSource: BetterPlayerDataSource.network(
               videoURLs[index],
-              videoFormat: BetterPlayerVideoFormat.hls,
             ),
           ),
         );

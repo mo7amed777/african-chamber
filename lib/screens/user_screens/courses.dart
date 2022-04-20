@@ -65,7 +65,6 @@ class Courses extends StatelessWidget {
                           betterPlayerDataSource:
                               BetterPlayerDataSource.network(
                             exampleURL,
-                            videoFormat: BetterPlayerVideoFormat.hls,
                           ),
                         );
                         Get.back();
@@ -204,7 +203,6 @@ class Courses extends StatelessWidget {
             ),
             betterPlayerDataSource: BetterPlayerDataSource.network(
               videoURLs[index],
-              videoFormat: BetterPlayerVideoFormat.hls,
             ),
           ),
         );
