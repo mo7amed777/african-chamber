@@ -49,20 +49,25 @@ class Courses extends StatelessWidget {
                         exampleName = exampleDoc.get('name');
                         BetterPlayerController exampleVideo =
                             BetterPlayerController(
-                                BetterPlayerConfiguration(
-                                  aspectRatio: 1.2,
-                                  placeholder: Center(
-                                    child: Text(
-                                      'جاري تحميل الفيديو',
-                                      style: TextStyle(
-                                        color: SECONDARYCOLOR,
-                                      ),
-                                    ),
-                                  ),
-                                  showPlaceholderUntilPlay: true,
+                          BetterPlayerConfiguration(
+                            allowedScreenSleep: false,
+                            aspectRatio: 1.2,
+                            placeholder: Center(
+                              child: Text(
+                                'جاري تحميل الفيديو',
+                                style: TextStyle(
+                                  color: SECONDARYCOLOR,
                                 ),
-                                betterPlayerDataSource:
-                                    BetterPlayerDataSource.network(exampleURL));
+                              ),
+                            ),
+                            showPlaceholderUntilPlay: true,
+                          ),
+                          betterPlayerDataSource:
+                              BetterPlayerDataSource.network(
+                            exampleURL,
+                            videoFormat: BetterPlayerVideoFormat.hls,
+                          ),
+                        );
                         Get.back();
                         Get.dialog(
                           Material(
@@ -187,6 +192,7 @@ class Courses extends StatelessWidget {
           (index) => BetterPlayerController(
             BetterPlayerConfiguration(
               aspectRatio: 1.2,
+              allowedScreenSleep: false,
               placeholder: Center(
                 child: Text(
                   'جاري تحميل الفيديو',
@@ -198,6 +204,7 @@ class Courses extends StatelessWidget {
             ),
             betterPlayerDataSource: BetterPlayerDataSource.network(
               videoURLs[index],
+              videoFormat: BetterPlayerVideoFormat.hls,
             ),
           ),
         );

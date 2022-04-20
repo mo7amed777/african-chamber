@@ -152,11 +152,12 @@ class HomePage extends StatelessWidget {
           videoURLs = videoDoc.get('urls');
           videosNames = videoDoc.get('names');
         }
-       List<BetterPlayerController> _videoPlayerControllers = List.generate(
+        List<BetterPlayerController> _videoPlayerControllers = List.generate(
           videoURLs.length,
           (index) => BetterPlayerController(
             BetterPlayerConfiguration(
               aspectRatio: 1.2,
+              allowedScreenSleep: false,
               placeholder: Center(
                 child: Text(
                   'جاري تحميل الفيديو',
@@ -168,7 +169,7 @@ class HomePage extends StatelessWidget {
             ),
             betterPlayerDataSource: BetterPlayerDataSource.network(
               videoURLs[index],
-              
+              videoFormat: BetterPlayerVideoFormat.hls,
             ),
           ),
         );

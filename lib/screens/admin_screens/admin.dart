@@ -721,6 +721,7 @@ class _AdminState extends State<Admin> {
           videoURLs.length,
           (index) => BetterPlayerController(
             BetterPlayerConfiguration(
+              allowedScreenSleep: false,
               aspectRatio: 1.2,
               placeholder: Center(
                 child: Text(
@@ -733,6 +734,8 @@ class _AdminState extends State<Admin> {
             ),
             betterPlayerDataSource: BetterPlayerDataSource.network(
               videoURLs[index],
+              videoFormat: BetterPlayerVideoFormat.hls,
+
             ),
           ),
         );
