@@ -1,6 +1,6 @@
 // ignore_for_file: import_of_legacy_library_into_null_safe
 
-import 'package:better_player/better_player.dart';
+import 'package:chewie/chewie.dart';
 import 'package:demo/constants.dart';
 import 'package:demo/widgets/message.dart';
 import 'package:dio/dio.dart';
@@ -17,7 +17,8 @@ class Course extends StatefulWidget {
   final List filesNames = Get.arguments['filesNames'];
   final List videosNames = Get.arguments['videosNames'];
   final String courseID = Get.arguments['coursID'];
-  final List<BetterPlayerController> videos = Get.arguments['videos'];
+  final List<ChewieController> videoPlayerControllers =
+      Get.arguments['videoPlayerControllers'];
 
   @override
   State<Course> createState() => _CourseState();
@@ -26,26 +27,12 @@ class Course extends StatefulWidget {
 class _CourseState extends State<Course> {
   @override
   void dispose() {
-    dis();
+    for (var playerController in widget.videoPlayerControllers) {
+      playerController.videoPlayerController
+          .dispose()
+          .then((_) => playerController.dispose());
+    }
     super.dispose();
-  }
-
-  void dis() {
-    for (BetterPlayerController video in widget.videos) {
-      video.dispose();
-    }
-  }
-
-  @override
-  void initState() {
-    init();
-    super.initState();
-  }
-
-  void init() async {
-    for (BetterPlayerController video in widget.videos) {
-      if (video.isVideoInitialized() ?? false) await video.play();
-    }
   }
 
   @override
@@ -103,31 +90,40 @@ class _CourseState extends State<Course> {
             .map(
               (video) => Column(
                 children: [
-                  Container(
-                    width: double.infinity,
-                    height: MediaQuery.of(context).size.height * 0.4,
-                    child: BetterPlayer(
-                      controller: widget.videos
+                  ListTile(
+                    onTap: () {
+                      Get.defaultDialog(
+                        title: widget.videosNames
+                            .elementAt(widget.videoURLs.indexOf(video)),
+                        onWillPop: () async {
+                          await widget.videoPlayerControllers[
+                              widget.videoURLs.indexOf(video)]
+                            ..pause();
+                          return true;
+                        },
+                        content: Container(
+                          child: Expanded(
+                            child: Chewie(
+                              controller: widget.videoPlayerControllers[
+                                  widget.videoURLs.indexOf(video)],
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                    title: Text(
+                      widget.videosNames
                           .elementAt(widget.videoURLs.indexOf(video)),
+                      style: TextStyle(
+                        color: SECONDARYCOLOR,
+                        fontWeight: FontWeight.bold,
+                        decoration: TextDecoration.underline,
+                      ),
                     ),
-                    // child: VideoPlayer(
-
-                    // placeholder: Center(
-                    //   child: Text(
-                    //     'جاري تحميل الفيديو',
-                    //     style: TextStyle(
-                    //       color: SECONDARYCOLOR,
-                    //     ),
-                    //   ),
-                    // ),
-                    // ),
-                  ),
-                  Text(
-                    widget.videosNames
-                        .elementAt(widget.videoURLs.indexOf(video)),
-                    style: TextStyle(
+                    leading: Icon(
+                      Icons.play_circle_filled,
                       color: SECONDARYCOLOR,
-                      fontWeight: FontWeight.bold,
+                      size: 50,
                     ),
                   ),
                   Container(

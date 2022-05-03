@@ -13,6 +13,7 @@ import 'package:firebase_storage_web/firebase_storage_web.dart';
 import 'package:platform_device_id_web/platform_device_id_web.dart';
 import 'package:shared_preferences_web/shared_preferences_web.dart';
 import 'package:syncfusion_flutter_pdfviewer_web/pdfviewer_web.dart';
+import 'package:video_player_web/video_player_web.dart';
 import 'package:wakelock_web/wakelock_web.dart';
 
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
@@ -27,6 +28,7 @@ void registerPlugins(Registrar registrar) {
   PlatformDeviceIdWebPlugin.registerWith(registrar);
   SharedPreferencesPlugin.registerWith(registrar);
   SyncfusionFlutterPdfViewerPlugin.registerWith(registrar);
+  VideoPlayerPlugin.registerWith(registrar);
   WakelockWeb.registerWith(registrar);
   registrar.registerMessageHandler();
 }

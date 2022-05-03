@@ -1,4 +1,4 @@
-import 'package:better_player/better_player.dart';
+import 'package:chewie/chewie.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demo/constants.dart';
 import 'package:demo/models/user.dart';
@@ -6,6 +6,7 @@ import 'package:demo/screens/user_screens/course.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:video_player/video_player.dart';
 
 class Courses extends StatelessWidget {
   static final String routeName = '/courses';
@@ -47,25 +48,9 @@ class Courses extends StatelessWidget {
                       if (exampleDoc.exists) {
                         exampleURL = exampleDoc.get('video');
                         exampleName = exampleDoc.get('name');
-                        BetterPlayerController exampleVideo =
-                            BetterPlayerController(
-                          BetterPlayerConfiguration(
-                            allowedScreenSleep: false,
-                            aspectRatio: 1.2,
-                            placeholder: Center(
-                              child: Text(
-                                'جاري تحميل الفيديو',
-                                style: TextStyle(
-                                  color: SECONDARYCOLOR,
-                                ),
-                              ),
-                            ),
-                            showPlaceholderUntilPlay: true,
-                          ),
-                          betterPlayerDataSource:
-                              BetterPlayerDataSource.network(
-                            exampleURL,
-                          ),
+                        VideoPlayerController exampleVideo =
+                            VideoPlayerController.network(
+                          exampleURL,
                         );
                         Get.back();
                         Get.dialog(
@@ -76,8 +61,8 @@ class Courses extends StatelessWidget {
                                   width: double.infinity,
                                   height:
                                       MediaQuery.of(context).size.height * 0.4,
-                                  child: BetterPlayer(
-                                    controller: exampleVideo,
+                                  child: VideoPlayer(
+                                    exampleVideo,
                                   ),
                                 ),
                                 Text(
@@ -102,10 +87,10 @@ class Courses extends StatelessWidget {
                                   ),
                                 ),
                                 TextButton(
-                                  onPressed: () {
-                                    exampleVideo.videoPlayerController!
-                                        .dispose()
-                                        .then((value) => Get.back());
+                                  onPressed: () async {
+                                    await exampleVideo.pause();
+                                    await exampleVideo.dispose();
+                                    Get.back();
                                   },
                                   child: Text('إغلاق'),
                                 ),
@@ -186,23 +171,22 @@ class Courses extends StatelessWidget {
           videoURLs = videoDoc.get('urls');
           videosNames = videoDoc.get('names');
         }
-        List<BetterPlayerController> _videoPlayerControllers = List.generate(
+        List<ChewieController> _videoPlayerControllers = List.generate(
           videoURLs.length,
-          (index) => BetterPlayerController(
-            BetterPlayerConfiguration(
-              aspectRatio: 1.2,
-              allowedScreenSleep: false,
-              placeholder: Center(
-                child: Text(
-                  'جاري تحميل الفيديو',
-                  style: TextStyle(
-                    color: SECONDARYCOLOR,
-                  ),
+          (index) => ChewieController(
+            videoPlayerController: VideoPlayerController.network(
+              videoURLs[index],
+            ),
+            fullScreenByDefault: true,
+            allowedScreenSleep: false,
+            placeholder: Center(
+              child: Text(
+                'جارى التحميل',
+                style: TextStyle(
+                  color: PRIMARYCOLOR,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-            ),
-            betterPlayerDataSource: BetterPlayerDataSource.network(
-              videoURLs[index],
             ),
           ),
         );
@@ -214,7 +198,7 @@ class Courses extends StatelessWidget {
           'filesNames': filesNames,
           'videosNames': videosNames,
           'coursID': title,
-          'videos': _videoPlayerControllers,
+          'videoPlayerControllers': _videoPlayerControllers,
         });
       },
       child: Card(

@@ -1,7 +1,6 @@
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:better_player/better_player.dart';
+import 'package:chewie/chewie.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demo/constants.dart';
 import 'package:demo/screens/admin_screens/admin_courses.dart';
@@ -17,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:video_player/video_player.dart';
 
 class Admin extends StatefulWidget {
   static final routeName = '/admin';
@@ -716,25 +716,22 @@ class _AdminState extends State<Admin> {
       if (videoDoc.exists) {
         videoURLs = videoDoc.get('urls');
         videosNames = videoDoc.get('names');
-
-        List<BetterPlayerController> _videoPlayerControllers = List.generate(
+        List<ChewieController> _videoPlayerControllers = List.generate(
           videoURLs.length,
-          (index) => BetterPlayerController(
-            BetterPlayerConfiguration(
-              allowedScreenSleep: false,
-              aspectRatio: 1.2,
-              placeholder: Center(
-                child: Text(
-                  'جاري تحميل الفيديو',
-                  style: TextStyle(
-                    color: SECONDARYCOLOR,
-                  ),
+          (index) => ChewieController(
+            videoPlayerController: VideoPlayerController.network(
+              videoURLs[index],
+            ),
+            fullScreenByDefault: true,
+            allowedScreenSleep: false,
+            placeholder: Center(
+              child: Text(
+                'جارى التحميل',
+                style: TextStyle(
+                  color: PRIMARYCOLOR,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-            ),
-            betterPlayerDataSource: BetterPlayerDataSource.network(
-              videoURLs[index],
-
             ),
           ),
         );
@@ -744,7 +741,7 @@ class _AdminState extends State<Admin> {
           'videoURLs': videoURLs,
           'videosNames': videosNames,
           'coursID': coursid,
-          'videos': _videoPlayerControllers,
+          'videoPlayerControllers': _videoPlayerControllers,
         });
       }
     });

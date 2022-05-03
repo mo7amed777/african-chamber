@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'package:better_player/better_player.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demo/constants.dart';
 import 'package:demo/models/user.dart';
@@ -9,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:video_player/video_player.dart';
 
 class HomePage extends StatelessWidget {
   final CurrentUser user;
@@ -152,27 +152,12 @@ class HomePage extends StatelessWidget {
           videoURLs = videoDoc.get('urls');
           videosNames = videoDoc.get('names');
         }
-        List<BetterPlayerController> _videoPlayerControllers = List.generate(
+        List<VideoPlayerController> _videoPlayerControllers = List.generate(
           videoURLs.length,
-          (index) => BetterPlayerController(
-            BetterPlayerConfiguration(
-              aspectRatio: 1.2,
-              allowedScreenSleep: false,
-              placeholder: Center(
-                child: Text(
-                  'جاري تحميل الفيديو',
-                  style: TextStyle(
-                    color: SECONDARYCOLOR,
-                  ),
-                ),
-              ),
-            ),
-            betterPlayerDataSource: BetterPlayerDataSource.network(
+          (index) => VideoPlayerController.network(
               videoURLs[index],
             ),
-          ),
         );
-
         Get.back();
         Get.toNamed(Course.routeName, arguments: {
           'videoURLs': videoURLs,
@@ -180,7 +165,7 @@ class HomePage extends StatelessWidget {
           'filesNames': filesNames,
           'videosNames': videosNames,
           'coursID': coursID,
-          'videos': _videoPlayerControllers,
+          'videoPlayerControllers': _videoPlayerControllers,
         });
       } else {
         Get.back();

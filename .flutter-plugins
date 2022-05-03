@@ -1,6 +1,5 @@
 # This is a generated file; do not edit or check into version control.
 awesome_notifications=C:\\src\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\awesome_notifications-0.6.21\\
-better_player=C:\\src\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\better_player-0.0.81\\
 cloud_firestore=C:\\src\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\cloud_firestore-3.1.6\\
 cloud_firestore_web=C:\\src\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\cloud_firestore_web-2.6.6\\
 device_info=C:\\src\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\device_info-2.0.3\\
@@ -35,6 +34,10 @@ shared_preferences_windows=C:\\src\\flutter\\.pub-cache\\hosted\\pub.dartlang.or
 syncfusion_flutter_pdfviewer=C:\\src\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\syncfusion_flutter_pdfviewer-19.4.47-beta\\
 syncfusion_flutter_pdfviewer_macos=C:\\src\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\syncfusion_flutter_pdfviewer_macos-19.4.47-beta\\
 syncfusion_flutter_pdfviewer_web=C:\\src\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\syncfusion_flutter_pdfviewer_web-19.4.47-beta\\
-wakelock=C:\\src\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\wakelock-0.5.6\\
+video_player=C:\\src\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\video_player-2.4.0\\
+video_player_android=C:\\src\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\video_player_android-2.3.2\\
+video_player_avfoundation=C:\\src\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\video_player_avfoundation-2.3.3\\
+video_player_web=C:\\src\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\video_player_web-2.0.8\\
+wakelock=C:\\src\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\wakelock-0.6.1+2\\
 wakelock_macos=C:\\src\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\wakelock_macos-0.4.0\\
 wakelock_web=C:\\src\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\wakelock_web-0.4.0\\

@@ -1,43 +1,30 @@
-import 'package:better_player/better_player.dart';
+import 'package:chewie/chewie.dart';
 import 'package:demo/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+
 class AdminCourses extends StatefulWidget {
   static final String routeName = '/admin-courses';
   final List videoURLs = Get.arguments['videoURLs'];
   final List videosNames = Get.arguments['videosNames'];
   final String courseID = Get.arguments['coursID'];
-  final List<BetterPlayerController> videos = Get.arguments['videos'];
+  final List<ChewieController> videoPlayerControllers =
+      Get.arguments['videoPlayerControllers'];
 
   @override
   State<AdminCourses> createState() => _AdminCoursesState();
 }
 
 class _AdminCoursesState extends State<AdminCourses> {
-
-    @override
-  void dispose() {
-    dis();
-    super.dispose();
-  }
-
-  void dis() {
-    for (BetterPlayerController video in widget.videos) {
-      video.dispose();
-    }
-  }
-
   @override
-  void initState() {
-    init();
-    super.initState();
-  }
-
-  void init() async {
-    for (BetterPlayerController video in widget.videos) {
-      if (video.isVideoInitialized() ?? false) await video.play();
+  void dispose() {
+    for (var playerController in widget.videoPlayerControllers) {
+      playerController.videoPlayerController
+          .dispose()
+          .then((_) => playerController.dispose());
     }
+    super.dispose();
   }
 
   @override
@@ -55,29 +42,51 @@ class _AdminCoursesState extends State<AdminCourses> {
         ),
       ),
       backgroundColor: PRIMARYCOLOR,
-      body: SingleChildScrollView(child: videosPlayer(context),),
+      body: SingleChildScrollView(
+        child: videosPlayer(context),
+      ),
     );
   }
-   Column videosPlayer(BuildContext context) => Column(
+
+  Column videosPlayer(BuildContext context) => Column(
         children: widget.videoURLs
             .map(
               (video) => Column(
                 children: [
-                  Container(
-                    width: double.infinity,
-                    height: MediaQuery.of(context).size.height * 0.4,
-                    child: BetterPlayer(
-                      controller: widget.videos
+                  ListTile(
+                    onTap: () {
+                      Get.defaultDialog(
+                        title: widget.videosNames
+                            .elementAt(widget.videoURLs.indexOf(video)),
+                        onWillPop: () async {
+                          await widget.videoPlayerControllers[
+                              widget.videoURLs.indexOf(video)]
+                            ..pause();
+                          return true;
+                        },
+                        content: Container(
+                          child: Expanded(
+                            child: Chewie(
+                              controller: widget.videoPlayerControllers[
+                                  widget.videoURLs.indexOf(video)],
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                    title: Text(
+                      widget.videosNames
                           .elementAt(widget.videoURLs.indexOf(video)),
+                      style: TextStyle(
+                        color: SECONDARYCOLOR,
+                        fontWeight: FontWeight.bold,
+                        decoration: TextDecoration.underline,
+                      ),
                     ),
-                   
-                  ),
-                  Text(
-                    widget.videosNames
-                        .elementAt(widget.videoURLs.indexOf(video)),
-                    style: TextStyle(
+                    leading: Icon(
+                      Icons.play_circle_filled,
                       color: SECONDARYCOLOR,
-                      fontWeight: FontWeight.bold,
+                      size: 50,
                     ),
                   ),
                   Container(
@@ -103,5 +112,4 @@ class _AdminCoursesState extends State<AdminCourses> {
             )
             .toList(),
       );
-
 }
