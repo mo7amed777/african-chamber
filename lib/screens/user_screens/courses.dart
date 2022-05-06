@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:video_player/video_player.dart';
+import 'package:demo/models/ad.dart';
 
 class Courses extends StatelessWidget {
   static final String routeName = '/courses';
@@ -136,7 +137,7 @@ class Courses extends StatelessWidget {
   Widget buildItem({required String imgURL, required String title}) {
     return InkWell(
       onTap: () async {
-        //showAdInterstitial();
+        showAdInterstitial();
         Get.dialog(
           Center(
             child: CircularProgressIndicator(),

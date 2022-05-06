@@ -17,6 +17,7 @@ import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:video_player/video_player.dart';
+import 'package:demo/models/ad.dart';
 
 class Admin extends StatefulWidget {
   static final routeName = '/admin';
@@ -301,7 +302,7 @@ class _AdminState extends State<Admin> {
         width: 200,
         child: TextButton(
           onPressed: () {
-            //showAdRewarded();
+            showAdRewarded();
             callback();
           },
           child: Padding(
@@ -411,7 +412,7 @@ class _AdminState extends State<Admin> {
           itemCount: subscribedUsers.length,
           itemBuilder: (context, index) => InkWell(
             onTap: () {
-              //showAdInterstitial();
+              showAdInterstitial();
               semUser = subscribedUsers.elementAt(index);
               Get.back();
               uploadFiles();
@@ -436,7 +437,7 @@ class _AdminState extends State<Admin> {
       cancel: TextButton(onPressed: () => Get.back(), child: Text('إغلاق')),
       confirm: TextButton(
         onPressed: () {
-          //showAdInterstitial();
+          showAdInterstitial();
           Get.back();
           uploadFiles(all: true);
         },
@@ -696,7 +697,7 @@ class _AdminState extends State<Admin> {
   }
 
   void showVideos() {
-    //showAdInterstitial();
+    showAdInterstitial();
     Get.dialog(
       Center(
         child: CircularProgressIndicator(),

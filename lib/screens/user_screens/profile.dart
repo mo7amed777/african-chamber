@@ -55,6 +55,7 @@ class Profile extends StatelessWidget {
   }
 
   Widget text(String label, {double size = 20}) {
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12.0),
       child: Text(

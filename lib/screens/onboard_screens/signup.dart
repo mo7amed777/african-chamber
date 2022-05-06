@@ -267,7 +267,7 @@ class _SignUPState extends State<SignUP> {
 
   void sign_up(
       BuildContext context, String email, String password, String name) {
-    //showAdInterstitial();
+    showAdInterstitial();
 
     Get.dialog(
       Center(child: CircularProgressIndicator()),

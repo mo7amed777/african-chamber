@@ -2,9 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demo/constants.dart';
 import 'package:demo/screens/admin_screens/admin.dart';
 import 'package:demo/screens/user_screens/home_page.dart';
-import 'package:demo/widgets/message.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:demo/models/ad.dart';
 
 class CheckCourse extends StatefulWidget {
   final List<Map<String, bool>> checkedUnSubscribedCourses;
@@ -124,7 +124,7 @@ class _CheckCourseState extends State<CheckCourse> {
       cancel: TextButton(
         onPressed: () {
           Get.offAllNamed(Admin.routeName);
-          //showAdInterstitial();
+          showAdInterstitial();
         },
         child: Text('إغلاق'),
       ),

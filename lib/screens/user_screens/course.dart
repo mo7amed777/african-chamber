@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
+import 'package:demo/models/ad.dart';
 
 class Course extends StatefulWidget {
   static final String routeName = '/course';
@@ -220,7 +221,7 @@ class _CourseState extends State<Course> {
       );
 
   void download(String url, String fileName) async {
-    //showAdInterstitial();
+    showAdInterstitial();
     Get.dialog(
       Center(child: CircularProgressIndicator()),
       barrierDismissible: false,

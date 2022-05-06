@@ -148,7 +148,7 @@ class Login extends StatelessWidget {
   }
 
   login(String email, String password, context) async {
-    //showAdInterstitial();
+    showAdInterstitial();
 
     try {
       Get.dialog(

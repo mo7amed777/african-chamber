@@ -9,6 +9,7 @@ import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:video_player/video_player.dart';
+import 'package:demo/models/ad.dart';
 
 class HomePage extends StatelessWidget {
   final CurrentUser user;
@@ -97,7 +98,7 @@ class HomePage extends StatelessWidget {
   Random _rnd = Random.secure();
 
   void buyCourse({required String coursID}) async {
-    //showAdInterstitial();
+    showAdInterstitial();
     try {
       Get.dialog(
         Center(

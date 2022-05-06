@@ -12,6 +12,7 @@ import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:demo/models/ad.dart';
 
 class Home extends StatefulWidget {
   static String routeName = '/home';
@@ -49,7 +50,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        //showAdInterstitial();
+        showAdInterstitial();
 
         bool res = false;
         await Get.defaultDialog(
@@ -101,7 +102,7 @@ class _HomeState extends State<Home> {
             ),
             IconButton(
               onPressed: () {
-                //showAdInterstitial();
+                showAdInterstitial();
                 SharedPreferences.getInstance().then((value) => value.clear());
                 Get.offAllNamed(Login.routeName);
               },
