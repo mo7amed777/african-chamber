@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demo/constants.dart';
+import 'package:demo/models/user.dart';
 import 'package:demo/screens/user_screens/home_page.dart';
+import 'package:demo/widgets/drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -11,13 +13,23 @@ class Posts extends StatefulWidget {
 }
 
 class _PostsState extends State<Posts> {
-  List<DocumentSnapshot> posts = Get.arguments;
+  List<DocumentSnapshot> posts = Get.arguments['posts'];
+  CurrentUser user = Get.arguments['user'];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: text('آخر الأخبار', color: SECONDARYCOLOR),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            Get.back();
+          },
+        ),
+      ),
+      drawer: MainDrawer(
+        user: user,
       ),
       backgroundColor: PRIMARYCOLOR,
       body: posts.isEmpty
@@ -41,16 +53,16 @@ class _PostsState extends State<Posts> {
                           post.get('url') == 'Not Found!'
                               ? Container()
                               : Padding(
-                                  padding: const EdgeInsets.only(
-                                    top: 16.0,
-                                  ),
+                                  padding: const EdgeInsets.all(16),
                                   child: Image.network(
                                     post.get('url'),
                                     fit: BoxFit.fill,
                                   ),
                                 ),
                           Divider(
-                            color: Colors.blue[900],
+                            color: Colors.blue[100],
+                            height: 1.0,
+                            thickness: 3.0,
                           ),
                         ],
                       ),

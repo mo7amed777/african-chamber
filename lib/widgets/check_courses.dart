@@ -124,7 +124,7 @@ class _CheckCourseState extends State<CheckCourse> {
       cancel: TextButton(
         onPressed: () {
           Get.offAllNamed(Admin.routeName);
-          showAdInterstitial();
+          //showAdInterstitial();
         },
         child: Text('إغلاق'),
       ),

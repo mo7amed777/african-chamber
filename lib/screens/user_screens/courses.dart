@@ -137,7 +137,7 @@ class Courses extends StatelessWidget {
   Widget buildItem({required String imgURL, required String title}) {
     return InkWell(
       onTap: () async {
-        showAdInterstitial();
+        //showAdInterstitial();
         Get.dialog(
           Center(
             child: CircularProgressIndicator(),
@@ -194,6 +194,7 @@ class Courses extends StatelessWidget {
 
         Get.back();
         Get.toNamed(Course.routeName, arguments: {
+          'user': user,
           'videoURLs': videoURLs,
           'docURLs': docURLs,
           'filesNames': filesNames,

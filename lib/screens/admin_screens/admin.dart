@@ -4,10 +4,13 @@ import 'package:chewie/chewie.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demo/constants.dart';
 import 'package:demo/screens/admin_screens/admin_courses.dart';
+import 'package:demo/screens/admin_screens/complaints.dart';
 import 'package:demo/screens/admin_screens/post.dart';
 import 'package:demo/screens/admin_screens/requests.dart';
 import 'package:demo/screens/admin_screens/sem_users.dart';
+import 'package:demo/screens/user_screens/complaint.dart';
 import 'package:demo/screens/user_screens/home_page.dart';
+import 'package:demo/widgets/drawer.dart';
 import 'package:demo/widgets/message.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:demo/screens/onboard_screens/login.dart';
@@ -36,42 +39,199 @@ class _AdminState extends State<Admin> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: PRIMARYCOLOR,
-        elevation: 0.0, //No Elevation
-        actions: [
-          TextButton(
-            onPressed: () {
-              SharedPreferences.getInstance().then((value) => value.clear());
-              Get.offAllNamed(Login.routeName);
-            },
-            child: Text(
-              'تسجيل الخروج',
-              style: TextStyle(
-                color: SECONDARYCOLOR,
-                fontWeight: FontWeight.bold,
+      drawer: _visible
+          ? MainDrawer(
+              isAdmin: true,
+              items: Column(
+                children: [
+                  drawerItem(
+                    icon: Icons.people,
+                    title: 'عرض جميع الطلاب',
+                    callback: () => setStudents(),
+                  ),
+                  drawerItem(
+                    icon: Icons.ondemand_video_sharp,
+                    title: 'عرض الفيديوهات',
+                    callback: () => showVideos(),
+                  ),
+                  drawerItem(
+                    icon: Icons.chrome_reader_mode_rounded,
+                    title: 'طلبات الإشتراك',
+                    callback: () => uploadCoursesRequests(coursid!),
+                  ),
+                  drawerItem(
+                    icon: Icons.post_add,
+                    title: 'نشر بوست جديد',
+                    callback: () => Get.toNamed(Post.routeName),
+                  ),
+                  drawerItem(
+                    icon: Icons.video_library,
+                    title: 'تحميل الفيديوهات',
+                    callback: () => uploadFiles(video: true),
+                  ),
+                  drawerItem(
+                    icon: Icons.upload_file_rounded,
+                    title: 'تحميل المذكرات',
+                    callback: () => getSubscribedUsers(),
+                  ),
+                  drawerItem(
+                    icon: Icons.live_help_rounded,
+                    title: 'الشكاوي والمقترحات',
+                    callback: () async {
+                      Get.back();
+                      Get.dialog(
+                        Center(child: CircularProgressIndicator()),
+                        barrierDismissible: false,
+                      );
+                      QuerySnapshot<Map<String, dynamic>> complaints =
+                          await firestore
+                              .collection('complaints')
+                              .doc(sem)
+                              .collection('data')
+                              .orderBy('date', descending: true)
+                              .limit(50)
+                              .get();
+
+                      Get.back();
+                      Get.to(Complaints(), arguments: {
+                        'complaints': complaints.docs,
+                      });
+                    },
+                  ),
+                  drawerItem(
+                    icon: Icons.logout,
+                    title: 'تسجيل الخروج',
+                    callback: () {
+                      //showAdInterstitial();
+                      SharedPreferences.getInstance()
+                          .then((value) => value.clear());
+                      Get.offAllNamed(Login.routeName);
+                    },
+                  ),
+                  Spacer(),
+                  Container(
+                    margin: EdgeInsets.zero,
+                    padding: const EdgeInsets.all(8.0),
+                    decoration: BoxDecoration(
+                        gradient: LinearGradient(colors: [
+                      Colors.cyan,
+                      Colors.indigo,
+                    ])),
+                    child: Text(
+                      '2022 © جميع الحقوق محفوظة لدى الغرفة الأفريقية',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 16.0,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          : null,
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/admin.jpg'),
+            fit: BoxFit.fill,
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              margin: EdgeInsets.only(top: 50),
+              width: MediaQuery.of(context).size.width * 0.5,
+              child: DropdownButtonHideUnderline(
+                child: DropdownButtonFormField<String>(
+                  isExpanded: true,
+                  elevation: 0,
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: SECONDARYCOLOR,
+                    hintText: 'الفرقة',
+                    hintStyle: TextStyle(
+                      color: PRIMARYCOLOR,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30.0),
+                    ),
+                  ),
+                  iconEnabledColor: PRIMARYCOLOR,
+                  iconSize: 25,
+                  value: sem,
+                  items: [
+                    DropdownMenuItem(
+                      alignment: Alignment.center,
+                      child: Text(
+                        'الأولى',
+                        style: TextStyle(
+                          color: PRIMARYCOLOR,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      value: 'الأولى',
+                    ),
+                    DropdownMenuItem(
+                      alignment: Alignment.center,
+                      child: Text(
+                        'الثانية',
+                        style: TextStyle(
+                          color: PRIMARYCOLOR,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      value: 'الثانية',
+                    ),
+                    DropdownMenuItem(
+                      alignment: Alignment.center,
+                      child: Text(
+                        'الثالثة',
+                        style: TextStyle(
+                          color: PRIMARYCOLOR,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      value: 'الثالثة',
+                    ),
+                    DropdownMenuItem(
+                      alignment: Alignment.center,
+                      child: Text(
+                        'الرابعة',
+                        style: TextStyle(
+                          color: PRIMARYCOLOR,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      value: 'الرابعة',
+                    ),
+                  ],
+                  onChanged: (val) {
+                    setState(() {
+                      sem = val!;
+                      coursid = null;
+                    });
+                  },
+                ),
               ),
             ),
-          )
-        ],
-      ),
-      backgroundColor: PRIMARYCOLOR,
-      body: SingleChildScrollView(
-        child: Container(
-          width: double.infinity,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width * 0.5,
+            Visibility(
+              visible: sem != null,
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
                 child: DropdownButtonHideUnderline(
                   child: DropdownButtonFormField<String>(
+                    value: coursid,
                     isExpanded: true,
                     elevation: 0,
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: SECONDARYCOLOR,
-                      hintText: 'الفرقة',
+                      hintText: 'أختر الكورس',
                       hintStyle: TextStyle(
                         color: PRIMARYCOLOR,
                         fontWeight: FontWeight.bold,
@@ -81,244 +241,48 @@ class _AdminState extends State<Admin> {
                       ),
                     ),
                     iconEnabledColor: PRIMARYCOLOR,
-                    iconSize: 25,
-                    value: sem,
-                    items: [
-                      DropdownMenuItem(
-                        alignment: Alignment.center,
-                        child: Text(
-                          'الأولى',
-                          style: TextStyle(
-                            color: PRIMARYCOLOR,
-                            fontWeight: FontWeight.bold,
+                    iconSize: 30,
+                    items: SEMS[sem]
+                        ?.keys
+                        .map(
+                          (e) => DropdownMenuItem<String>(
+                            child: Center(
+                              child: Text(
+                                e,
+                                style: TextStyle(
+                                  color: PRIMARYCOLOR,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            value: e,
                           ),
-                        ),
-                        value: 'الأولى',
-                      ),
-                      DropdownMenuItem(
-                        alignment: Alignment.center,
-                        child: Text(
-                          'الثانية',
-                          style: TextStyle(
-                            color: PRIMARYCOLOR,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        value: 'الثانية',
-                      ),
-                      DropdownMenuItem(
-                        alignment: Alignment.center,
-                        child: Text(
-                          'الثالثة',
-                          style: TextStyle(
-                            color: PRIMARYCOLOR,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        value: 'الثالثة',
-                      ),
-                      DropdownMenuItem(
-                        alignment: Alignment.center,
-                        child: Text(
-                          'الرابعة',
-                          style: TextStyle(
-                            color: PRIMARYCOLOR,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        value: 'الرابعة',
-                      ),
-                    ],
-                    onChanged: (val) {
+                        )
+                        .toList(),
+                    onChanged: (newVal) {
                       setState(() {
-                        sem = val!;
-                        coursid = null;
+                        coursid = newVal!;
+                        _visible = true;
                       });
                     },
                   ),
                 ),
               ),
-              Visibility(
-                visible: sem != null,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 8.0, horizontal: 16.0),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButtonFormField<String>(
-                      value: coursid,
-                      isExpanded: true,
-                      elevation: 0,
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: SECONDARYCOLOR,
-                        hintText: 'أختر الكورس',
-                        hintStyle: TextStyle(
-                          color: PRIMARYCOLOR,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30.0),
-                        ),
-                      ),
-                      iconEnabledColor: PRIMARYCOLOR,
-                      iconSize: 30,
-                      items: SEMS[sem]
-                          ?.keys
-                          .map(
-                            (e) => DropdownMenuItem<String>(
-                              child: Center(
-                                child: Text(
-                                  e,
-                                  style: TextStyle(
-                                    color: PRIMARYCOLOR,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                              value: e,
-                            ),
-                          )
-                          .toList(),
-                      onChanged: (newVal) {
-                        setState(() {
-                          coursid = newVal!;
-                          _visible = true;
-                        });
-                      },
-                    ),
+            ),
+            Container(
+              height: 50.0,
+              child: AdWidget(
+                ad: BannerAd(
+                  size: AdSize.banner,
+                  adUnitId: bannerAdUnitId,
+                  listener: BannerAdListener(
+                    onAdClosed: (ad) async => await ad.dispose(),
                   ),
-                ),
-              ),
-              SizedBox(
-                height: 16,
-              ),
-              Visibility(
-                visible: _visible,
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Text(
-                        coursid ?? '',
-                        textAlign: TextAlign.center,
-                        maxLines: 2,
-                        style: TextStyle(
-                          color: SECONDARYCOLOR,
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold,
-                          overflow: TextOverflow.fade,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 4,
-                    ),
-                    buildButton(
-                      title: 'إضافة بوست',
-                      callback: () => Get.toNamed(Post.routeName),
-                    ),
-                    buildButton(
-                      title: 'عرض الطلاب  ',
-                      callback: () => setStudents(),
-                    ),
-                    buildButton(
-                      title: 'تحميل الفيديوهات',
-                      callback: () => uploadFiles(video: true),
-                    ),
-                    buildButton(
-                      title: 'عرض الفيديوهات   ',
-                      callback: () => showVideos(),
-                    ),
-                    buildButton(
-                      title: 'تحميل المذكرات',
-                      callback: () => getSubscribedUsers(),
-                    ),
-                    buildButton(
-                      title: 'طلبات الإشتراك  ',
-                      callback: () => uploadCoursesRequests(coursid!),
-                    ),
-                    buildButton(
-                      title: 'تحميل مثال للشرح',
-                      callback: () async {
-                        FilePickerResult? result = await FilePicker.platform
-                            .pickFiles(
-                                dialogTitle: 'قم بتحميل فيديو مثال للشرح');
-                        if (result != null) {
-                          Get.dialog(
-                            Center(
-                              child: CircularProgressIndicator(),
-                            ),
-                          );
-                          String path = result.paths.first!;
-                          firebase_storage.FirebaseStorage.instance
-                              .ref('example/${fileName(File(path))}')
-                              .putFile(File(path))
-                              .then((uplaodedFile) async {
-                            String url =
-                                await uplaodedFile.ref.getDownloadURL();
-                            firestore
-                                .collection('materials')
-                                .doc('example')
-                                .set({
-                              'video': url,
-                              'name': fileName(File(path)),
-                            }).then((value) {
-                              showMessage(
-                                  title: 'تم التحميل',
-                                  text: 'تم تحميل الفيديو بنجاح');
-                            });
-                          });
-                        }
-                        ;
-                      },
-                    ),
-                    Container(
-                      height: 50.0,
-                      child: AdWidget(
-                        ad: BannerAd(
-                          size: AdSize.banner,
-                          adUnitId: bannerAdUnitId,
-                          listener: BannerAdListener(
-                            onAdClosed: (ad) async => await ad.dispose(),
-                          ),
-                          request: AdRequest(),
-                        )..load(),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget buildButton({required String title, required Function callback}) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        width: 200,
-        child: TextButton(
-          onPressed: () {
-            showAdRewarded();
-            callback();
-          },
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Text(
-              title,
-              style: TextStyle(
-                color: PRIMARYCOLOR,
-                fontWeight: FontWeight.bold,
-                fontSize: 22,
+                  request: AdRequest(),
+                )..load(),
               ),
             ),
-          ),
-          style: TextButton.styleFrom(
-            backgroundColor: SECONDARYCOLOR,
-          ),
+          ],
         ),
       ),
     );
@@ -367,8 +331,6 @@ class _AdminState extends State<Admin> {
         }
       }
       List<String> names = [];
-      if (coursid == 'Terminologies  مصطلحات تجارية') sem_users = users.docs;
-
       for (var request in requests) {
         for (var user in sem_users) {
           if (request.containsKey(user.id)) {
@@ -412,7 +374,7 @@ class _AdminState extends State<Admin> {
           itemCount: subscribedUsers.length,
           itemBuilder: (context, index) => InkWell(
             onTap: () {
-              showAdInterstitial();
+              //showAdInterstitial();
               semUser = subscribedUsers.elementAt(index);
               Get.back();
               uploadFiles();
@@ -437,7 +399,7 @@ class _AdminState extends State<Admin> {
       cancel: TextButton(onPressed: () => Get.back(), child: Text('إغلاق')),
       confirm: TextButton(
         onPressed: () {
-          showAdInterstitial();
+          //showAdInterstitial();
           Get.back();
           uploadFiles(all: true);
         },
@@ -697,7 +659,7 @@ class _AdminState extends State<Admin> {
   }
 
   void showVideos() {
-    showAdInterstitial();
+    //showAdInterstitial();
     Get.dialog(
       Center(
         child: CircularProgressIndicator(),

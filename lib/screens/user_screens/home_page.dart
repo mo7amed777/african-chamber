@@ -98,7 +98,7 @@ class HomePage extends StatelessWidget {
   Random _rnd = Random.secure();
 
   void buyCourse({required String coursID}) async {
-    showAdInterstitial();
+    //showAdInterstitial();
     try {
       Get.dialog(
         Center(
@@ -156,11 +156,12 @@ class HomePage extends StatelessWidget {
         List<VideoPlayerController> _videoPlayerControllers = List.generate(
           videoURLs.length,
           (index) => VideoPlayerController.network(
-              videoURLs[index],
-            ),
+            videoURLs[index],
+          ),
         );
         Get.back();
         Get.toNamed(Course.routeName, arguments: {
+          'user': user,
           'videoURLs': videoURLs,
           'docURLs': docURLs,
           'filesNames': filesNames,

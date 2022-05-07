@@ -2,6 +2,8 @@
 
 import 'package:chewie/chewie.dart';
 import 'package:demo/constants.dart';
+import 'package:demo/models/user.dart';
+import 'package:demo/widgets/drawer.dart';
 import 'package:demo/widgets/message.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +11,6 @@ import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
-import 'package:demo/models/ad.dart';
 
 class Course extends StatefulWidget {
   static final String routeName = '/course';
@@ -20,6 +21,7 @@ class Course extends StatefulWidget {
   final String courseID = Get.arguments['coursID'];
   final List<ChewieController> videoPlayerControllers =
       Get.arguments['videoPlayerControllers'];
+  final CurrentUser user = Get.arguments['user'];
 
   @override
   State<Course> createState() => _CourseState();
@@ -49,6 +51,15 @@ class _CourseState extends State<Course> {
             fontWeight: FontWeight.bold,
           ),
         ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            Get.back();
+          },
+        ),
+      ),
+      drawer: MainDrawer(
+        user: widget.user,
       ),
       backgroundColor: PRIMARYCOLOR,
       body: widget.docURLs.isNotEmpty || widget.videoURLs.isNotEmpty
@@ -221,7 +232,7 @@ class _CourseState extends State<Course> {
       );
 
   void download(String url, String fileName) async {
-    showAdInterstitial();
+    //showAdInterstitial();
     Get.dialog(
       Center(child: CircularProgressIndicator()),
       barrierDismissible: false,

@@ -10,7 +10,7 @@ showMessage({required String title, required String text, bool error = false}) {
     cancel: TextButton(
       onPressed: () {
         Get.back();
-        showAdInterstitial();
+        //showAdInterstitial();
       },
       child: Text('إغلاق'),
     ),

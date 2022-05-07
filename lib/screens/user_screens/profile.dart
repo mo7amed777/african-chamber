@@ -1,5 +1,6 @@
 import 'package:demo/constants.dart';
 import 'package:demo/models/user.dart';
+import 'package:demo/screens/user_screens/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
@@ -9,6 +10,7 @@ class Profile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: PRIMARYCOLOR,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -36,34 +38,39 @@ class Profile extends StatelessWidget {
             SizedBox(
               height: 20,
             ),
-            text(user.name, size: 25),
-            text(' الفرقة  : ' + user.sem),
-            text(user.set_num + ' : رقم الجلوس '),
-            text(user.courses.isEmpty
-                ? 'لم يتم التسجيل في أى محتوى'
-                : 'الإشتراكات'),
-            user.courses.isNotEmpty
-                ? Column(
-                    children:
-                        user.courses.map((course) => text(course)).toList(),
-                  )
-                : Container(),
+            Container(
+              width: double.infinity,
+              margin: EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                color: Colors.transparent.withOpacity(0.5),
+              ),
+              child: Column(
+                children: [
+                  text('بيانات الطالب', color: SECONDARYCOLOR),
+                  text(user.name, color: SECONDARYCOLOR),
+                  text(' الفرقة  : ' + user.sem, color: SECONDARYCOLOR),
+                  text(user.set_num + ' : رقم الجلوس ', color: SECONDARYCOLOR),
+                  text(user.phone + ' : رقم الهاتف ', color: SECONDARYCOLOR),
+                  text(user.email + ' : البريد الإلكتروني ',
+                      color: SECONDARYCOLOR),
+                  text(
+                      user.courses.isEmpty
+                          ? 'لم يتم التسجيل في أى محتوى'
+                          : 'الإشتراكات',
+                      color: SECONDARYCOLOR),
+                  user.courses.isNotEmpty
+                      ? Column(
+                          children: user.courses
+                              .map((course) =>
+                                  text(course, color: SECONDARYCOLOR))
+                              .toList(),
+                        )
+                      : Container(),
+                ],
+              ),
+            ),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget text(String label, {double size = 20}) {
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12.0),
-      child: Text(
-        label,
-        style: TextStyle(
-          fontSize: size,
-          fontWeight: FontWeight.bold,
-          color: PRIMARYCOLOR,
         ),
       ),
     );

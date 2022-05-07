@@ -2,11 +2,13 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:badges/badges.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demo/constants.dart';
+import 'package:demo/screens/user_screens/complaint.dart';
 import 'package:demo/screens/user_screens/courses.dart';
 import 'package:demo/screens/user_screens/home_page.dart';
 import 'package:demo/screens/user_screens/posts.dart';
 import 'package:demo/screens/user_screens/profile.dart';
 import 'package:demo/screens/onboard_screens/login.dart';
+import 'package:demo/widgets/drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:get/get.dart';
@@ -50,7 +52,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        showAdInterstitial();
+        //showAdInterstitial();
 
         bool res = false;
         await Get.defaultDialog(
@@ -73,6 +75,9 @@ class _HomeState extends State<Home> {
         return res;
       },
       child: Scaffold(
+        drawer: MainDrawer(
+          user: Get.arguments[0],
+        ),
         appBar: AppBar(
           title: Text(titles.elementAt(_selectedIndex)),
           backgroundColor: PRIMARYCOLOR,
@@ -83,7 +88,10 @@ class _HomeState extends State<Home> {
                 setState(() {
                   showBadge = false;
                 });
-                Get.toNamed(Posts.routeName, arguments: posts);
+                Get.toNamed(Posts.routeName, arguments: {
+                  'user': Get.arguments[0],
+                  'posts': posts,
+                });
               },
               icon: Badge(
                 child: Icon(
@@ -100,14 +108,6 @@ class _HomeState extends State<Home> {
                 ),
               ),
             ),
-            IconButton(
-              onPressed: () {
-                showAdInterstitial();
-                SharedPreferences.getInstance().then((value) => value.clear());
-                Get.offAllNamed(Login.routeName);
-              },
-              icon: Icon(Icons.logout),
-            )
           ],
         ),
         bottomNavigationBar: Padding(

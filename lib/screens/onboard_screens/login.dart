@@ -148,7 +148,7 @@ class Login extends StatelessWidget {
   }
 
   login(String email, String password, context) async {
-    showAdInterstitial();
+    //showAdInterstitial();
 
     try {
       Get.dialog(
@@ -183,16 +183,24 @@ class Login extends StatelessWidget {
               set_num: doc.get('set_num'),
               phone: doc.get('phone'),
             );
-            QuerySnapshot<Map<String, dynamic>> sem_doc =
-                await firestore.collection('posts').doc(currentUser.sem)
-                .collection('posts').orderBy('date').limit(20).get();
-            QuerySnapshot<Map<String, dynamic>> all_sems =
-                await firestore.collection('posts').doc('الكل')
-                .collection('posts').orderBy('date').limit(20).get();
+            QuerySnapshot<Map<String, dynamic>> sem_doc = await firestore
+                .collection('posts')
+                .doc(currentUser.sem)
+                .collection('posts')
+                .orderBy('date', descending: true)
+                .limit(20)
+                .get();
+            QuerySnapshot<Map<String, dynamic>> all_sems = await firestore
+                .collection('posts')
+                .doc('الكل')
+                .collection('posts')
+                .orderBy('date', descending: true)
+                .limit(20)
+                .get();
 
             List<DocumentSnapshot> posts = [];
-              posts = sem_doc.docs;
-              posts.addAll(all_sems.docs);
+            posts = sem_doc.docs;
+            posts.addAll(all_sems.docs);
             Get.offAllNamed(Home.routeName, arguments: [currentUser, posts]);
             return;
           }
@@ -214,14 +222,22 @@ class Login extends StatelessWidget {
                 set_num: doc.get('set_num'),
                 phone: doc.get('phone'),
               );
-              QuerySnapshot<Map<String, dynamic>> sem_doc =
-                await firestore.collection('posts').doc(currentUser.sem)
-                .collection('posts').orderBy('date').limit(20).get();
-            QuerySnapshot<Map<String, dynamic>> all_sems =
-                await firestore.collection('posts').doc('الكل')
-                .collection('posts').orderBy('date').limit(20).get();
+              QuerySnapshot<Map<String, dynamic>> sem_doc = await firestore
+                  .collection('posts')
+                  .doc(currentUser.sem)
+                  .collection('posts')
+                  .orderBy('date', descending: true)
+                  .limit(20)
+                  .get();
+              QuerySnapshot<Map<String, dynamic>> all_sems = await firestore
+                  .collection('posts')
+                  .doc('الكل')
+                  .collection('posts')
+                  .orderBy('date', descending: true)
+                  .limit(20)
+                  .get();
 
-            List<DocumentSnapshot> posts = [];
+              List<DocumentSnapshot> posts = [];
               posts = sem_doc.docs;
               posts.addAll(all_sems.docs);
               Get.offAllNamed(Home.routeName, arguments: [currentUser, posts]);
