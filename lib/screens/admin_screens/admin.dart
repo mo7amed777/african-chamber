@@ -333,8 +333,9 @@ class _AdminState extends State<Admin> {
       List<String> names = [];
       for (var request in requests) {
         for (var user in sem_users) {
-          if (request.containsKey(user.id)) {
-            names.add(user.get('name'));
+          if (request.containsKey(user.id) &&
+              !names.contains(user.get('name')!)) {
+            names.add(user.get('name')!);
           }
         }
       }

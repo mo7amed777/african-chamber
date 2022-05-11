@@ -20,61 +20,64 @@ class MainDrawer extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: [
           Container(
-            height: MediaQuery.of(context).size.height * 0.33,
             child: DrawerHeader(
+              margin: EdgeInsets.zero,
+              padding: EdgeInsets.zero,
               decoration: BoxDecoration(
                 color: PRIMARYCOLOR,
                 gradient: LinearGradient(
                   colors: [Colors.cyan, Colors.indigo],
                 ),
               ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    height: 100,
-                    width: 100,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                        fit: BoxFit.fill,
-                        image: AssetImage('assets/images/logo.jpg'),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      height: 100,
+                      width: 100,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                          fit: BoxFit.fill,
+                          image: AssetImage('assets/images/logo.jpg'),
+                        ),
                       ),
                     ),
-                  ),
-                  isAdmin
-                      ? Row(
-                          children: [
-                            Text(
-                              ' (Admin) ',
-                              style: TextStyle(
-                                color: Colors.red[900],
-                                fontSize: 20.0,
-                                fontWeight: FontWeight.w900,
+                    isAdmin
+                        ? Row(
+                            children: [
+                              Text(
+                                ' (Admin) ',
+                                style: TextStyle(
+                                  color: Colors.red[900],
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.w900,
+                                ),
                               ),
-                            ),
-                            Text(
-                              'الغرفة الأفريقية',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 30.0,
+                              Text(
+                                'الغرفة الأفريقية',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 30.0,
+                                ),
                               ),
+                            ],
+                          )
+                        : Text(
+                            'الغرفة الأفريقية',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 30.0,
                             ),
-                          ],
-                        )
-                      : Text(
-                          'الغرفة الأفريقية',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 30.0,
                           ),
-                        ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
           Container(
-              height: MediaQuery.of(context).size.height * 0.7,
+              height: MediaQuery.of(context).size.height * 0.70,
               child: isAdmin
                   ? items
                   : Column(
@@ -125,7 +128,7 @@ class MainDrawer extends StatelessWidget {
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
                               fontSize: 16.0,
-                              overflow: TextOverflow.ellipsis,
+                              overflow: TextOverflow.fade,
                             ),
                           ),
                         ),
