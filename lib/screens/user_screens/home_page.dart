@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:chewie/chewie.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demo/constants.dart';
 import 'package:demo/models/user.dart';
@@ -153,12 +154,26 @@ class HomePage extends StatelessWidget {
           videoURLs = videoDoc.get('urls');
           videosNames = videoDoc.get('names');
         }
-        List<VideoPlayerController> _videoPlayerControllers = List.generate(
+        List<ChewieController> _videoPlayerControllers = List.generate(
           videoURLs.length,
-          (index) => VideoPlayerController.network(
-            videoURLs[index],
+          (index) => ChewieController(
+            videoPlayerController: VideoPlayerController.network(
+              videoURLs[index],
+            ),
+            fullScreenByDefault: true,
+            allowedScreenSleep: false,
+            placeholder: Center(
+              child: Text(
+                'جارى التحميل',
+                style: TextStyle(
+                  color: PRIMARYCOLOR,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
           ),
         );
+
         Get.back();
         Get.toNamed(Course.routeName, arguments: {
           'user': user,

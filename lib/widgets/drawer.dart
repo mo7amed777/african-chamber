@@ -20,7 +20,7 @@ class MainDrawer extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: [
           Container(
-            height: MediaQuery.of(context).size.height * 0.3,
+            height: MediaQuery.of(context).size.height * 0.33,
             child: DrawerHeader(
               decoration: BoxDecoration(
                 color: PRIMARYCOLOR,
