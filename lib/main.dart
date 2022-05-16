@@ -49,6 +49,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
+      locale: Get.deviceLocale,
+      fallbackLocale: Locale('en'),
       theme: ThemeData(
         fontFamily: 'Amiri',
       ),

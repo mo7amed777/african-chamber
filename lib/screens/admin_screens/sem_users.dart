@@ -1,11 +1,18 @@
+import 'dart:io';
+
 import 'package:anim_search_bar/anim_search_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demo/constants.dart';
 import 'package:demo/screens/user_screens/home_page.dart';
 import 'package:demo/widgets/check_courses.dart';
+import 'package:demo/widgets/message.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
 
 class SemUsers extends StatefulWidget {
   static final routeName = '/sem_users';
@@ -35,19 +42,32 @@ class _SemUsersState extends State<SemUsers> {
   Widget build(BuildContext context) {
     switch (state) {
       case states.subscribed:
-        title = 'الطلاب المشتركين';
+        title = 'المشتركين';
         break;
       case states.non:
-        title = 'الطلاب الغير مشتركين';
+        title = 'الغير مشتركين';
         break;
       default:
-        title = 'جميع طلاب الفرقة $sem';
+        title = 'الفرقة $sem';
         break;
     }
     return Scaffold(
         appBar: AppBar(
-          title: text(title, color: SECONDARYCOLOR),
+          title: text(
+            title + ' (${sem_users.length}) ',
+            color: SECONDARYCOLOR,
+          ),
           actions: [
+            IconButton(
+              icon: Icon(
+                Icons.file_download_outlined,
+                color: Colors.lightGreenAccent,
+                size: 35.0,
+              ),
+              onPressed: () {
+                savePdf();
+              },
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 4.0),
               child: AnimSearchBar(
@@ -336,5 +356,92 @@ class _SemUsersState extends State<SemUsers> {
         (index) => {unSubscribedCourses[index]: false});
     Get.to(CheckCourse(checkedUnSubscribedCourses, unSubscribedCourses,
         subscribedCourses, user));
+  }
+
+  void savePdf() async {
+    //showAdInterstitial();
+    Get.dialog(
+      Center(child: CircularProgressIndicator()),
+      barrierDismissible: false,
+    );
+
+    try {
+      final pdf = pw.Document();
+      var dir;
+      try {
+        dir = await getExternalStorageDirectory();
+      } catch (e) {
+        dir = getApplicationDocumentsDirectory();
+      }
+      var data =
+          await rootBundle.load("assets/fonts/Cairo-VariableFont_wght.ttf");
+      final ttf = pw.Font.ttf(data);
+      int indx = 0;
+      int pages = sem_users.length ~/ 19;
+      for (var i = 0; i <= pages; i++) {
+        addPage(indx, pdf, ttf);
+        indx += 19;
+      }
+
+      final file = File('${dir.path}/$sem/$coursID.pdf');
+      await file.writeAsBytes(await pdf.save());
+      showMessage(title: 'تم التحميل', text: 'تم التحميل بنجاح');
+    } catch (e) {
+      showMessage(title: 'خطأ', text: 'حدث خطأ في تحميل الملف', error: true);
+    }
+  }
+
+  void addPage(int indx, pw.Document pdf, pw.Font ttf) {
+    pdf.addPage(
+      pw.Page(
+        pageTheme: pw.PageTheme(
+          pageFormat: PdfPageFormat.a4,
+          orientation: pw.PageOrientation.natural,
+          textDirection: pw.TextDirection.rtl,
+          clip: true,
+          margin: pw.EdgeInsets.all(0),
+          buildBackground: (pw.Context context) => pw.Container(
+            decoration: pw.BoxDecoration(
+                gradient: pw.LinearGradient(colors: [
+              PdfColors.cyan,
+              PdfColors.indigo,
+            ])),
+          ),
+        ),
+        build: (pw.Context context) => pw.Center(
+          child: pw.ListView(
+            children: sem_users.map((_) {
+              if (indx >= sem_users.length) {
+                return pw.Container();
+              }
+              return pw.Text(
+                '    ${indx + 1}    ' + sem_users[indx++].get('name'),
+                style: pw.TextStyle(
+                  fontSize: 20,
+                  fontWeight: pw.FontWeight.bold,
+                  font: ttf,
+                  color: PdfColors.white,
+                ),
+              );
+            }).toList()
+              ..insert(
+                0,
+                pw.Container(
+                  margin: pw.EdgeInsets.only(top: 10, bottom: 10),
+                  child: pw.Text(
+                    title,
+                    style: pw.TextStyle(
+                      fontSize: 25,
+                      fontWeight: pw.FontWeight.bold,
+                      font: ttf,
+                      color: PdfColors.white,
+                    ),
+                  ),
+                ),
+              ),
+          ),
+        ),
+      ),
+    );
   }
 }

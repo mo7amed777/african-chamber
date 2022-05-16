@@ -151,7 +151,8 @@ class _AdminState extends State<Admin> {
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: SECONDARYCOLOR,
-                    hintText: 'الفرقة',
+                    hintText:
+                        Get.locale == Locale('en') ? 'Semester' : 'الفرقة',
                     hintStyle: TextStyle(
                       color: PRIMARYCOLOR,
                       fontWeight: FontWeight.bold,
@@ -167,7 +168,7 @@ class _AdminState extends State<Admin> {
                     DropdownMenuItem(
                       alignment: Alignment.center,
                       child: Text(
-                        'الأولى',
+                        Get.locale == Locale('en') ? 'First' : 'الأولى',
                         style: TextStyle(
                           color: PRIMARYCOLOR,
                           fontWeight: FontWeight.bold,
@@ -178,7 +179,7 @@ class _AdminState extends State<Admin> {
                     DropdownMenuItem(
                       alignment: Alignment.center,
                       child: Text(
-                        'الثانية',
+                        Get.locale == Locale('en') ? 'Second' : 'الثانية',
                         style: TextStyle(
                           color: PRIMARYCOLOR,
                           fontWeight: FontWeight.bold,
@@ -189,7 +190,7 @@ class _AdminState extends State<Admin> {
                     DropdownMenuItem(
                       alignment: Alignment.center,
                       child: Text(
-                        'الثالثة',
+                        Get.locale == Locale('en') ? 'Third' : 'الثالثة',
                         style: TextStyle(
                           color: PRIMARYCOLOR,
                           fontWeight: FontWeight.bold,
@@ -200,7 +201,7 @@ class _AdminState extends State<Admin> {
                     DropdownMenuItem(
                       alignment: Alignment.center,
                       child: Text(
-                        'الرابعة',
+                        Get.locale == Locale('en') ? 'Fourth' : 'الرابعة',
                         style: TextStyle(
                           color: PRIMARYCOLOR,
                           fontWeight: FontWeight.bold,
@@ -231,7 +232,8 @@ class _AdminState extends State<Admin> {
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: SECONDARYCOLOR,
-                      hintText: 'أختر الكورس',
+                      hintText:
+                          Get.locale == Locale('en') ? 'Course' : 'المادة',
                       hintStyle: TextStyle(
                         color: PRIMARYCOLOR,
                         fontWeight: FontWeight.bold,
@@ -281,6 +283,17 @@ class _AdminState extends State<Admin> {
                   request: AdRequest(),
                 )..load(),
               ),
+            ),
+            Spacer(),
+            TextButton(
+              onPressed: () {
+                if (Get.locale == Locale('en')) {
+                  Get.updateLocale(Locale('ar'));
+                } else {
+                  Get.updateLocale(Locale('en'));
+                }
+              },
+              child: Text(Get.locale == Locale('en') ? 'English' : 'عربي'),
             ),
           ],
         ),
