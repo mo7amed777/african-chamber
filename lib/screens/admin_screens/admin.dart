@@ -8,7 +8,6 @@ import 'package:demo/screens/admin_screens/complaints.dart';
 import 'package:demo/screens/admin_screens/post.dart';
 import 'package:demo/screens/admin_screens/requests.dart';
 import 'package:demo/screens/admin_screens/sem_users.dart';
-import 'package:demo/screens/user_screens/complaint.dart';
 import 'package:demo/screens/user_screens/home_page.dart';
 import 'package:demo/widgets/drawer.dart';
 import 'package:demo/widgets/message.dart';
@@ -20,7 +19,6 @@ import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:video_player/video_player.dart';
-import 'package:demo/models/ad.dart';
 
 class Admin extends StatefulWidget {
   static final routeName = '/admin';
@@ -35,6 +33,19 @@ class _AdminState extends State<Admin> {
   String? sem;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   List<Map<String, dynamic>> courses_requests = [];
+
+  bool? firstTerm;
+
+  bool is_open = true;
+  @override
+  void initState() {
+    super.initState();
+    firestore.collection('materials').doc('term').get().then((term) {
+      setState(() {
+        firstTerm = term.get(term) == 1 ? true : false;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -244,7 +255,7 @@ class _AdminState extends State<Admin> {
                     ),
                     iconEnabledColor: PRIMARYCOLOR,
                     iconSize: 30,
-                    items: SEMS[sem]
+                    items: SEMs[sem]
                         ?.keys
                         .map(
                           (e) => DropdownMenuItem<String>(
@@ -261,11 +272,21 @@ class _AdminState extends State<Admin> {
                           ),
                         )
                         .toList(),
-                    onChanged: (newVal) {
+                    onChanged: (newVal) async {
                       setState(() {
                         coursid = newVal!;
                         _visible = true;
                       });
+                      DocumentSnapshot<Map<String, dynamic>> isOpenDoc =
+                          await firestore
+                              .collection('materials')
+                              .doc(sem)
+                              .collection(coursid!)
+                              .doc('is_open')
+                              .get();
+                      if (isOpenDoc.exists) {
+                        is_open = isOpenDoc.get('is_open');
+                      }
                     },
                   ),
                 ),
@@ -285,20 +306,129 @@ class _AdminState extends State<Admin> {
               ),
             ),
             Spacer(),
-            TextButton(
-              onPressed: () {
-                if (Get.locale == Locale('en')) {
-                  Get.updateLocale(Locale('ar'));
+            Visibility(
+              visible: _visible,
+              child: Container(
+                margin: EdgeInsets.only(bottom: 50),
+                child: RaisedButton(
+                  color: PRIMARYCOLOR,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                  ),
+                  onPressed: () async {
+                    setState(() {
+                      is_open = !is_open;
+                    });
+                    await firestore
+                        .collection('materials')
+                        .doc(sem)
+                        .collection(coursid!)
+                        .doc('is_open')
+                        .set({
+                      'is_open': is_open,
+                    });
+                    // show toaster
+                    Get.snackbar(
+                      'تم',
+                      is_open ? 'تم فتح المادة' : 'تم إغلاق المادة',
+                      snackPosition: SnackPosition.BOTTOM,
+                      backgroundColor: Colors.green,
+                      borderRadius: 25.0,
+                      margin: EdgeInsets.all(10),
+                      snackStyle: SnackStyle.FLOATING,
+                      duration: Duration(seconds: 2),
+                      animationDuration: Duration(seconds: 2),
+                    );
+                  },
+                  child: Text(
+                    Get.locale == Locale('en')
+                        ? 'Open or Cancel Course'
+                        : 'فتح أو إغلاق المادة',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SwitchListTile(
+              value: firstTerm ?? false,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30.0),
+              ),
+              subtitle: Text(
+                Get.locale == Locale('en')
+                    ? 'Enable for first term & disable for second term'
+                    : 'تفعيل للفصل الأول وإلغاء للفصل الثاني',
+                style: TextStyle(
+                  color: SECONDARYCOLOR,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              ),
+              title: Text(
+                Get.locale == Locale('en') ? 'First Term' : 'الفصل الأول',
+                style: TextStyle(
+                  color: Colors.teal,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              ),
+              onChanged: (val) async {
+                setState(() {
+                  firstTerm = val;
+                });
+                if (val) {
+                  await firestore.collection('materials').doc('term').set({
+                    'id': 1,
+                  });
+                  //show snackbar to enable first term
+                  Get.snackbar(
+                    Get.locale == Locale('en') ? 'First Term' : 'الفصل الأول',
+                    Get.locale == Locale('en')
+                        ? 'First Term is enabled'
+                        : 'تم تفعيل الفصل الأول',
+                    snackPosition: SnackPosition.BOTTOM,
+                    colorText: SECONDARYCOLOR,
+                    backgroundColor: SECONDARYCOLOR,
+                    backgroundGradient: LinearGradient(colors: [
+                      Color.fromARGB(255, 57, 152, 230),
+                      Color.fromARGB(255, 89, 231, 94),
+                    ]),
+                    borderRadius: 30.0,
+                    margin: EdgeInsets.all(8.0),
+                    duration: Duration(seconds: 2),
+                  );
                 } else {
-                  Get.updateLocale(Locale('en'));
+                  await firestore.collection('materials').doc('term').set({
+                    'id': 2,
+                  });
+                  // show snackbar to enable second term
+                  Get.snackbar(
+                    Get.locale == Locale('en') ? 'Second Term' : 'الفصل الثاني',
+                    Get.locale == Locale('en')
+                        ? 'Second Term is enabled'
+                        : 'تم تفعيل الفصل الثاني',
+                    snackPosition: SnackPosition.BOTTOM,
+                    colorText: SECONDARYCOLOR,
+                    backgroundColor: SECONDARYCOLOR,
+                    backgroundGradient: LinearGradient(colors: [
+                      Color.fromARGB(255, 57, 152, 230),
+                      Color.fromARGB(255, 89, 231, 94),
+                    ]),
+                    borderRadius: 30.0,
+                    margin: EdgeInsets.all(8.0),
+                    duration: Duration(seconds: 2),
+                  );
                 }
               },
-              child: Text(Get.locale == Locale('en') ? 'English' : 'عربي'),
             ),
           ],
         ),
       ),
     );
+    // make dropdown for opening or closing courses
   }
 
   void uploadCoursesRequests(String couresID) async {
@@ -321,9 +451,9 @@ class _AdminState extends State<Admin> {
       });
 
       List<Map<String, Map<String, String>>> requests = [];
-      for (String sem in SEMS.keys) {
+      for (String sem in SEMs.keys) {
         if (sem == sem) {
-          for (String title in SEMS[sem]!.keys) {
+          for (String title in SEMs[sem]!.keys) {
             if (title == coursid) {
               for (var request in courses_requests) {
                 for (var crs in request.values.first!) {

@@ -342,7 +342,7 @@ class _SemUsersState extends State<SemUsers> {
   }
 
   void add(DocumentSnapshot user) {
-    List allCourses = SEMS[sem]!.keys.toList();
+    List allCourses = SEMs[sem]!.keys.toList();
     List subscribedCourses = user.get('courses');
     List<String> unSubscribedCourses = [];
 

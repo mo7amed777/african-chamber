@@ -190,7 +190,7 @@ class Login extends StatelessWidget {
                 .orderBy('date', descending: true)
                 .limit(20)
                 .get();
-            QuerySnapshot<Map<String, dynamic>> all_sems = await firestore
+            QuerySnapshot<Map<String, dynamic>> all_SEMs = await firestore
                 .collection('posts')
                 .doc('الكل')
                 .collection('posts')
@@ -200,7 +200,7 @@ class Login extends StatelessWidget {
 
             List<DocumentSnapshot> posts = [];
             posts = sem_doc.docs;
-            posts.addAll(all_sems.docs);
+            posts.addAll(all_SEMs.docs);
             Get.offAllNamed(Home.routeName, arguments: [currentUser, posts]);
             return;
           }
@@ -229,7 +229,7 @@ class Login extends StatelessWidget {
                   .orderBy('date', descending: true)
                   .limit(20)
                   .get();
-              QuerySnapshot<Map<String, dynamic>> all_sems = await firestore
+              QuerySnapshot<Map<String, dynamic>> all_SEMs = await firestore
                   .collection('posts')
                   .doc('الكل')
                   .collection('posts')
@@ -239,7 +239,7 @@ class Login extends StatelessWidget {
 
               List<DocumentSnapshot> posts = [];
               posts = sem_doc.docs;
-              posts.addAll(all_sems.docs);
+              posts.addAll(all_SEMs.docs);
               Get.offAllNamed(Home.routeName, arguments: [currentUser, posts]);
               return;
             } else if (doc.get('blocked') && doc.get('email') == email) {

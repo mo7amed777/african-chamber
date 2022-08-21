@@ -77,7 +77,7 @@ class MainDrawer extends StatelessWidget {
             ),
           ),
           Container(
-              height: MediaQuery.of(context).size.height * 0.70,
+              height: MediaQuery.of(context).size.height * 0.75,
               child: isAdmin
                   ? items
                   : Column(

@@ -82,6 +82,17 @@ class Splash extends StatelessWidget {
   }
 
   Future loadUsersData() async {
+    firestore.collection('materials').doc('term').get().then((term) {
+      if (term.get('id') == 1) {
+        // load first term materials
+        SEMs = SEMS;
+//TODO
+      } else {
+        // load second time materials
+        SEMs = SEMS2;
+      }
+      print(SEMs);
+    });
     SharedPreferences.getInstance().then((pref) async {
       String uid = pref.getString('uid') ?? 'Not Authorized';
       switch (uid) {
@@ -117,7 +128,7 @@ class Splash extends StatelessWidget {
                     .orderBy('date', descending: true)
                     .limit(20)
                     .get();
-                QuerySnapshot<Map<String, dynamic>> all_sems = await firestore
+                QuerySnapshot<Map<String, dynamic>> all_SEMs = await firestore
                     .collection('posts')
                     .doc('الكل')
                     .collection('posts')
@@ -127,7 +138,7 @@ class Splash extends StatelessWidget {
 
                 List<DocumentSnapshot> posts = [];
                 posts = sem_doc.docs;
-                posts.addAll(all_sems.docs);
+                posts.addAll(all_SEMs.docs);
                 Get.offAndToNamed(Home.routeName, arguments: [user, posts]);
                 return;
               }

@@ -18,24 +18,15 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     int getCount() {
-      switch (user.sem) {
-        case 'الأولى':
-          return 6;
-        case 'الثانية':
-          return 4;
-        case 'الثالثة':
-          return 5;
-        default:
-          return 9;
-      }
+      return SEMs[user.sem]!.length;
     }
 
     return Scaffold(
       backgroundColor: SECONDARYCOLOR,
       body: ListView.builder(
         itemBuilder: (context, index) => buildItem(
-          imgURL: SEMS[user.sem]!.values.elementAt(index),
-          title: SEMS[user.sem]!.keys.elementAt(index),
+          imgURL: SEMs[user.sem]!.values.elementAt(index),
+          title: SEMs[user.sem]!.keys.elementAt(index),
         ),
         itemCount: getCount(),
       ),
@@ -107,10 +98,35 @@ class HomePage extends StatelessWidget {
         ),
         barrierDismissible: false,
       );
+
       String code = getRandomString(6);
 
       FirebaseFirestore firestore = FirebaseFirestore.instance;
-
+      DocumentSnapshot<Map<String, dynamic>> isOpen = await firestore
+          .collection('materials')
+          .doc(user.sem)
+          .collection(coursID)
+          .doc('is_open')
+          .get();
+      if (isOpen.exists) {
+        if (!isOpen.get('is_open')) {
+          Get.back();
+          Get.snackbar(
+            'Error',
+            'This course is not open Now',
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.red,
+            borderRadius: 25,
+            margin: EdgeInsets.all(10),
+            borderColor: Colors.red,
+            borderWidth: 2,
+            colorText: Colors.white,
+            snackStyle: SnackStyle.FLOATING,
+            duration: Duration(seconds: 3),
+          );
+          return;
+        }
+      }
       DocumentSnapshot? courses_snapshot =
           await firestore.collection('crs_requests').doc(user.uid).get();
       List courses_requests = [];

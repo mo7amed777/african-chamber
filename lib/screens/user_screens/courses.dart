@@ -126,7 +126,7 @@ class Courses extends StatelessWidget {
             )
           : ListView.builder(
               itemBuilder: (context, index) => buildItem(
-                imgURL: SEMS[user.sem]![user.courses[index]]!,
+                imgURL: SEMs[user.sem]![user.courses[index]]!,
                 title: user.courses[index],
               ),
               itemCount: user.courses.length,
