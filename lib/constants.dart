@@ -3,109 +3,180 @@ import 'dart:io' show Platform;
 
 const Map<String, Map<String, String>> SEMS = <String, Map<String, String>>{
   'الأولى': {
-    'أصول المحاسبة المالية':
-        'https://www.almrsal.com/wp-content/uploads/2017/09/%D9%83%D8%AA%D8%A8-%D8%A7%D9%84%D8%AA%D8%B3%D9%88%D9%8A%D9%82.jpg',
-    'أصول إدارة الأعمال':
-        'https://modo3.com/thumbs/fit630x300/254038/1629875947/%D8%AA%D8%B9%D8%B1%D9%8A%D9%81_%D8%A7%D9%84%D8%A7%D9%82%D8%AA%D8%B5%D8%A7%D8%AF_%D8%A7%D9%84%D9%83%D9%84%D9%8A.jpg',
-    'مبادئ الاقتصاد الجزئي':
-        'https://i2.wp.com/www.thechamberofbusiness.com/wp-content/uploads/2020/05/Organizational-Behavior.jpg?fit=804%2C400&ssl=1',
-    'اقتصاديات الموارد والتطور الاقتصادي':
-        'https://i.ytimg.com/vi/XvjvJeFagko/maxresdefault.jpg',
+    '(شرح) أصول المحاسبة المالية':
+        'https://i.im.ge/2022/08/22/OhhFDC.1-Accounting-A.jpg',
+    '(مراجعة) أصول المحاسبة المالية':
+        'https://i.im.ge/2022/08/22/OhhlgD.1-Accounting-B.jpg',
+    '(شرح) أصول إدارة الأعمال':
+        'https://i.im.ge/2022/08/22/OhhdN1.1-Management-A.jpg',
+    '(مراجعة) أصول إدارة الأعمال':
+        'https://i.im.ge/2022/08/22/OhhqVf.1-Management-B.jpg',
+    '(شرح) مبادئ الاقتصاد الجزئي':
+        'https://i.im.ge/2022/08/22/Ohhre4.1-Micro-A.jpg',
+    '(مراجعة) مبادئ الاقتصاد الجزئي':
+        'https://i.im.ge/2022/08/22/OhhX0Y.1-Micro-B.jpg',
+    '(شرح) اقتصاديات الموارد والتطور الاقتصادي':
+        'https://i.im.ge/2022/08/22/OhhOEq.1-Resources-A.jpg',
+    '(مراجعة) اقتصاديات الموارد والتطور الاقتصادي':
+        'https://i.im.ge/2022/08/22/OhhSSP.1-Resources-B.jpg',
   },
   'الثانية': {
-    'محاسبة شركات (2)':
-        'https://www.techfunnel.com/wp-content/uploads/2019/08/15-Ways-Digital-Banking-Drives-Revenue-Growth-1.png',
-    'ادارة انتاج':
-        'https://fjwp.s3.amazonaws.com/blog/wp-content/uploads/2019/11/29144739/HR-career.png',
-    'اقتصاد تحليلي':
-        'https://www.almaal.org/wp-content/uploads/2021/05/%D8%A3%D9%87%D9%85-%D8%A7%D9%84%D9%85%D8%B5%D8%B7%D9%84%D8%AD%D8%A7%D8%AA-%D8%A7%D9%84%D8%AA%D8%AC%D8%A7%D8%B1%D9%8A%D8%A9.jpg',
-    'مبادئ التامين':
-        'http://fortunetsp.com/services/wp-content/uploads/2019/03/specialized-acciunting.jpg',
-    'ادارة الاحتياجات':
-        'http://fortunetsp.com/services/wp-content/uploads/2019/03/specialized-acciunting.jpg',
+    '(شرح) محاسبة شركات (2)':
+        'https://i.im.ge/2022/08/22/Ohh75r.2-Corporation-A.jpg',
+    '(مراجعة) محاسبة شركات (2)':
+        'https://i.im.ge/2022/08/22/Ohharm.2-Corporation-B.jpg',
+    '(شرح) ادارة انتاج': 'https://i.im.ge/2022/08/22/OhhLM0.2-Operation-A.jpg',
+    '(مراجعة) ادارة انتاج':
+        'https://i.im.ge/2022/08/22/OhhUIT.2-Operation-B.jpg',
+    '(شرح) اقتصاد تحليلي':
+        'https://i.im.ge/2022/08/22/Ohh5SG.2-Analytical-A.jpg',
+    '(مراجعة) اقتصاد تحليلي':
+        'https://i.im.ge/2022/08/22/OhhhEc.2-Analytical-B.jpg',
+    '(شرح) مبادئ التامين':
+        'https://i.im.ge/2022/08/22/Ohhjfa.2-Insurance-A.jpg',
+    '(مراجعة) مبادئ التامين':
+        'https://i.im.ge/2022/08/22/Ohh9Nx.2-Insurance-B.jpg',
+    '(شرح) ادارة الاحتياجات':
+        'https://i.im.ge/2022/08/22/OhhN8S.2-Supply-A.jpg',
+    '(مراجعة) ادارة الاحتياجات':
+        'https://i.im.ge/2022/08/22/OhhtMz.2-Supply-B.jpg',
   },
   'الثالثة': {
-    'اصول مراجعة':
-        'https://cloudinary.hbs.edu/hbsit/image/upload/s--mS7H2QFE--/f_auto,c_fill,h_375,w_750,/v20200101/32C8D93D513DF95DE7E5A2532E55720E.jpg',
-    'محاسبة تكاليف (1)':
-        'https://businessyield.com/wp-content/uploads/2020/11/images-13.jpeg',
-    'تطبيقات محاسبية على الحاسب':
-        'https://thumbs.dreamstime.com/b/conceptual-hand-written-text-showing-managerial-accounting-conceptual-hand-written-text-showing-managerial-accounting-168464725.jpg',
-    'ادارة عامة ومحلية':
-        'https://www.topaccountingdegrees.org/wp-content/uploads/2015/12/international-tax-consulting.jpg',
-    'اقتصاديات التجارة الدولية':
-        'https://qsstudy.com/wp-content/uploads/2019/01/Cost-Accounting-3.jpg',
+    '(شرح) اصول مراجعة': 'https://i.im.ge/2022/08/22/OhhAxF.3-Auditing-A.jpg',
+    '(مراجعة) اصول مراجعة':
+        'https://i.im.ge/2022/08/22/OhhyI6.3-Auditing-B.jpg',
+    '(شرح) محاسبة تكاليف (1)': 'https://i.im.ge/2022/08/22/OhhCJK.3-Cost-A.jpg',
+    '(مراجعة) محاسبة تكاليف (1)':
+        'https://i.im.ge/2022/08/22/Ohhxd9.3-Cost-B.jpg',
+    '(شرح) تطبيقات محاسبية على الحاسب':
+        'https://i.im.ge/2022/08/22/Ohhcuh.3-Excel-A.jpg',
+    '(مراجعة) تطبيقات محاسبية على الحاسب':
+        'https://i.im.ge/2022/08/22/Ohhg9M.3-Excel-B.jpg',
+    '(شرح) ادارة عامة ومحلية':
+        'https://i.im.ge/2022/08/22/Ohh88Y.3-Public-A.jpg',
+    '(مراجعة) ادارة عامة ومحلية':
+        'https://i.im.ge/2022/08/22/OhhWQD.3-Public-B.jpg',
+    '(شرح) اقتصاديات التجارة الدولية':
+        'https://i.im.ge/2022/08/22/OhhZI4.3-IT-A.jpg',
+    '(مراجعة) اقتصاديات التجارة الدولية':
+        'https://i.im.ge/2022/08/22/OhhVnq.3-IT-B.jpg',
   },
   'الرابعة': {
-    'مراجعة متقدمة':
-        'https://sdaho.org/wp-content/uploads/2020/07/strategic-planning.png',
-    'ادارة مالية':
-        'https://blogs.iadb.org/ideas-matter/wp-content/uploads/sites/12/2017/06/shutterstock_102687368.jpg',
-    'نظم تكاليف':
-        'https://capitalcampaignmasters.com/wpsys/wp-content/uploads/2019/03/feasibility-study-common-misconceptions.jpg',
-    'اقتصاديات التنمية والتخطيط':
-        'https://www.meritglobaltraining.com/images/best-marketing-research-professional-course.jpg',
-    'نظم المعلومات الادارية':
-        'https://www.managementstudyhq.com/wp-content/uploads/2018/11/Organization-Management.jpg',
-    'بحوث العمليات في المحاسبة':
-        'https://journolink-static.s3.eu-west-1.amazonaws.com/assets/content/MGgUHR8JVZfWjoqFjJLrpaUQQndhgU5wxUAlShRO.png',
-    'مواد قسم إدارة':
-        'https://www.marketing2business.com/wp-content/uploads/2019/06/Bank-Accounting1.png',
+    '(شرح) مراجعة متقدمة': 'https://i.im.ge/2022/08/22/Ohhkdp.4-Audit-A.jpg',
+    '(مراجعة) مراجعة متقدمة': 'https://i.im.ge/2022/08/22/OhhzPP.4-Audit-B.jpg',
+    '(شرح) ادارة مالية': 'https://i.im.ge/2022/08/22/OhhHk1.4-Financial-A.jpg',
+    '(مراجعة) ادارة مالية':
+        'https://i.im.ge/2022/08/22/Ohhvuf.4-Financial-B.jpg',
+    '(شرح) نظم تكاليف': 'https://i.im.ge/2022/08/22/OhhJ9m.4-Costing-A.jpg',
+    '(مراجعة) نظم تكاليف': 'https://i.im.ge/2022/08/22/OhhnRr.4-Costing-B.jpg',
+    '(شرح) اقتصاديات التنمية والتخطيط':
+        'https://i.im.ge/2022/08/22/OhioPG.4-Development-A.jpg',
+    '(مراجعة) اقتصاديات التنمية والتخطيط':
+        'https://i.im.ge/2022/08/22/OhiXkx.4-Development-B.jpg',
+    '(شرح) نظم المعلومات الادارية':
+        'https://i.im.ge/2022/08/22/Ohiu9J.4-MIS-A.jpg',
+    '(مراجعة) نظم المعلومات الادارية':
+        'https://i.im.ge/2022/08/22/OhirFa.4-MIS-B.jpg',
+    '(شرح) بحوث العمليات في المحاسبة':
+        'https://i.im.ge/2022/08/22/OhiFRy.4-OR-A.jpg',
+    '(مراجعة) بحوث العمليات في المحاسبة':
+        'https://i.im.ge/2022/08/22/Ohi2Lz.4-OR-B.jpg',
+    '(شرح) مواد قسم إدارة':
+        'https://i.im.ge/2022/08/22/Ohid4F.4-Management-A.jpg',
+    '(مراجعة) مواد قسم إدارة':
+        'https://i.im.ge/2022/08/22/OhiS36.4-Management-B.jpg',
   },
 };
 
 const Map<String, Map<String, String>> SEMS2 = <String, Map<String, String>>{
   'الأولى': {
-    'Partnership accounting  محاسبة شركات (1) ':
-        'https://i.ytimg.com/vi/XvjvJeFagko/maxresdefault.jpg',
-    'Marketing principles  مبادئ تسويق':
-        'https://www.almrsal.com/wp-content/uploads/2017/09/%D9%83%D8%AA%D8%A8-%D8%A7%D9%84%D8%AA%D8%B3%D9%88%D9%8A%D9%82.jpg',
-    'Organizational behavior  سلوك تنظيمي':
-        'https://i2.wp.com/www.thechamberofbusiness.com/wp-content/uploads/2020/05/Organizational-Behavior.jpg?fit=804%2C400&ssl=1',
-    'Risk management  مبادئ إدارة الخطر':
-        'https://www.sscsrl.com/wp-content/uploads/2017/07/risk-management.jpg',
-    'Macroeconomics  مبادئ اقتصاد كلي':
-        'https://modo3.com/thumbs/fit630x300/254038/1629875947/%D8%AA%D8%B9%D8%B1%D9%8A%D9%81_%D8%A7%D9%84%D8%A7%D9%82%D8%AA%D8%B5%D8%A7%D8%AF_%D8%A7%D9%84%D9%83%D9%84%D9%8A.jpg',
-    'Terminologies  مصطلحات تجارية':
-        'https://www.almaal.org/wp-content/uploads/2021/05/%D8%A3%D9%87%D9%85-%D8%A7%D9%84%D9%85%D8%B5%D8%B7%D9%84%D8%AD%D8%A7%D8%AA-%D8%A7%D9%84%D8%AA%D8%AC%D8%A7%D8%B1%D9%8A%D8%A9.jpg',
+    '(شرح) محاسبة شركات (1) ':
+        'https://i.im.ge/2022/08/22/OhCl7x.1-Partnership-A.jpg',
+    '(مراجعة) محاسبة شركات (1) ':
+        'https://i.im.ge/2022/08/22/OhCQic.1-Partnership-B.jpg',
+    '(شرح) مبادئ تسويق': 'https://i.im.ge/2022/08/22/OhCoGG.1-Marketing-A.jpg',
+    '(مراجعة) مبادئ تسويق':
+        'https://i.im.ge/2022/08/22/OhCMlT.1-Marketing-B.jpg',
+    '(شرح) سلوك تنظيمي': 'https://i.im.ge/2022/08/22/OhCTcL.1-OB-A.jpg',
+    '(مراجعة) سلوك تنظيمي': 'https://i.im.ge/2022/08/22/OhCmgq.1-OB-B.jpg',
+    '(شرح) مبادئ إدارة الخطر': 'https://i.im.ge/2022/08/22/OhCREx.1-Risk-A.jpg',
+    '(مراجعة) مبادئ إدارة الخطر':
+        'https://i.im.ge/2022/08/22/OhCbgc.1-Risk-B.jpg',
+    '(شرح) مبادئ اقتصاد كلي':
+        'https://i.im.ge/2022/08/22/OhCWJa.1-Macroeconomics-A.jpg',
+    '(مراجعة) مبادئ اقتصاد كلي':
+        'https://i.im.ge/2022/08/22/OhCgML.1-Macroeconomics-B.jpg',
+    '(شرح) مصطلحات تجارية':
+        'https://i.im.ge/2022/08/22/OhCH56.1-Terminologies-A.jpg',
+    '(مراجعة) مصطلحات تجارية':
+        'https://i.im.ge/2022/08/22/OhCJMK.1-Terminologies-B.jpg',
   },
   'الثانية': {
-    'Specialized accounting  محاسبة متخصصة':
-        'http://fortunetsp.com/services/wp-content/uploads/2019/03/specialized-acciunting.jpg',
-    'Money and banking  اقصاديات النقود والبنوك':
-        'https://www.techfunnel.com/wp-content/uploads/2019/08/15-Ways-Digital-Banking-Drives-Revenue-Growth-1.png',
-    'Human resources management  إدارة المواد البشرية':
-        'https://fjwp.s3.amazonaws.com/blog/wp-content/uploads/2019/11/29144739/HR-career.png',
-    'Terminologies  مصطلحات تجارية':
-        'https://www.almaal.org/wp-content/uploads/2021/05/%D8%A3%D9%87%D9%85-%D8%A7%D9%84%D9%85%D8%B5%D8%B7%D9%84%D8%AD%D8%A7%D8%AA-%D8%A7%D9%84%D8%AA%D8%AC%D8%A7%D8%B1%D9%8A%D8%A9.jpg',
+    '(شرح) محاسبة متخصصة':
+        'https://i.im.ge/2022/08/22/OhC4xX.2-Specialized-A.jpg',
+    '(مراجعة) محاسبة متخصصة':
+        'https://i.im.ge/2022/08/22/OhCnI9.2-Specialized-B.jpg',
+    '(شرح) اقصاديات النقود والبنوك':
+        'https://i.im.ge/2022/08/22/OhEMPM.2-Money-and-Banking-A.jpg',
+    '(مراجعة) اقصاديات النقود والبنوك':
+        'https://i.im.ge/2022/08/22/OhEouD.2-Money-and-Banking-B.jpg',
+    '(شرح) إدارة المواد البشرية':
+        'https://i.im.ge/2022/08/22/OhEFIp.2-HR-A.jpg',
+    '(مراجعة) إدارة المواد البشرية':
+        'https://i.im.ge/2022/08/22/OhE1n1.2-HR-B.jpg',
+    '(شرح) مصطلحات تجارية':
+        'https://i.im.ge/2022/08/22/OhEdPm.2-Terminologies-A.jpg',
+    '(مراجعة) مصطلحات تجارية':
+        'https://i.im.ge/2022/08/22/OhESdf.2-Terminologies-B.jpg',
   },
   'الثالثة': {
-    'Negotiation management  إدارة تفاوض':
-        'https://cloudinary.hbs.edu/hbsit/image/upload/s--mS7H2QFE--/f_auto,c_fill,h_375,w_750,/v20200101/32C8D93D513DF95DE7E5A2532E55720E.jpg',
-    'Public finance  مالية عامة':
-        'https://businessyield.com/wp-content/uploads/2020/11/images-13.jpeg',
-    'Managerial accounting  المحاسبة الإدارية':
-        'https://thumbs.dreamstime.com/b/conceptual-hand-written-text-showing-managerial-accounting-conceptual-hand-written-text-showing-managerial-accounting-168464725.jpg',
-    'Governmental and international accounting  محاسبة حكومية و دولية':
-        'https://www.topaccountingdegrees.org/wp-content/uploads/2015/12/international-tax-consulting.jpg',
-    'Cost accounting  محاسبة تكاليف (2)':
-        'https://qsstudy.com/wp-content/uploads/2019/01/Cost-Accounting-3.jpg',
+    '(شرح) إدارة تفاوض':
+        'https://i.im.ge/2022/08/22/OhEqkr.3-Negotiation-A.jpg',
+    '(مراجعة) إدارة تفاوض':
+        'https://i.im.ge/2022/08/22/OhEDRT.3-Negotiation-B.jpg',
+    '(شرح) مالية عامة':
+        'https://i.im.ge/2022/08/22/OhEhxG.3-Public-Finance-A.jpg',
+    '(مراجعة) مالية عامة':
+        'https://i.im.ge/2022/08/22/OhEULL.3-Public-Finance-B.jpg',
+    '(شرح) المحاسبة الإدارية':
+        'https://i.im.ge/2022/08/22/OhEinx.3-Managerial-Accounting-A.jpg',
+    '(مراجعة) المحاسبة الإدارية':
+        'https://i.im.ge/2022/08/22/OhE9PJ.3-Managerial-Accounting-B.jpg',
+    '(شرح) محاسبة حكومية و دولية':
+        'https://i.im.ge/2022/08/22/OhEwFS.3-Governmental-Accounting-A.jpg',
+    '(مراجعة) محاسبة حكومية و دولية':
+        'https://i.im.ge/2022/08/22/OhE69z.3-Governmental-Accounting-B.jpg',
+    '(شرح) محاسبة تكاليف (2)':
+        'https://i.im.ge/2022/08/22/OhEtTF.3-Cost-Accounting-A.jpg',
+    '(مراجعة) محاسبة تكاليف (2)':
+        'https://i.im.ge/2022/08/22/OhENR6.3-Cost-Accounting-B.jpg',
   },
   'الرابعة': {
-    'Banking accounting  محاسبة منشات مالية':
-        'https://www.marketing2business.com/wp-content/uploads/2019/06/Bank-Accounting1.png',
-    'Strategic planning  تخطيط إستراتيجي':
-        'https://sdaho.org/wp-content/uploads/2020/07/strategic-planning.png',
-    'Recent economic issues  قضايا اقتصادية معاصرة':
-        'https://blogs.iadb.org/ideas-matter/wp-content/uploads/sites/12/2017/06/shutterstock_102687368.jpg',
-    'Tax accounting  محاسبة ضريبية':
-        'https://e7.pngegg.com/pngimages/849/211/png-clipart-tax-illustration-goods-and-services-tax-accounting-payment-calculate-the-tax-text-service.png',
-    'Feasibility studies  دراسة جدوى':
-        'https://capitalcampaignmasters.com/wpsys/wp-content/uploads/2019/03/feasibility-study-common-misconceptions.jpg',
-    'Accounting Information System  نظم معلومات محاسبية':
-        'https://cdn.educba.com/academy/wp-content/uploads/2020/07/psd-9-9-5-4.jpg',
-    '(قسم إدارة) مواد ':
-        'https://www.meritglobaltraining.com/images/best-marketing-research-professional-course.jpg',
+    '(شرح) محاسبة منشات مالية':
+        'https://i.im.ge/2022/08/22/OhEyLK.4-Institutional-Accounting-A.jpg',
+    '(مراجعة) محاسبة منشات مالية':
+        'https://i.im.ge/2022/08/22/OhEC4X.4-Institutional-Accounting-B.jpg',
+    '(شرح) تخطيط إستراتيجي':
+        'https://i.im.ge/2022/08/22/OhEYzM.4-Strategic-Planning-A.jpg',
+    '(مراجعة) تخطيط إستراتيجي':
+        'https://i.im.ge/2022/08/22/OhE3th.4-Strategic-Planning-B.jpg',
+    '(شرح) قضايا اقتصادية معاصرة':
+        'https://i.im.ge/2022/08/22/OhEcFY.4-Economic-Issues-A.jpg',
+    '(مراجعة) قضايا اقتصادية معاصرة':
+        'https://i.im.ge/2022/08/22/OhEgjD.4-Economic-Issues-B.jpg',
+    '(شرح) محاسبة ضريبية': 'https://i.im.ge/2022/08/22/OhEZUq.4-Tax-A.jpg',
+    '(مراجعة) محاسبة ضريبية': 'https://i.im.ge/2022/08/22/OhEV4P.4-Tax-B.jpg',
+    '(شرح) دراسة جدوى': 'https://i.im.ge/2022/08/22/OhEztf.4-Feasibility-A.jpg',
+    '(مراجعة) دراسة جدوى':
+        'https://i.im.ge/2022/08/22/OhEks1.4-Feasibility-B.jpg',
+    '(شرح) نظم معلومات محاسبية':
+        'https://i.im.ge/2022/08/22/OhEHzm.4-AIS-A.jpg',
+    '(مراجعة) نظم معلومات محاسبية':
+        'https://i.im.ge/2022/08/22/OhEvOr.4-AIS-B.jpg',
+    '(شرح) (قسم إدارة) مواد ':
+        'https://i.im.ge/2022/08/22/OhEnW0.4-Management-A.jpg',
+    '(مراجعة) (قسم إدارة) مواد ':
+        'https://i.im.ge/2022/08/22/OhEJjW.4-Management-B.jpg',
   },
 };
 Map<String, Map<String, String>> SEMs = {};

@@ -50,6 +50,7 @@ class _AdminState extends State<Admin> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       drawer: _visible
           ? MainDrawer(
               isAdmin: true,
@@ -315,29 +316,51 @@ class _AdminState extends State<Admin> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30.0),
                   ),
-                  onPressed: () async {
-                    setState(() {
-                      is_open = !is_open;
-                    });
-                    await firestore
-                        .collection('materials')
-                        .doc(sem)
-                        .collection(coursid!)
-                        .doc('is_open')
-                        .set({
-                      'is_open': is_open,
-                    });
-                    // show toaster
-                    Get.snackbar(
-                      'تم',
-                      is_open ? 'تم فتح المادة' : 'تم إغلاق المادة',
-                      snackPosition: SnackPosition.BOTTOM,
-                      backgroundColor: Colors.green,
-                      borderRadius: 25.0,
-                      margin: EdgeInsets.all(10),
-                      snackStyle: SnackStyle.FLOATING,
-                      duration: Duration(seconds: 2),
-                      animationDuration: Duration(seconds: 2),
+                  onPressed: () {
+                    Get.defaultDialog(
+                      title: 'Password Required',
+                      textCancel: 'Cancel',
+                      onCancel: () => Get.back(),
+                      content: Card(
+                        elevation: 10,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                        child: TextField(
+                          decoration: InputDecoration(border: InputBorder.none),
+                          autofocus: true,
+                          obscureText: true,
+                          textAlign: TextAlign.center,
+                          onChanged: (password) async {
+                            if (password == '0000') {
+                              Get.back();
+                              setState(() {
+                                is_open = !is_open;
+                              });
+                              await firestore
+                                  .collection('materials')
+                                  .doc(sem)
+                                  .collection(coursid!)
+                                  .doc('is_open')
+                                  .set({
+                                'is_open': is_open,
+                              });
+                              // show toaster
+                              Get.snackbar(
+                                'تم',
+                                is_open ? 'تم فتح المادة' : 'تم إغلاق المادة',
+                                snackPosition: SnackPosition.BOTTOM,
+                                backgroundColor: Colors.green,
+                                borderRadius: 25.0,
+                                margin: EdgeInsets.all(10),
+                                snackStyle: SnackStyle.FLOATING,
+                                duration: Duration(seconds: 2),
+                                animationDuration: Duration(seconds: 2),
+                              );
+                            }
+                          },
+                        ),
+                      ),
                     );
                   },
                   child: Text(
@@ -376,52 +399,84 @@ class _AdminState extends State<Admin> {
                 ),
               ),
               onChanged: (val) async {
-                setState(() {
-                  firstTerm = val;
-                });
-                if (val) {
-                  await firestore.collection('materials').doc('term').set({
-                    'id': 1,
-                  });
-                  //show snackbar to enable first term
-                  Get.snackbar(
-                    Get.locale == Locale('en') ? 'First Term' : 'الفصل الأول',
-                    Get.locale == Locale('en')
-                        ? 'First Term is enabled'
-                        : 'تم تفعيل الفصل الأول',
-                    snackPosition: SnackPosition.BOTTOM,
-                    colorText: SECONDARYCOLOR,
-                    backgroundColor: SECONDARYCOLOR,
-                    backgroundGradient: LinearGradient(colors: [
-                      Color.fromARGB(255, 57, 152, 230),
-                      Color.fromARGB(255, 89, 231, 94),
-                    ]),
-                    borderRadius: 30.0,
-                    margin: EdgeInsets.all(8.0),
-                    duration: Duration(seconds: 2),
-                  );
-                } else {
-                  await firestore.collection('materials').doc('term').set({
-                    'id': 2,
-                  });
-                  // show snackbar to enable second term
-                  Get.snackbar(
-                    Get.locale == Locale('en') ? 'Second Term' : 'الفصل الثاني',
-                    Get.locale == Locale('en')
-                        ? 'Second Term is enabled'
-                        : 'تم تفعيل الفصل الثاني',
-                    snackPosition: SnackPosition.BOTTOM,
-                    colorText: SECONDARYCOLOR,
-                    backgroundColor: SECONDARYCOLOR,
-                    backgroundGradient: LinearGradient(colors: [
-                      Color.fromARGB(255, 57, 152, 230),
-                      Color.fromARGB(255, 89, 231, 94),
-                    ]),
-                    borderRadius: 30.0,
-                    margin: EdgeInsets.all(8.0),
-                    duration: Duration(seconds: 2),
-                  );
-                }
+                Get.defaultDialog(
+                  title: 'Password Required',
+                  textCancel: 'Cancel',
+                  onCancel: () => Get.back(),
+                  content: Card(
+                    elevation: 10,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    child: TextField(
+                      obscureText: true,
+                      autofocus: true,
+                      textAlign: TextAlign.center,
+                      decoration: InputDecoration(border: InputBorder.none),
+                      onChanged: (password) async {
+                        if (password == '0000') {
+                          Get.back();
+                          setState(() {
+                            firstTerm = val;
+                          });
+                          if (val) {
+                            await firestore
+                                .collection('materials')
+                                .doc('term')
+                                .set({
+                              'id': 1,
+                            });
+                            //show snackbar to enable first term
+                            Get.snackbar(
+                              Get.locale == Locale('en')
+                                  ? 'First Term'
+                                  : 'الفصل الأول',
+                              Get.locale == Locale('en')
+                                  ? 'First Term is enabled'
+                                  : 'تم تفعيل الفصل الأول',
+                              snackPosition: SnackPosition.BOTTOM,
+                              colorText: SECONDARYCOLOR,
+                              backgroundColor: SECONDARYCOLOR,
+                              backgroundGradient: LinearGradient(colors: [
+                                Color.fromARGB(255, 57, 152, 230),
+                                Color.fromARGB(255, 89, 231, 94),
+                              ]),
+                              borderRadius: 30.0,
+                              margin: EdgeInsets.all(8.0),
+                              duration: Duration(seconds: 2),
+                            );
+                          } else {
+                            await firestore
+                                .collection('materials')
+                                .doc('term')
+                                .set({
+                              'id': 2,
+                            });
+                            // show snackbar to enable second term
+                            Get.snackbar(
+                              Get.locale == Locale('en')
+                                  ? 'Second Term'
+                                  : 'الفصل الثاني',
+                              Get.locale == Locale('en')
+                                  ? 'Second Term is enabled'
+                                  : 'تم تفعيل الفصل الثاني',
+                              snackPosition: SnackPosition.BOTTOM,
+                              colorText: SECONDARYCOLOR,
+                              backgroundColor: SECONDARYCOLOR,
+                              backgroundGradient: LinearGradient(colors: [
+                                Color.fromARGB(255, 57, 152, 230),
+                                Color.fromARGB(255, 89, 231, 94),
+                              ]),
+                              borderRadius: 30.0,
+                              margin: EdgeInsets.all(8.0),
+                              duration: Duration(seconds: 2),
+                            );
+                          }
+                        }
+                      },
+                    ),
+                  ),
+                );
               },
             ),
           ],
