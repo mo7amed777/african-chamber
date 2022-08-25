@@ -70,8 +70,9 @@ class _SignUPState extends State<SignUP> {
                   icon: Icons.person_pin,
                   label: 'الإسم رباعي (مثل البطاقة)',
                   validate: (String name) {
-                    if (name.length >= 12) return null;
-                    return 'برجاء إدخال الإسم رباعي صحيح';
+                    if (name.length >= 12 && HasArabicCharacters(name))
+                      return null;
+                    return 'برجاء إدخال الإسم رباعي وبالعربي فقط';
                   },
                 ),
                 inputField(
@@ -339,5 +340,10 @@ class _SignUPState extends State<SignUP> {
 
   String fileName(String file) {
     return file.substring(file.lastIndexOf('/') + 1);
+  }
+
+  bool HasArabicCharacters(String text) {
+    RegExp arregex = RegExp('^[\u0621-\u064A0-9 ]+\$');
+    return arregex.hasMatch(text);
   }
 }
