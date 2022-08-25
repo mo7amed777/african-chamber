@@ -9,19 +9,7 @@
   <component name="ChangeListManager">
     <list default="true" id="ad4ec13a-afe4-4465-9a33-d7e9414d566b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins-dependencies" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/screens/admin_screens/admin.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/screens/admin_screens/admin.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/screens/onboard_screens/login.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/screens/onboard_screens/login.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/screens/onboard_screens/signup.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/screens/onboard_screens/signup.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/screens/user_screens/course.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/screens/user_screens/course.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/screens/user_screens/courses.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/screens/user_screens/courses.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/screens/user_screens/home.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/screens/user_screens/home.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/screens/user_screens/home_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/screens/user_screens/home_page.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/screens/user_screens/profile.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/screens/user_screens/profile.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/widgets/check_courses.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/widgets/check_courses.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/widgets/message.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/widgets/message.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build.gradle" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

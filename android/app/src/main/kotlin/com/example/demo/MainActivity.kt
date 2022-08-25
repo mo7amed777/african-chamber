@@ -1,4 +1,4 @@
-package com.african.chamber
+package com.africano.chamber
 
 import io.flutter.embedding.android.FlutterActivity
 
