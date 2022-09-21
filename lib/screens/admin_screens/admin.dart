@@ -311,10 +311,12 @@ class _AdminState extends State<Admin> {
               visible: _visible,
               child: Container(
                 margin: EdgeInsets.only(bottom: 50),
-                child: RaisedButton(
-                  color: PRIMARYCOLOR,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0),
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                    backgroundColor: PRIMARYCOLOR,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30.0),
+                    ),
                   ),
                   onPressed: () {
                     Get.defaultDialog(
