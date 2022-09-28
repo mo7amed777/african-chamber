@@ -44,7 +44,7 @@ dependencies:
   syncfusion_flutter_pdfviewer:
   path_provider:
   google_mobile_ads:
-  awesome_notifications:
+  awesome_notifications: any
   badges:
   chewie:
   video_player:
