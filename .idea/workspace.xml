@@ -21,12 +21,8 @@
       <change beforePath="$PROJECT_DIR$/.dart_tool/flutter_build/7d1f7b21f28f49d0cfa7c6c510e63c96/kernel_snapshot.stamp" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.dart_tool/flutter_build/7d1f7b21f28f49d0cfa7c6c510e63c96/outputs.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.dart_tool/flutter_build/dart_plugin_registrant.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.dart_tool/package_config.json" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/package_config.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins-dependencies" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/ios/Pods.build/Release-iphonesimulator/Pods-Runner.build/dgph" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Podfile" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Podfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Podfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Podfile.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Runner.xcodeproj/project.pbxproj" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Runner.xcodeproj/project.pbxproj" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
