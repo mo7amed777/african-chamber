@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/african_chamber.iml" filepath="$PROJECT_DIR$/african_chamber.iml" />
-      <module fileurl="file://$PROJECT_DIR$/android/african_chamber_android.iml" filepath="$PROJECT_DIR$/android/african_chamber_android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/african-chamber.iml" filepath="$PROJECT_DIR$/.idea/african-chamber.iml" />
     </modules>
   </component>
 </project>
