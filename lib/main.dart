@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:demo/constants.dart';
 import 'package:demo/screens/admin_screens/admin.dart';
@@ -18,8 +19,20 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+
+  if (Platform.isIOS) {
+    await Firebase.initializeApp(
+        options: FirebaseOptions(
+            apiKey: "AIzaSyDxdloIscDMyWAgCkus77vZ5jw1IpXDcg8",
+            appId: "1:727474785846:ios:af38ce07502e802538d297",
+            messagingSenderId: "727474785846",
+            projectId: "fir-a062a"));
+  } else {
+    await Firebase.initializeApp();
+  }
+
   await MobileAds.instance.initialize();
-  await Firebase.initializeApp();
   AwesomeNotifications().initialize(
     null,
     [
