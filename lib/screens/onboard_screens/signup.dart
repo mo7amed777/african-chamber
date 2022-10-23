@@ -321,20 +321,22 @@ class _SignUPState extends State<SignUP> {
         Get.dialog(Center(child: CircularProgressIndicator()),
             barrierDismissible: false);
         String file = result.paths.first!;
-        firebase_storage.FirebaseStorage.instance
+
+        firebase_storage.TaskSnapshot task = await firebase_storage.FirebaseStorage.instance
             .ref('البطاقات/${_nameController.text}/${fileName(file)}')
-            .putFile(File(file))
-            .then((uplaodedFile) async {
-          url = await uplaodedFile.ref.getDownloadURL();
+            .putFile(File(file));
+
+          url = await task.ref.getDownloadURL();
+          print(task.state.name);
           Get.back();
           setState(() {});
-        });
+
       }
-    } catch (e) {
+    } on FirebaseException catch (e) {
       showMessage(
           title: 'خطأ في التحميل',
           error: true,
-          text: 'برجاء التأكد من الإتصال بالإنترنت وإعادة المحاولة');
+          text: e.message!);
     }
   }
 

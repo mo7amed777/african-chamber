@@ -7,9 +7,82 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:727474785846:android:6d48298241ec215438d297",
+        "mobilesdk_app_id": "1:727474785846:android:08e8b7400b809d2d38d297",
+        "android_client_info": {
+          "package_name": "com.african.chamber"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "727474785846-1aa4vbblihhjvtsdcbg88186kkmjgu9b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxdloIscDMyWAgCkus77vZ5jw1IpXDcg8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "727474785846-1aa4vbblihhjvtsdcbg88186kkmjgu9b.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "727474785846-41b5b71bnhg9oledj36keoc7k95250qq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.african.chamber"
+              }
+            }
+          ]
+        }
+      },
+      "admob_app_id": "ca-app-pub-4096410892355332~4055597832"
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:727474785846:android:72d8d60c1a2a841e38d297",
         "android_client_info": {
           "package_name": "com.africano.chamber"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "727474785846-1aa4vbblihhjvtsdcbg88186kkmjgu9b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxdloIscDMyWAgCkus77vZ5jw1IpXDcg8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "727474785846-1aa4vbblihhjvtsdcbg88186kkmjgu9b.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "727474785846-41b5b71bnhg9oledj36keoc7k95250qq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.african.chamber"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:727474785846:android:6d48298241ec215438d297",
+        "android_client_info": {
+          "package_name": "com.example.demo"
         }
       },
       "oauth_client": [
@@ -17,7 +90,7 @@
           "client_id": "727474785846-uo7hr1jabiunkjla7eataa7dnbi4623o.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.africano.chamber",
+            "package_name": "com.example.demo",
             "certificate_hash": "cf7e0c8c45d156a7afaa78a54969d93a63cec240"
           }
         },
@@ -37,6 +110,13 @@
             {
               "client_id": "727474785846-1aa4vbblihhjvtsdcbg88186kkmjgu9b.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "727474785846-41b5b71bnhg9oledj36keoc7k95250qq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.african.chamber"
+              }
             }
           ]
         }

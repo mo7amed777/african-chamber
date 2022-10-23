@@ -12,25 +12,18 @@ import 'package:demo/screens/onboard_screens/login.dart';
 import 'package:demo/screens/onboard_screens/signup.dart';
 import 'package:demo/screens/onboard_screens/splash.dart';
 import 'package:demo/screens/user_screens/posts.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,);
 
-  if (Platform.isIOS) {
-    await Firebase.initializeApp(
-        options: FirebaseOptions(
-            apiKey: "AIzaSyDxdloIscDMyWAgCkus77vZ5jw1IpXDcg8",
-            appId: "1:727474785846:ios:af38ce07502e802538d297",
-            messagingSenderId: "727474785846",
-            projectId: "fir-a062a"));
-  } else {
-    await Firebase.initializeApp();
-  }
 
   await MobileAds.instance.initialize();
   AwesomeNotifications().initialize(
@@ -48,7 +41,7 @@ void main() async {
     // Channel groups are only visual and are not required
     channelGroups: [
       NotificationChannelGroup(
-          channelGroupkey: 'basic_channel_group',
+          channelGroupKey: 'basic_channel_group',
           channelGroupName: 'Basic group')
     ],
     debug: true,
