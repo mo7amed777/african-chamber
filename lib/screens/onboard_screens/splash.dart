@@ -99,7 +99,7 @@ class Splash extends StatelessWidget {
         case 'admin':
           Get.offAndToNamed(Admin.routeName);
           break;
-        case 'Not Authorized':
+        case '5DA744C9-68D4-4DBB-9B90-A8C7976F9144':
           Get.offAndToNamed(Login.routeName);
           break;
         default:

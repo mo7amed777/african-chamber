@@ -113,6 +113,7 @@ class MainDrawer extends StatelessWidget {
                             Get.offAllNamed(Login.routeName);
                           },
                         ),
+
                         Spacer(),
                         Container(
                           margin: EdgeInsets.zero,

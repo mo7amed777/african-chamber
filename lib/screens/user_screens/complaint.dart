@@ -2,11 +2,14 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demo/constants.dart';
 import 'package:demo/models/user.dart';
+import 'package:demo/screens/onboard_screens/login.dart';
 import 'package:demo/screens/user_screens/home_page.dart';
 import 'package:demo/widgets/drawer.dart';
 import 'package:demo/widgets/message.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Complaint extends StatefulWidget {
   @override
@@ -83,8 +86,8 @@ class _ComplaintState extends State<Complaint> {
                     borderRadius: BorderRadius.circular(15),
                   ),
                 ),
-                minLines: 5,
-                maxLines: 10,
+                minLines: 2,
+                maxLines: 5,
                 style: TextStyle(
                   fontSize: 20,
                 ),
@@ -92,7 +95,7 @@ class _ComplaintState extends State<Complaint> {
             ),
             Container(
               width: double.infinity,
-              margin: EdgeInsets.all(8),
+              margin: EdgeInsets.symmetric(vertical: 4,horizontal: 8),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
                 color: Colors.transparent.withOpacity(0.5),
@@ -131,6 +134,55 @@ class _ComplaintState extends State<Complaint> {
                 ),
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                width: double.infinity,
+                child: TextButton(
+                  onPressed: () async {
+                    await Get.defaultDialog(
+                      titleStyle: TextStyle(color: Colors.red),
+                      title: 'Delete Account Permanently',
+                      middleText: Get.locale == Locale('en')
+                          ? 'Are you sure you want to permanently delete your account ? '
+                          : 'هل أنت متأكد أنك تريد حذف حسابك بشكل نهائي ؟ ',
+                      cancel: TextButton(
+
+                        onPressed: () {
+                          Get.back();
+                        },
+                        child: Text('Cancel',style: TextStyle(color: Colors.black),),
+                      ),
+                      confirm: TextButton(
+
+                        onPressed: () async {
+
+                         await FirebaseAuth.instance.currentUser?.delete();
+                         await firestore.collection('users').doc(user.uid).delete();
+                          showMessage(title: 'Deleting Account', text: 'Your Account deleted successfully...',error: true);
+                         SharedPreferences.getInstance()
+                             .then((value) => value.clear());
+                         Get.offAllNamed(Login.routeName);
+                        },
+                        child: Text('Delete',style: TextStyle(color: Colors.red),),
+                      ),
+                    );
+                  },
+                  child: Text(
+                    'Delete my account',
+                    style: TextStyle(
+                      color: SECONDARYCOLOR,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.red,
+                  ),
+                ),
+              ),
+            ),
+
           ],
         ),
       ),
